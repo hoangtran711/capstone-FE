@@ -7,7 +7,9 @@
 | 18110      | Nguyen Hoang Vu      |   Fuckboiz Engineering |
 | 181100 | Nguyen Tan Thanh      |    Fuckboiz Engineering |
 
-
+## Project UI Template
+[Dashboard](https://smarthr-ci.dreamguystech.com/template/orange/public/dashboard?)
+[Landing](http://seje.tonatheme.com/payonline/home-one/)
 ## About Project
 
 ## Technique

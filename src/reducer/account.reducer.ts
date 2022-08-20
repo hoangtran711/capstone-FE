@@ -15,7 +15,6 @@ const accountSlice = createSlice({
       (state.token = ''), (state.expiresIn = '');
     },
   },
-  extraReducers: (builder) => {},
 });
 
 export const { updateAccount, deleteAccount } = accountSlice.actions;

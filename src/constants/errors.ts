@@ -1,0 +1,45 @@
+export enum ERROR_CODE {
+  Auth_UsernameNotFound = 'Username Not Found',
+  Auth_UsernameAlreadyRegistered = 'Username Already Registered',
+  Auth_EmailNotFound = 'Email Not Found',
+  Auth_EmailAlreadyRegistered = 'Email Already Registered',
+  Auth_AddressNotFound = 'Address Not Found',
+  Auth_AddressAlreadyRegistered = 'Address Already Registered',
+  Auth_InvalidUsernamePassword = 'Invalid Username Password',
+  Auth_InvalidEmailPassword = 'Invalid Email Password',
+  Auth_InvalidNonce = 'Invalid Nonce',
+  Auth_InvalidSignature = 'Invalid Signature',
+  Auth_InvalidJWTToken = 'Invalid JWT Token',
+  Auth_PasswordConfirmNotMatch = 'Password Confirm Not Match',
+  Auth_InvalidEmailVerification = 'User Not Found Or Secret Not Matched',
+  Auth_EmailAlreadyVerified = 'Email Already Verified',
+  Auth_EmailVerificationUnavailable = 'Email Verification Unavailable',
+
+  Role_RequiredAuth = 'Required JWT Authentication',
+  Role_AccessForbidden = 'Access Forbidden',
+
+  Profile_UserAlreadyLinkedEmail = 'User Already Linked Email',
+  Profile_PasswordConfirmNotMatch = 'Password Confirm Not Match',
+  Profile_OldPasswordNotMatch = 'Old Password Not Match',
+  Profile_UserNotFoundOrDeleted = 'User Not Found Or Being Deleted',
+  Profile_UserAlreadyVerifiedEmail = 'User Already Verified Email',
+  Profile_EmailAlreadyRegistered = 'Email Already Registered',
+  Profile_AccountAlreadyRegisteredEmail = 'Account Already Registered Email',
+  Profile_AuthorityNotFound = 'Authority Not Found',
+  Profile_InvalidConfirmationCode = 'Invalid Confirmation Code',
+
+  Rewards_NFTNotFound = 'NFT Not Found',
+  Rewards_DoNotHavePermission = 'Do Not Have Permission',
+  Rewards_RewardUnavailable = 'Reward Unavailable',
+  Rewards_RewardNotRedeemable = 'Reward Not Redeemable',
+
+  Inventory_ItemNotFound = 'Item Not Found',
+
+  Royalty_DistributionUnavailable = 'Distribution Unavailable',
+  Royalty_DistributionNotFound = 'Distribution Not Found',
+  Royalty_DistributionForbidden = 'Distribution Forbidden',
+  Royalty_DistributionNotStarted = 'Distribution Not Started',
+
+  Code_InvalidCodeType = 'Invalid Code Type',
+  Code_UnableToResendCode = 'Unable To Resend Code',
+}

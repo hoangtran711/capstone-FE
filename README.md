@@ -1,10 +1,19 @@
-# Getting Started with Create React App
+# Welcome to Capstone Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Member of teams.
+- [18110057](linkhere) Hoang Ngoc Bao Tran
+- [181100**](linkhere) Nguyen Hoang Vu
+- [181100**](linkhere) Nguyen Tan Thanh
+
+## About Project
+
+## Technique
+- Typescript.
+- Styled Component.
+- Redux Toolkit
+- face.js
 
 ## Available Scripts
-
-In the project directory, you can run:
 
 ### `yarn start`
 

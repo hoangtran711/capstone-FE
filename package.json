@@ -41,7 +41,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src --fix",
-    "lint:ci": "npx eslint ./src"
+    "lint:ci": "npx eslint ./src",
+    "postinstall": "husky install"
   },
   "eslintConfig": {
     "extends": [

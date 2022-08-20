@@ -1,9 +1,12 @@
 # Welcome to Capstone Project
 
 ## Member of teams.
-- [18110057](linkhere) Hoang Ngoc Bao Tran
-- [181100**](linkhere) Nguyen Hoang Vu
-- [181100**](linkhere) Nguyen Tan Thanh
+| ID            | Name          | Role  |
+| ------------- |:-------------:| -----:|
+| 18110057      | Hoang Ngoc Bao Tran | Junior Sofware Developer |
+| 18110      | Nguyen Hoang Vu      |   Fuckboiz Engineering |
+| 181100 | Nguyen Tan Thanh      |    Fuckboiz Engineering |
+
 
 ## About Project
 

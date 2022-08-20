@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components": ["components"],
+      "@styles": ["styles"],
+      "@config": ["config"]
+    }
+  },
+  "exclude": ["node_modules", "cypress"],
+  "include": ["src/**/*"]
+}

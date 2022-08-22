@@ -1,10 +1,13 @@
 import React from 'react';
 import { Wrapper } from './HomePage.styled';
+import { Banner, Header, Sidebar } from './components';
 
 const HomePage = () => {
   return (
     <Wrapper>
-      <h1 className="title">Tao la tran ne</h1>
+      <Sidebar />
+      <Header />
+      <Banner />
     </Wrapper>
   );
 };

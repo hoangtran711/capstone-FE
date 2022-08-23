@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.button-red {
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  color: #fff;
+  background: #ee3234;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 30px;
+  padding: 18px 39.5px;
+  text-align: center;
+  box-shadow: 0 10px 30px 0 rgb(238 50 52 / 30%);
+  
+}
+
+.button-red:hover {
+  background: #fff;
+  color: #001328;
+  box-shadow: 0 10px 30px 0 rgb(255 255 255 / 30%);
+}

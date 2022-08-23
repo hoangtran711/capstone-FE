@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wrapper } from './HomePage.styled';
-import { Banner, Header, Sidebar } from './components';
+import { Banner, Header, Sidebar, Service } from './components';
 
 const HomePage = () => {
   return (
@@ -8,6 +8,7 @@ const HomePage = () => {
       <Sidebar />
       <Header />
       <Banner />
+      <Service />
     </Wrapper>
   );
 };

@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   color: black;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.5s;
+  overflow-y: scroll;
   transform: translateX(100%);
   .hiddenSidebar__btnClose {
     position: absolute;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Wrapper } from './Banner.styled';
 import Slider from 'react-slick';
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
@@ -15,10 +15,29 @@ const settings = {
 };
 
 export const Banner = () => {
+  let slider: any;
+  const onHandleNext = useCallback(
+    () => slider && console.log(slider),
+    [slider],
+  );
+  const onHandlePrevious = useCallback(
+    () => slider && slider.slickPrev(),
+    [slider],
+  );
   return (
     <Wrapper>
       <div className="banner">
-        <Slider {...settings}>
+        <div onClick={onHandleNext} className="bannerBtn__pre">
+          <a className="bannerBtn__preChild">
+            <ArrowBack />
+          </a>
+        </div>
+        <div onClick={onHandlePrevious} className="bannerBtn__next">
+          <a className="bannerBtn__nextChild">
+            <ArrowForward />
+          </a>
+        </div>
+        <Slider ref={(c) => (slider = c)} {...settings}>
           <div className="banner__content">
             <div className="banner__img">
               <img
@@ -35,16 +54,6 @@ export const Banner = () => {
                 <p>to take your business further</p>
                 <a className="button-red">Request a meeting</a>
               </div>
-              <div className="bannerBtn__pre">
-                <a className="bannerBtn__preChild">
-                  <ArrowBack />
-                </a>
-              </div>
-              <div className="bannerBtn__next">
-                <a className="bannerBtn__nextChild">
-                  <ArrowForward />
-                </a>
-              </div>
             </div>
           </div>
           <div className="banner__content">
@@ -63,16 +72,6 @@ export const Banner = () => {
                 <p>to take your business further</p>
                 <a className="button-red">Request a meeting</a>
               </div>
-              <div className="bannerBtn__pre">
-                <a className="bannerBtn__preChild">
-                  <ArrowBack />
-                </a>
-              </div>
-              <div className="bannerBtn__next">
-                <a className="bannerBtn__nextChild">
-                  <ArrowForward />
-                </a>
-              </div>
             </div>
           </div>
           <div className="banner__content">
@@ -90,16 +89,6 @@ export const Banner = () => {
                 </h2>
                 <p>to take your business further</p>
                 <a className="button-red">Request a meeting</a>
-              </div>
-              <div className="bannerBtn__pre">
-                <a className="bannerBtn__preChild">
-                  <ArrowBack />
-                </a>
-              </div>
-              <div className="bannerBtn__next">
-                <a className="bannerBtn__nextChild">
-                  <ArrowForward />
-                </a>
               </div>
             </div>
           </div>

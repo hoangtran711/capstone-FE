@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { IRouteProps } from 'modules';
 
-const context = (require as any).context('src/modules', true, /\.route.tsx?/);
+const context = (require as any).context('modules', true, /\.route.tsx?/);
 
 const enhance = (WrappedComponent: FunctionComponent) => (props: any) => {
   const [routes, setRoutes] = React.useState<Array<IRouteProps>>([]);
@@ -10,7 +10,10 @@ const enhance = (WrappedComponent: FunctionComponent) => (props: any) => {
     const allRoutes: IRouteProps[] = [];
     context
       .keys()
-      .map((path: any) => allRoutes.push(context(`${path}`).default));
+      .map(
+        (path: any) =>
+          path[0] !== '.' && allRoutes.push(context(`${path}`).default),
+      );
     setRoutes([...allRoutes]);
   };
   React.useEffect(() => {

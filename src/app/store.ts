@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { AccountReducer } from 'reducer';
+import { AccountReducer, ThemeReducer } from 'reducer';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 const reducers = combineReducers({
   account: AccountReducer,
+  theme: ThemeReducer,
 });
 
 const persistConfig = {

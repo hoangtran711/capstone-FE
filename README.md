@@ -10,7 +10,16 @@
 ## Project UI Template
 [Dashboard](https://smarthr-ci.dreamguystech.com/template/orange/public/dashboard?)
 [Landing](http://seje.tonatheme.com/payonline/home-one/)
-## About Project
+## Goal Of Project
+- [ ] Create/delete a subject.
+- [ ] Add/Remove student from class.
+- [ ] Attendance.
+- [ ] Attendance by face recognition(optimize).
+- [ ] Add payment(optimize).
+- [ ] Responsive UI.
+- [ ] Features by roles.
+- [ ] Embeded blockchain to app.
+- [ ] Certificate(etc).
 
 ## Technique
 - Typescript.

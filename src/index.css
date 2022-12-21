@@ -1,17 +1,11 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+font-family: 'Circular Std';
+overflow-x: hidden;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .button-red {
   border: none;
   outline: 0;
@@ -28,6 +22,11 @@ code {
   padding: 18px 39.5px;
   text-align: center;
   box-shadow: 0 10px 30px 0 rgb(238 50 52 / 30%);
+  
+}
+@font-face {
+  font-family: 'Circular Std';
+  src: local('Circular Std'), url(./fonts//CircularStd-Book.woff) format('woff');
   
 }
 

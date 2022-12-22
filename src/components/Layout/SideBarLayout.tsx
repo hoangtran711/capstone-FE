@@ -16,7 +16,9 @@ export const SidebarLayout = ({ children }: any) => {
         <Navbar />
         <Stack direction="row">
           <SideBar />
-          <Box sx={{ maxHeight: '100vh', overflow: 'scroll' }}>{children}</Box>
+          <Box sx={{ maxHeight: '100vh', overflow: 'scroll', width: '100%' }}>
+            {children}
+          </Box>
         </Stack>
       </Stack>
     </Wrapper>

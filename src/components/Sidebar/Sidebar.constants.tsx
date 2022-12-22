@@ -1,7 +1,10 @@
 import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import AppsIcon from '@mui/icons-material/Apps';
+import HomeIcon from '@mui/icons-material/Home';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SubjectIcon from '@mui/icons-material/Subject';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 export interface ISidebarItem {
   children?: ISidebarItem[];
@@ -14,19 +17,39 @@ export interface ISidebarItem {
 }
 export const SidebarItems: ISidebarItem[] = [
   {
-    title: 'Dashboard',
-    Icon: DashboardIcon,
-    children: [
-      {
-        title: 'Admin Dashboard',
-        path: '/dashboard',
-      },
-      {
-        title: 'Employee Dashboard',
-        path: '/dashboard',
-      },
-    ],
+    title: 'Home',
+    path: '/Homepage',
+    Icon: HomeIcon,
   },
+  {
+    title: ' Students',
+    path: '/Students',
+    Icon: AccountCircleIcon,
+  },
+  {
+    title: ' Courses',
+    path: '/Courses',
+    Icon: AccountTreeIcon,
+  },
+  {
+    title: ' Subjects',
+    path: '/Subjects',
+    Icon: SubjectIcon,
+  },
+  // {
+  //   title: 'Dashboard',
+  //   Icon: DashboardIcon,
+  //   children: [
+  //     {
+  //       title: 'Teacher Dashboard',
+  //       path: '/dashboard',
+  //     },
+  //     {
+  //       title: 'Student Dashboard',
+  //       path: '/dashboard',
+  //     },
+  //   ],
+  // },
   {
     title: 'Apps',
     path: '/apps',

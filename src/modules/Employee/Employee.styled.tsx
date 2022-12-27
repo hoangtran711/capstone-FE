@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     .header-left {
       .welcome {
         color: #1f1f1f;
@@ -60,6 +60,61 @@ export const Wrapper = styled.div`
         .icon {
           font-size: 35px;
         }
+      }
+    }
+  }
+  .grid {
+    .profile-widget {
+      background-color: #ffffff;
+      border: 1px solid #ededed;
+      margin-bottom: 30px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      box-shadow: 0 1px 1px 0 rgb(0 0 0 / 20%);
+      .profile-img {
+        cursor: pointer;
+        height: 80px;
+        margin: 0 auto;
+        width: 80px;
+        position: relative;
+        a {
+          font-size: 24px;
+          height: 80px;
+          line-height: 80px;
+          margin: 0;
+          width: 80px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+      }
+      .profile-action {
+        a {
+          color: #777;
+          font-size: 18px;
+          display: inline-block;
+          position: absolute;
+          top: 8px;
+          right: 3px;
+        }
+      }
+      h4 {
+        margin-top: 10px;
+        margin-bottom: 2px;
+        a {
+          color: #333333;
+          text-decoration: none;
+        }
+      }
+      .text-major {
+        position: relative;
+        color: #8e8e8e;
       }
     }
   }

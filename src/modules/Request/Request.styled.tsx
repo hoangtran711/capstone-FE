@@ -64,6 +64,33 @@ export const Wrapper = styled.div`
     }
   }
   .grid {
+    .stats-info {
+      background-color: #ffffff;
+      border: 1px solid #ededed;
+      padding: 20px;
+      text-align: center;
+      border-radius: 4px;
+      h6 {
+        color: #1f1f1f;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 18px;
+        margin-bottom: 5px;
+        margin: 5px;
+      }
+      h4 {
+        margin: 15px;
+        font-size: 24px;
+        margin-bottom: 0;
+        span {
+          font-size: 12px;
+          color: #8e8e8e;
+        }
+      }
+    }
+    .text-field .select-requestType .select-requestType {
+      background-color: #ffffff;
+    }
     .button-search {
       min-height: 50px;
       text-transform: uppercase;
@@ -93,59 +120,6 @@ export const Wrapper = styled.div`
         cursor: pointer;
         font-size: 1rem;
         border-radius: 0.25rem;
-      }
-    }
-    .profile-widget {
-      background-color: #ffffff;
-      border: 1px solid #ededed;
-      margin-bottom: 30px;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border-radius: 4px;
-      box-shadow: 0 1px 1px 0 rgb(0 0 0 / 20%);
-      .profile-img {
-        cursor: pointer;
-        height: 80px;
-        margin: 0 auto;
-        width: 80px;
-        position: relative;
-        a {
-          font-size: 24px;
-          height: 80px;
-          line-height: 80px;
-          margin: 0;
-          width: 80px;
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-        }
-      }
-      .profile-action {
-        a {
-          color: #777;
-          font-size: 18px;
-          display: inline-block;
-          position: absolute;
-          top: 8px;
-          right: 3px;
-        }
-      }
-      h4 {
-        margin-top: 10px;
-        margin-bottom: 2px;
-        a {
-          color: #333333;
-          text-decoration: none;
-        }
-      }
-      .text-major {
-        position: relative;
-        color: #8e8e8e;
       }
     }
   }

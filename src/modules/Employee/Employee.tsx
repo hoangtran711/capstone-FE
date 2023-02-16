@@ -86,12 +86,9 @@ const Employee = () => {
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Search"
-              type="text"
-            />
+            <div className="button-search">
+              <a href="#">Search</a>
+            </div>
           </Grid>
           <Grid item xs={3}>
             <div className="profile-widget">

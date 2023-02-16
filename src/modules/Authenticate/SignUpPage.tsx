@@ -3,8 +3,24 @@ import { Wrapper } from './Authenticate.styled';
 import { TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+// import { useSignUp } from 'queries/useAuth';
 
 const SignInPage = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [repeatpass, setRepeatPass] = React.useState('');
+  const register = () => {
+    if (email && password && repeatpass) {
+      if (password !== repeatpass) {
+        toast.info('Password and Repeat Password does not match !');
+        return;
+      }
+    } else {
+      toast.info('Please fill all the fields for registering');
+    }
+  };
+
   return (
     <Wrapper>
       <img
@@ -20,23 +36,27 @@ const SignInPage = () => {
           className="text-field"
           label="Email"
           type="email"
+          onChange={(e: any) => setEmail(e.target.value)}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Password"
           type="password"
+          onChange={(e: any) => setPassword(e.target.value)}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Repeat Password"
           type="password"
+          onChange={(e: any) => setRepeatPass(e.target.value)}
         />
         <LoadingButton
           className="authenticate-button"
           variant="contained"
           fullWidth
+          onClick={() => register()}
         >
           Register
         </LoadingButton>

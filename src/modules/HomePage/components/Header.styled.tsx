@@ -142,7 +142,7 @@ export const Wrapper = styled.div`
     }
   }
 
-  .header__bottom .headerBottom__content .headerBottom__right a {
+  .header__bottom .headerBottom__content .headerBottom__right div {
     text-decoration: none;
     color: black;
     padding: 10px 15px;
@@ -151,6 +151,7 @@ export const Wrapper = styled.div`
     border-radius: 22px;
     margin-left: 10px;
     transition: all 0.5s;
+    cursor: pointer;
     &:hover {
       background-color: #222;
       color: white;

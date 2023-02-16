@@ -9,6 +9,7 @@ import { AccessTokenProvider } from 'providers/AccessTokenProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainRoute } from 'modules';
+import 'react-toastify/dist/ReactToastify.css';
 
 let persistor = persistStore(store);
 

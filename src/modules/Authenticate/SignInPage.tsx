@@ -2,9 +2,23 @@ import React from 'react';
 import { Wrapper } from './Authenticate.styled';
 import { TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+// import { useSignIn } from 'queries/useAuth';
+// import { toast } from 'react-toastify';
+import { singInThunk } from 'reducer';
+// import { IAppDispatch } from 'app/store';
+import { useAppDispatch } from 'app/store';
 
 const SignInPage = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const history = useHistory();
+
+  const dispatch = useAppDispatch();
+  const login = () => {
+    dispatch(singInThunk({ email: email, password: password }));
+    history.push('/');
+  };
   return (
     <Wrapper>
       <img
@@ -20,18 +34,23 @@ const SignInPage = () => {
           className="text-field"
           label="Email"
           type="email"
+          onChange={(e: any) => setEmail(e.target.value)}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Password"
           type="password"
+          onChange={(e: any) => setPassword(e.target.value)}
         />
         <span className="forgot">Forgot Password?</span>
         <LoadingButton
           className="authenticate-button"
           variant="contained"
           fullWidth
+          onClick={() => {
+            login();
+          }}
         >
           Login
         </LoadingButton>

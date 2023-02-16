@@ -13,20 +13,19 @@ const SidebarComponent = () => {
     <Wrapper>
       {SidebarItems.map(({ title, Icon, children }, key) => {
         return (
-          <div key={key} className="sidebar-item">
+          <div
+            key={key}
+            className="sidebar-item"
+            onClick={() => {
+              setSelectedSidebar(key);
+            }}
+          >
             <Stack
               sx={{ width: '100%', cursor: 'pointer' }}
               justifyContent="space-between"
               className="item"
               direction="row"
               alignItems="center"
-              onClick={() => {
-                if (key === selectedSidebar) {
-                  setSelectedSidebar(-1);
-                } else {
-                  setSelectedSidebar(key);
-                }
-              }}
             >
               <Stack direction="row" alignItems="center">
                 {Icon && <Icon />}
@@ -40,23 +39,6 @@ const SidebarComponent = () => {
                 />
               )}
             </Stack>
-            <div
-              className={classNames('children-container', {
-                active: key === selectedSidebar,
-              })}
-            >
-              {children?.map((item) => (
-                <div
-                  key={item.title}
-                  className={classNames('children', 'item')}
-                >
-                  <Stack direction="row">
-                    {item.Icon && <item.Icon />}
-                    <span className="title">{item.title}</span>
-                  </Stack>
-                </div>
-              ))}
-            </div>
           </div>
         );
       })}

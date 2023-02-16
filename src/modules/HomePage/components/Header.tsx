@@ -6,6 +6,11 @@ import HorizontalSplitIcon from '@mui/icons-material/HorizontalSplit';
 import { Container } from '@mui/system';
 import { menu } from './Header.constants';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { selectToken } from 'reducer/account/account.selector';
+import { deleteAccount } from 'reducer';
+import { useAppDispatch } from 'app/store';
+import { useHistory } from 'react-router-dom';
 
 export const Header = () => {
   const onHandleShowSidebar = useCallback(() => {
@@ -17,6 +22,9 @@ export const Header = () => {
       toast.error(err?.message || err);
     }
   }, []);
+  const token = useSelector(selectToken);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
   return (
     <Wrapper>
       <div className="header">
@@ -77,9 +85,20 @@ export const Header = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="headerBottom__right">
-                  <a href="#">SIGN IN</a>
-                </div>
+                {!token ? (
+                  <div className="headerBottom__right">
+                    <div onClick={() => history.push('/sign-in')}>SIGN IN </div>
+                  </div>
+                ) : (
+                  <div
+                    className="headerBottom__right"
+                    onClick={() => {
+                      dispatch(deleteAccount());
+                    }}
+                  >
+                    <div>SIGN OUT</div>
+                  </div>
+                )}
               </div>
             </div>
           </Container>

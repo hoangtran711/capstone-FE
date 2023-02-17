@@ -110,13 +110,13 @@ const Request = () => {
       <Wrapper>
         <div className="header">
           <div className="header-left">
-            <span className="welcome">Welcome Teacher!</span>
-            <span className="breadcrumb">All Students</span>
+            <span className="welcome">Requests</span>
+            <span className="breadcrumb">Dashboard / Requests</span>
           </div>
           <div className="header-right">
             <div className="add-icon">
               <AddIcon className="icon" />
-              Add Student
+              Add Request
             </div>
           </div>
         </div>

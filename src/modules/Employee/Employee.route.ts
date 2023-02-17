@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { IRouteProps } from 'modules';
 
-const route = '/employee';
+const route = '/students';
 
 const Employee: IRouteProps = {
   path: route,

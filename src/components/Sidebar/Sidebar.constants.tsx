@@ -32,8 +32,8 @@ export const SidebarItems: ISidebarItem[] = [
     Icon: AccountTreeIcon,
   },
   {
-    title: 'Employee',
-    path: '/employee',
+    title: 'Students',
+    path: '/students',
     Icon: SubjectIcon,
   },
   // {

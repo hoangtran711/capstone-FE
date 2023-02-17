@@ -234,14 +234,28 @@ const Request = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow className="table-title">
-                    <TableCell>Student</TableCell>
-                    <TableCell align="right">Request Type</TableCell>
-                    <TableCell align="right">From</TableCell>
-                    <TableCell align="right">To</TableCell>
-                    <TableCell align="right">No of Days</TableCell>
-                    <TableCell align="right">Reason</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell id="table-head">Student</TableCell>
+                    <TableCell align="right" id="table-head">
+                      Request Type
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      From
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      To
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      No of Days
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      Reason
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      Status
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

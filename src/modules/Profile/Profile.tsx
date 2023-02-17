@@ -3,8 +3,11 @@ import { Wrapper } from './Profile.styled';
 import { SidebarLayout } from 'components';
 import { Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
+  let param: { id: string } = useParams();
+  console.log(param.id);
   return (
     <SidebarLayout>
       <Wrapper>

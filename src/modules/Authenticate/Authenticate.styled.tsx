@@ -10,6 +10,25 @@ export const Wrapper = styled.div`
     cursor: pointer;
     margin: 20px 0px;
   }
+  .date {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    margin: 18px 0px;
+    .label {
+      margin-bottom: 12px;
+    }
+    select {
+      margin-right: 12px;
+      padding: 4px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      color: rgba(0, 0, 0, 0.8);
+      border-radius: 4px;
+    }
+  }
   .form {
     background-color: white;
     width: 480px;

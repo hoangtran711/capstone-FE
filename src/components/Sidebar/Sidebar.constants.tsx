@@ -1,6 +1,6 @@
 import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
-import AppsIcon from '@mui/icons-material/Apps';
+// import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SubjectIcon from '@mui/icons-material/Subject';
@@ -18,22 +18,22 @@ export interface ISidebarItem {
 export const SidebarItems: ISidebarItem[] = [
   {
     title: 'Home',
-    path: '/Homepage',
+    path: '/dashboard',
     Icon: HomeIcon,
   },
   {
-    title: ' Students',
-    path: '/Students',
+    title: ' Attendance',
+    path: '/attendance',
     Icon: AccountCircleIcon,
   },
   {
-    title: ' Courses',
-    path: '/Courses',
+    title: 'Requests',
+    path: '/request',
     Icon: AccountTreeIcon,
   },
   {
-    title: ' Subjects',
-    path: '/Subjects',
+    title: 'Employee',
+    path: '/employee',
     Icon: SubjectIcon,
   },
   // {
@@ -50,9 +50,9 @@ export const SidebarItems: ISidebarItem[] = [
   //     },
   //   ],
   // },
-  {
-    title: 'Apps',
-    path: '/apps',
-    Icon: AppsIcon,
-  },
+  // {
+  //   title: 'Apps',
+  //   path: '/apps',
+  //   Icon: AppsIcon,
+  // },
 ];

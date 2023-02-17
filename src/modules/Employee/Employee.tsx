@@ -7,6 +7,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useGetAllEmployee } from 'queries/useEmployee';
 
 const majors = [
   {
@@ -26,8 +27,24 @@ const majors = [
     label: 'English Studies',
   },
 ];
-
+export interface IEmployee {
+  email: string;
+  password: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  dateOfBirth: string;
+}
 const Employee = () => {
+  const [list, setList] = React.useState<Array<IEmployee>>();
+  const onnGetAllEmployee = useGetAllEmployee();
+  React.useEffect(() => {
+    onnGetAllEmployee().then((rs: any) => {
+      setList(rs);
+    });
+  });
   return (
     <SidebarLayout>
       <Wrapper>
@@ -90,29 +107,33 @@ const Employee = () => {
               <a href="#">Search</a>
             </div>
           </Grid>
-          <Grid item xs={3}>
-            <div className="profile-widget">
-              <div className="profile-img">
-                <a href="#">
-                  <img
-                    className="logo"
-                    src={require('assets/images/student/student-01.jpg')}
-                    alt="Logo"
-                  />
-                </a>
-              </div>
+          {list?.map((item, key) => {
+            return (
+              <Grid item xs={3} key={key}>
+                <div className="profile-widget">
+                  <div className="profile-img">
+                    <a href="#">
+                      <img
+                        className="logo"
+                        src={require('assets/images/student/student-01.jpg')}
+                        alt="Logo"
+                      />
+                    </a>
+                  </div>
 
-              <h4>
-                <a href="#">Tan Thanh</a>
-              </h4>
-              <div className="text-major">Infomation Technology</div>
-              <div className="profile-action">
-                <a href="#" className="action-icon dropdown-toggle">
-                  <MoreVertIcon />
-                </a>
-              </div>
-            </div>
-          </Grid>
+                  <h4>
+                    <a href="#">{item.firstName + item.lastName}</a>
+                  </h4>
+                  <div className="text-major">Infomation Technology</div>
+                  <div className="profile-action">
+                    <a href="#" className="action-icon dropdown-toggle">
+                      <MoreVertIcon />
+                    </a>
+                  </div>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </Wrapper>
     </SidebarLayout>

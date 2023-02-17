@@ -5,19 +5,23 @@ import { SidebarItems } from './Sidebar.constants';
 import { Wrapper } from './Sidebar.styled';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 
 const SidebarComponent = () => {
   const [selectedSidebar, setSelectedSidebar] = useState(-1);
   console.log(selectedSidebar);
+  const history = useHistory();
+
   return (
     <Wrapper>
-      {SidebarItems.map(({ title, Icon, children }, key) => {
+      {SidebarItems.map(({ title, path, Icon, children }, key) => {
         return (
           <div
             key={key}
             className="sidebar-item"
             onClick={() => {
               setSelectedSidebar(key);
+              history.push(path || '');
             }}
           >
             <Stack

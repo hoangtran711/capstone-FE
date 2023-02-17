@@ -16,7 +16,7 @@ const SignInPage = () => {
 
   const dispatch = useAppDispatch();
   const login = () => {
-    dispatch(singInThunk({ email: email, password: password }));
+    dispatch(singInThunk({ username: email, password: password }));
     history.push('/');
   };
   return (

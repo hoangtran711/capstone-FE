@@ -64,6 +64,9 @@ export const Wrapper = styled.div`
     }
   }
   .grid {
+    #table-head {
+      font-weight: 800;
+    }
     .stats-info {
       background-color: #ffffff;
       border: 1px solid #ededed;

@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { IRouteProps } from 'modules';
 
-const route = '/profile';
+const route = '/profile/:id';
 
 const Profile: IRouteProps = {
   path: route,

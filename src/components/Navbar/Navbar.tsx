@@ -1,8 +1,8 @@
 import React from 'react';
 import { memo } from 'react';
 import { Wrapper } from './Navbar.styled';
-import { Stack, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Stack } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const NavbarComponent = () => {
   return (
@@ -22,18 +22,19 @@ const NavbarComponent = () => {
         <span className="title">Magic Attendance Technologies</span>
       </Stack>
       <Stack direction="row" alignItems="center">
-        <TextField
-          type="text"
-          size="small"
-          className="search-box"
-          variant="standard"
-          InputProps={{
-            endAdornment: <SearchIcon className="icon" />,
-            placeholder: 'Search here',
-            disableUnderline: true,
-          }}
-        />
+        <AccountCircleIcon className="account-icon" />
       </Stack>
+      <div className="account-more">
+        <div className="account-content">
+          <div>Harley Helmets</div>
+          <div className="text-info">Student ID: 18110046</div>
+          <div className=" text-info">Class: 18110CLA</div>
+          <div className=" text-info ">Infomation Technology</div>
+          <div className="signout-btn">
+            <div className="btn">Sign Out</div>
+          </div>
+        </div>
+      </div>
     </Wrapper>
   );
 };

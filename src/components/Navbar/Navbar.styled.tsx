@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
+  position: relative;
   .logo {
     width: 40px;
   }
@@ -34,6 +35,47 @@ export const Wrapper = styled.div`
     input {
       color: white;
       padding: 0 5px !important;
+    }
+  }
+  .account-icon {
+    color: white;
+    font-size: 35px;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+  .account-more {
+    position: absolute;
+    right: 23px;
+    top: 52px;
+
+    .account-content {
+      border-radius: 5px;
+      font-weight: 300;
+      border: 1px solid #f5f0f0;
+      background-color: white;
+      padding: 15px 40px;
+
+      .signout-btn {
+        display: flex;
+        justify-content: center;
+        .btn {
+          margin-top: 10px;
+          font-size: 16px;
+          font-weight: 600;
+          max-width: 80%;
+          padding: 7px 25px;
+          border-radius: 50px;
+          background-color: #f5f0f0;
+          border: 1px solid black;
+          color: black !important;
+          cursor: pointer;
+          text-align: center;
+        }
+      }
+      .text-info {
+        color: #757575 !important;
+        margin-top: 3px;
+      }
     }
   }
 `;

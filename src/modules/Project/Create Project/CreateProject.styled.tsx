@@ -1,4 +1,28 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+export const anim = keyframes`
+0%{
+  opacity:0;
+  
+}
+100%{
+  opacity:1;
+  
+
+}
+
+`;
+export const animContent = keyframes`
+0%{
+  
+  transform: translateY(-48px);
+}
+100%{
+  
+  transform: translateY(0);
+
+}
+
+`;
 export const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -9,6 +33,7 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: ${anim} 0.3s forwards;
   .overlay {
     width: 100%;
     height: 100%;
@@ -19,6 +44,7 @@ export const Wrapper = styled.div`
     background: rgba(0, 0, 0, 0.5);
   }
   .content {
+    animation: ${animContent} 0.1s forwards;
     width: 40%;
     background: white;
     z-index: 2;
@@ -185,6 +211,7 @@ export const Wrapper = styled.div`
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       }
     }
   }

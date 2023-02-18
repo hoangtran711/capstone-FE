@@ -21,3 +21,13 @@ export const useGetDetailEmployee = () => {
         }
     }
 }
+export const useGetDetailOfMe = () => {
+    return async function () {
+        try {
+            const rs = await http.get(`v1/users/me`);
+            return rs;
+        } catch (error: any) {
+            toast.error(error)
+        }
+    }
+}

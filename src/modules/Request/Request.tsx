@@ -215,7 +215,6 @@ const Request = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => console.log(e.target.value)}
               />{' '}
             </Stack>
           </Grid>

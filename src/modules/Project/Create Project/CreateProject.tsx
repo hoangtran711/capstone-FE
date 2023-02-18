@@ -10,9 +10,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
+import { useCreateProject } from 'queries/useProjects';
 const MAX_JOIN_DEFAULT = 99;
 const ATTENDANCE_AFTER_DEFAULT = 14;
-export const CreateProject = ({ setVisibility }: any) => {
+export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
   const {
     register,
     handleSubmit,
@@ -20,14 +22,22 @@ export const CreateProject = ({ setVisibility }: any) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const onCreateProject = useCreateProject();
+  console.log(reload);
 
   const onSubmit = (data: any) => {
-    console.log(data);
     let payload = { ...data, startDate, endDate, learnDate };
     payload.maxJoin = Number(payload.maxJoin);
     payload.attendanceAfterMinute = Number(payload.attendanceAfterMinute);
     payload.totalLesson = Number(payload.totalLesson);
     console.log(payload);
+    onCreateProject(payload).then((rs: any) => {
+      if (rs) {
+        toast.success(`Project ${payload.projectName} created successfull`);
+        setReload(!reload);
+        setVisibility(false);
+      }
+    });
   };
   const [startDate, setStart] = React.useState('2022-01-01');
   const [endDate, setEnd] = React.useState('2022-01-02');
@@ -52,6 +62,7 @@ export const CreateProject = ({ setVisibility }: any) => {
                   type="text"
                   className="value"
                   {...register('projectName')}
+                  placeholder="Enter your project name"
                 />
                 <p>{errors.projectName?.message?.toString()}</p>
               </div>
@@ -99,7 +110,7 @@ export const CreateProject = ({ setVisibility }: any) => {
                       (item, key) => {
                         return (
                           <option value={item + 1} key={key}>
-                            {item + 1} minutes
+                            {item + 1} {item + 1 > 1 ? 'lessons' : 'lesson'}
                           </option>
                         );
                       },
@@ -118,7 +129,7 @@ export const CreateProject = ({ setVisibility }: any) => {
                       (item, key) => {
                         return (
                           <option value={item + 1} key={key}>
-                            {item + 1} minutes
+                            {item + 1} {item + 1 > 1 ? 'minutes' : 'minute'}
                           </option>
                         );
                       },
@@ -153,6 +164,20 @@ export const CreateProject = ({ setVisibility }: any) => {
                   <div
                     className="btn-add"
                     onClick={() => {
+                      let flag = false;
+                      for (let i = 0; i < learnDate.length; i++) {
+                        if (
+                          new Date(learnDate[i]).getTime() ===
+                          new Date(value?.toISOString() || '').getTime()
+                        ) {
+                          flag = true;
+                        }
+                      }
+                      if (flag) {
+                        toast.info('Time overlap');
+                        return;
+                      }
+
                       let tmp = learnDate;
                       tmp.push(value?.toISOString() || '');
                       setLearnDate([...tmp]);

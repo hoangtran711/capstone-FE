@@ -9,6 +9,7 @@ export interface IProject {
   attendanceAfterMinute: number;
   maxJoin: number;
   totalLesson: number;
+  joined: number;
 }
 export const useCreateProject = () => {
   return async function (payload: IProject) {

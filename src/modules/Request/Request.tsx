@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { CreateProject } from './components/Create Project/CreateProject';
 
 const requestType = [
   {
@@ -105,16 +106,23 @@ const rows = [
   ),
 ];
 const Request = () => {
+  const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
   return (
     <SidebarLayout>
       <Wrapper>
+        {isShowCreateProject && (
+          <CreateProject setVisibility={setIsShowCreateProject} />
+        )}
         <div className="header">
           <div className="header-left">
             <span className="welcome">Requests</span>
             <span className="breadcrumb">Dashboard / Requests</span>
           </div>
           <div className="header-right">
-            <div className="add-icon">
+            <div
+              className="add-icon"
+              onClick={() => setIsShowCreateProject(true)}
+            >
               <AddIcon className="icon" />
               Add Request
             </div>
@@ -262,7 +270,9 @@ const Request = () => {
                   {rows.map((row) => (
                     <TableRow
                       key={row.name}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      sx={{
+                        '&:last-child td, &:last-child th': { border: 0 },
+                      }}
                     >
                       <TableCell component="th" scope="row">
                         {row.name}

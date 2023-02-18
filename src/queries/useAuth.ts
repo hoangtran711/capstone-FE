@@ -29,7 +29,7 @@ export const useSignUp = () => {
 export const useSignIn = () => {
     return async (payload: ISingIn) => {
         try {
-            const rs: any = await http.post(`/v1/auth/login`, JSON.stringify(payload), { headers: { 'Content-type': 'appication/json' } });
+            const rs: any = await http.post(`/v1/auth/login`, payload);
             return rs;
         } catch (err: any) {
             toast.error(err);

@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useGetAllEmployee } from 'queries/useEmployee';
+import { useHistory } from 'react-router-dom';
 
 const majors = [
   {
@@ -36,15 +37,25 @@ export interface IEmployee {
   phoneNumber: string;
   address: string;
   dateOfBirth: string;
+  _id: string;
 }
 const Employee = () => {
   const [list, setList] = React.useState<Array<IEmployee>>();
+  const [isShowGrid, setIsShowGrid] = React.useState(true);
+  const [isShowTable, setIsShowTable] = React.useState(false);
   const onnGetAllEmployee = useGetAllEmployee();
+  const history = useHistory();
   React.useEffect(() => {
     onnGetAllEmployee().then((rs: any) => {
       setList(rs);
     });
-  });
+  }, [onnGetAllEmployee]);
+  React.useEffect(() => {
+    setIsShowTable(!isShowGrid);
+  }, [isShowGrid]);
+  React.useEffect(() => {
+    setIsShowGrid(!isShowTable);
+  }, [isShowTable]);
   return (
     <SidebarLayout>
       <Wrapper>
@@ -54,11 +65,21 @@ const Employee = () => {
             <span className="breadcrumb">All Students</span>
           </div>
           <div className="header-right">
-            <div className="container-icon">
-              <AppsIcon className="icon" />
+            <div
+              className={
+                isShowGrid ? 'container-icon active' : 'container-icon'
+              }
+              onClick={() => setIsShowGrid(true)}
+            >
+              <MenuIcon className={'icon'} />
             </div>
-            <div className="container-icon">
-              <MenuIcon className="icon" />
+            <div
+              className={
+                isShowTable ? 'container-icon active' : 'container-icon'
+              }
+              onClick={() => setIsShowTable(true)}
+            >
+              <AppsIcon className={'icon'} />
             </div>
             <div className="add-icon">
               <AddIcon className="icon" />
@@ -109,10 +130,26 @@ const Employee = () => {
           </Grid>
           {list?.map((item, key) => {
             return (
-              <Grid item xs={3} key={key}>
-                <div className="profile-widget">
+              <Grid
+                item
+                xs={isShowGrid ? 12 : isShowTable ? 3 : 1}
+                key={key}
+                className={
+                  isShowGrid
+                    ? 'grid-wrapper table'
+                    : isShowTable
+                    ? 'grid-wrapper grid'
+                    : 'grid-wrapper'
+                }
+              >
+                <div
+                  className="profile-widget"
+                  onClick={() => {
+                    history.push(`/profile/${item?._id}`);
+                  }}
+                >
                   <div className="profile-img">
-                    <a href="#">
+                    <a href="">
                       <img
                         className="logo"
                         src={require('assets/images/student/student-01.jpg')}
@@ -122,11 +159,11 @@ const Employee = () => {
                   </div>
 
                   <h4>
-                    <a href="#">{item.firstName + item.lastName}</a>
+                    <a href="">{item.firstName + item.lastName}</a>
                   </h4>
                   <div className="text-major">Infomation Technology</div>
                   <div className="profile-action">
-                    <a href="#" className="action-icon dropdown-toggle">
+                    <a href="" className="action-icon dropdown-toggle">
                       <MoreVertIcon />
                     </a>
                   </div>

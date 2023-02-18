@@ -96,10 +96,19 @@ export const Wrapper = styled.div`
         border-radius: 0.25rem;
       }
     }
+    .loading {
+      width: 100%;
+      display: flex;
+      align-items: ceter;
+      justify-content: center;
+      padding: 12px;
+    }
     .card {
       border: 1px solid #ededed;
       margin-bottom: 30px;
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      height: 100%;
       .card-body {
         flex: 1 1 auto;
         padding: 1rem;
@@ -119,9 +128,19 @@ export const Wrapper = styled.div`
         }
         .text-muted {
           color: #8e8e8e !important;
+          display: flex;
+          align-items: center;
+          column-gap: 12px;
+          .ic {
+            font-size: 38px;
+          }
         }
-        .deadline {
-          margin-bottom: 8px;
+        .date {
+          display: flex;
+          justify-content: space-between;
+          .deadline {
+            margin-bottom: 8px;
+          }
         }
         .leader {
           margin-bottom: 8px;

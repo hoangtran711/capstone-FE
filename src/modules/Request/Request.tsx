@@ -154,7 +154,7 @@ const Request = () => {
               fullWidth
               className="text-field"
               label="Student Name"
-              type="number"
+              type="text"
             />
           </Grid>
 

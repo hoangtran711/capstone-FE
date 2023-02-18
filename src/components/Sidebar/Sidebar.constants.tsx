@@ -36,6 +36,11 @@ export const SidebarItems: ISidebarItem[] = [
     path: '/students',
     Icon: SubjectIcon,
   },
+  {
+    title: 'Projects',
+    path: '/projects',
+    Icon: SubjectIcon,
+  },
   // {
   //   title: 'Dashboard',
   //   Icon: DashboardIcon,

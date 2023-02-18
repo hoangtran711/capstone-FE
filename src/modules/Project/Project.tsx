@@ -3,10 +3,11 @@ import { SidebarLayout } from 'components';
 import { Wrapper } from './Project.styled';
 import { Grid } from '@mui/material';
 
-import AppsIcon from '@mui/icons-material/Apps';
-import MenuIcon from '@mui/icons-material/Menu';
+// import AppsIcon from '@mui/icons-material/Apps';
+// import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import { TextField } from '@mui/material';
+import { CreateProject } from './Create Project/CreateProject';
 
 const majors = [
   {
@@ -28,24 +29,32 @@ const majors = [
 ];
 
 const Project = () => {
+  const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
+
   return (
     <SidebarLayout>
       <Wrapper>
+        {isShowCreateProject && (
+          <CreateProject setVisibility={setIsShowCreateProject} />
+        )}
         <div className="header">
           <div className="header-left">
             <span className="welcome">Projects</span>
             <span className="breadcrumb">Dashboard / Projects</span>
           </div>
           <div className="header-right">
-            <div className="container-icon">
+            {/* <div className="container-icon">
               <AppsIcon className="icon" />
             </div>
             <div className="container-icon">
               <MenuIcon className="icon" />
-            </div>
-            <div className="add-icon">
+            </div> */}
+            <div
+              className="add-icon"
+              onClick={() => setIsShowCreateProject(true)}
+            >
               <AddIcon className="icon" />
-              Add Student
+              Add Project
             </div>
           </div>
         </div>

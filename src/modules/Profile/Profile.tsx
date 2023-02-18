@@ -4,10 +4,17 @@ import { SidebarLayout } from 'components';
 import { Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useParams } from 'react-router-dom';
+import { useGetDetailEmployee } from 'queries/useEmployee';
 
 const Profile = () => {
   let param: { id: string } = useParams();
-  console.log(param.id);
+  const onGetDetailEmployee = useGetDetailEmployee();
+  React.useEffect(() => {
+    onGetDetailEmployee(param.id).then((rs: any) => {
+      console.log(rs);
+    });
+    console.log(param.id);
+  }, [param]);
   return (
     <SidebarLayout>
       <Wrapper>

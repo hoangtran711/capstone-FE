@@ -11,3 +11,13 @@ export const useGetAllEmployee = () => {
         }
     }
 }
+export const useGetDetailEmployee = () => {
+    return async function (id: string) {
+        try {
+            const rs = await http.get(`v1/users/${id}`);
+            return rs;
+        } catch (error: any) {
+            toast.error(error)
+        }
+    }
+}

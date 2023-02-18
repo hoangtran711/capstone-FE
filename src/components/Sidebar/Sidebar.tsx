@@ -9,7 +9,6 @@ import { useHistory } from 'react-router-dom';
 
 const SidebarComponent = () => {
   const [selectedSidebar, setSelectedSidebar] = useState(-1);
-  console.log(selectedSidebar);
   const history = useHistory();
 
   return (

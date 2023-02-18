@@ -7,7 +7,6 @@ export const AccessTokenProvider = ({ children }: any) => {
   const token = useSelector(selectToken);
   useEffect(() => {
     setAccessToken(token);
-    console.log('token', token);
   }, [token]);
   return children;
 };

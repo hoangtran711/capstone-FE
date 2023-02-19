@@ -1,11 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { SidebarLayout } from 'components';
 import { Wrapper } from './Employee.styled';
 import { TextField } from '@mui/material';
-import AppsIcon from '@mui/icons-material/Apps';
-import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useGetAllEmployee } from 'queries/useEmployee';
 import { useHistory } from 'react-router-dom';
@@ -40,22 +37,24 @@ export interface IEmployee {
   _id: string;
 }
 const Employee = () => {
+  const [searchValue, setSearchValue] = useState('');
   const [list, setList] = React.useState<Array<IEmployee>>();
-  const [isShowGrid, setIsShowGrid] = React.useState(true);
-  const [isShowTable, setIsShowTable] = React.useState(false);
   const onnGetAllEmployee = useGetAllEmployee();
   const history = useHistory();
   React.useEffect(() => {
     onnGetAllEmployee().then((rs: any) => {
       setList(rs);
     });
-  }, []);
-  React.useEffect(() => {
-    setIsShowTable(!isShowGrid);
-  }, [isShowGrid]);
-  React.useEffect(() => {
-    setIsShowGrid(!isShowTable);
-  }, [isShowTable]);
+  }, [onnGetAllEmployee]);
+  const filteredStudents = useMemo(() => {
+    const copyList = [...(list ?? [])];
+    return copyList?.filter((student) =>
+      `${student.firstName} ${student.lastName}`
+        .toLowerCase()
+        .trim()
+        .includes(searchValue.toLowerCase().trim()),
+    );
+  }, [list, searchValue]);
   return (
     <SidebarLayout>
       <Wrapper>
@@ -64,84 +63,25 @@ const Employee = () => {
             <span className="welcome">Welcome Teacher!</span>
             <span className="breadcrumb">All Students</span>
           </div>
-          <div className="header-right">
-            <div
-              className={
-                isShowGrid ? 'container-icon active' : 'container-icon'
-              }
-              onClick={() => setIsShowGrid(true)}
-            >
-              <MenuIcon className={'icon'} />
-            </div>
-            <div
-              className={
-                isShowTable ? 'container-icon active' : 'container-icon'
-              }
-              onClick={() => setIsShowTable(true)}
-            >
-              <AppsIcon className={'icon'} />
-            </div>
-            <div className="add-icon">
-              <AddIcon className="icon" />
-              Add Student
-            </div>
-          </div>
         </div>
         <Grid spacing={3} className="grid" container>
-          <Grid item xs={3}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Student ID"
-              type="number"
-            />
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item className="search" xs={4}>
+            <span className="text">Search By:</span>
             <TextField
               fullWidth
               className="text-field"
               label="Student Name"
+              size="small"
               type="text"
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </Grid>
-          <Grid item xs={3}>
-            <TextField
-              fullWidth
-              className="select-major"
-              id="outlined-select-currency-native"
-              select
-              label="Select Major"
-              defaultValue="Information Technology"
-              SelectProps={{
-                native: true,
-              }}
-            >
-              {majors.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={3}>
-            <div className="button-search">
-              <a href="#">Search</a>
-            </div>
-          </Grid>
-          {list?.map((item, key) => {
+          {filteredStudents?.map((item, key) => {
             return (
-              <Grid
-                item
-                xs={isShowGrid ? 12 : isShowTable ? 3 : 1}
-                key={key}
-                className={
-                  isShowGrid
-                    ? 'grid-wrapper table'
-                    : isShowTable
-                    ? 'grid-wrapper grid'
-                    : 'grid-wrapper'
-                }
-              >
+              <Grid item xs={3} key={key} className={'grid-wrapper grid'}>
                 <div
                   className="profile-widget"
                   onClick={() => {

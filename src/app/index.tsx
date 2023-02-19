@@ -10,6 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainRoute } from 'modules';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoadingProvider } from 'providers/LoadingProvider';
 
 let persistor = persistStore(store);
 
@@ -19,18 +20,20 @@ export const App = () => {
       <Router>
         <PersistGate loading={null} persistor={persistor}>
           <QueryClientProvider client={queryClient}>
-            <AccessTokenProvider>
-              <MainRoute />
-              <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                pauseOnFocusLoss
-                pauseOnHover
-              />
-            </AccessTokenProvider>
+            <LoadingProvider>
+              <AccessTokenProvider>
+                <MainRoute />
+                <ToastContainer
+                  position="bottom-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  pauseOnFocusLoss
+                  pauseOnHover
+                />
+              </AccessTokenProvider>
+            </LoadingProvider>
           </QueryClientProvider>
         </PersistGate>
       </Router>

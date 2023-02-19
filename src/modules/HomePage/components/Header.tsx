@@ -74,24 +74,13 @@ export const Header = () => {
                         onClick={() => history.push(`${item.path}`)}
                       >
                         {item.title}
-                        <div className="dropdown-menu">
-                          {item.child?.map((item) => (
-                            <a
-                              key={item.title}
-                              className="dropdown-item"
-                              href="#"
-                            >
-                              {item.title}
-                            </a>
-                          ))}
-                        </div>
                       </li>
                     ))}
                   </ul>
                 </div>
                 {!token ? (
                   <div className="headerBottom__right">
-                    <div onClick={() => history.push('/sign-in')}>SIGN IN </div>
+                    <div onClick={() => history.push('/sign-in')}>SIGN IN</div>
                   </div>
                 ) : (
                   <div

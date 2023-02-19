@@ -2,8 +2,18 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   padding: 30px;
+  padding-bottom: 80px;
   box-sizing: border-box;
   width: 100%;
+  .search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    .text {
+      min-width: 90px;
+    }
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -27,9 +37,13 @@ export const Wrapper = styled.div`
     .header-right {
       display: flex;
       align-items: center;
-      .add-icon {
-        display: flex;
-        align-items: center;
+      .button-add {
+        background: linear-gradient(
+          to right,
+          #ff9b44 0%,
+          #fc6075 100%
+        ) !important;
+        color: white !important;
       }
       .container-icon {
         margin-right: 20px;

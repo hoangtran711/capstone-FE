@@ -91,7 +91,7 @@ export const Header = () => {
                 </div>
                 {!token ? (
                   <div className="headerBottom__right">
-                    <div onClick={() => history.push('/sign-in')}>SIGN IN </div>
+                    <div onClick={() => history.push('/sign-in')}>SIGN IN</div>
                   </div>
                 ) : (
                   <div

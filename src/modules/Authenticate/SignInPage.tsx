@@ -10,20 +10,30 @@ import { singInThunk } from 'reducer';
 import { useAppDispatch } from 'app/store';
 import { useSelector } from 'react-redux';
 import { selectToken } from 'reducer/account/account.selector';
+import { useForm } from 'react-hook-form';
+import { ISingIn } from 'queries/useAuth';
+import { IDataInputLogin } from './interfaces/IDataInputLogin';
 
 const SignInPage = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const {
+    register,
+    formState: { errors },
+    getValues,
+    trigger,
+  } = useForm<IDataInputLogin>({ mode: 'onChange' });
   const history = useHistory();
   const token = useSelector(selectToken);
 
   const dispatch = useAppDispatch();
-  const login = () => {
-    dispatch(singInThunk({ username: email, password: password }));
+  const handleLogin = async () => {
+    const isValid = await trigger();
+    if (!isValid) return;
+    const data = getValues();
+    dispatch(singInThunk(data as ISingIn));
   };
   React.useEffect(() => {
     if (token) {
-      history.push('/');
+      history.push('/dashboard');
     }
   }, [token, history]);
   return (
@@ -39,25 +49,29 @@ const SignInPage = () => {
         <TextField
           fullWidth
           className="text-field"
-          label="Email"
+          label="Email or Username"
           type="email"
-          onChange={(e: any) => setEmail(e.target.value)}
+          {...register('username', {
+            required: 'Email or Username cannot empty',
+          })}
+          helperText={errors.username?.message}
+          error={!!errors.username?.message}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Password"
           type="password"
-          onChange={(e: any) => setPassword(e.target.value)}
+          {...register('password', { required: 'Password cannot empty' })}
+          helperText={errors.password?.message}
+          error={!!errors.password?.message}
         />
         <span className="forgot">Forgot Password?</span>
         <LoadingButton
           className="authenticate-button"
           variant="contained"
           fullWidth
-          onClick={() => {
-            login();
-          }}
+          onClick={handleLogin}
         >
           Login
         </LoadingButton>

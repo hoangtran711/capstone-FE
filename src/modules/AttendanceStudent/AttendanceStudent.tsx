@@ -20,6 +20,7 @@ import Paper from '@mui/material/Paper';
 import {
   useAttendanceMe,
   useGetCurrentSchedules,
+  useGetHistoryAttendance,
   // useGetSchedules,
 } from 'queries/useEmployee';
 import { useGetAllProjectsAdmin } from 'queries/useProjects';
@@ -123,15 +124,20 @@ const Request = () => {
   const [distance, setDistance] = React.useState<any>();
   const [ableToCountDown, setAbleToCountDown] = React.useState<boolean>(false);
   const [schedules, setSchedules] = React.useState<Array<any>>([]);
+  const [history, setHistory] = React.useState<Array<any>>([]);
   const [times, setTimes] = React.useState<any>();
   const [projects, setProjects] = React.useState<Array<any>>([]);
   const [minute, setMinute] = React.useState(0);
   const [second, setSecond] = React.useState(0);
+  const [textNotify, setTextNotify] = React.useState<string>('');
+  const [reload, setReload] = React.useState<boolean>(false);
+  const [isAttended, setIsAttended] = React.useState<boolean>(false);
 
   // const onGetSchedules = useGetSchedules();
   const onGetCurrentSchedules = useGetCurrentSchedules();
   const onGetAllProject = useGetAllProjectsAdmin();
   const attendanceMe = useAttendanceMe();
+  const onGetHistoryAttendance = useGetHistoryAttendance();
 
   const handleChange = (event: SelectChangeEvent) => {
     setDefaultProject(event.target.value);
@@ -147,21 +153,61 @@ const Request = () => {
       .catch((err: any) => {
         toast.error(err);
       });
+    onGetHistoryAttendance()
+      .then((rs: any) => {
+        if (rs) {
+          console.log('rs', rs);
+          setHistory(rs);
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err);
+      });
     onGetAllProject().then((rs: any) => {
       setProjects(rs);
     });
   }, []);
   React.useEffect(() => {
+    onGetHistoryAttendance()
+      .then((rs: any) => {
+        if (rs) {
+          console.log('rs', rs);
+          setHistory(rs);
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err);
+      });
+  }, [reload]);
+  React.useEffect(() => {
     if (defaultProject !== '') {
-      setTimes(
-        schedules?.find((item: any) => item.projectId === defaultProject)?.time,
-      );
+      if (
+        history?.find((h: any) => {
+          return h.projectId === defaultProject;
+        })?.times[0]?.leave
+      ) {
+        setTextNotify('Joined');
+        setAbleToCountDown(false);
+      } else {
+        if (
+          !history?.find((h: any) => {
+            return h.projectId === defaultProject;
+          })?.times[0]?.leave
+        ) {
+          setTextNotify('Time out');
+          setAbleToCountDown(false);
+        }
+        // setTextNotify('Waiting');
+        setTimes(
+          schedules?.find((item: any) => item.projectId === defaultProject)
+            ?.time,
+        );
+      }
     }
-  }, [defaultProject, schedules]);
+  }, [defaultProject, schedules, history, distance]);
   console.log(schedules);
 
   React.useEffect(() => {
-    console.log(times);
     if (times) {
       console.log(moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate());
       if (
@@ -171,10 +217,11 @@ const Request = () => {
       ) {
         setAfterMinute(times.attendaceAfter);
       } else {
-        console.log(
-          'distance',
+        setTextNotify('Waiting');
+        startWaiting(
           moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
             new Date().getTime(),
+          times,
         );
       }
     }
@@ -190,24 +237,41 @@ const Request = () => {
     }
   }, [dateMatch, afterMinute, times]);
   React.useEffect(() => {
+    const startTimer = (timer: number) => {
+      let j = setInterval(() => {
+        setMinute(parseInt((timer / 60000).toString(), 10));
+        setSecond(parseInt(((timer % 60000) / 1000).toString(), 10));
+        timer = timer - 1000;
+        if (timer < 0) {
+          setAbleToCountDown(false);
+          setDistance(0);
+          clearInterval(j);
+        }
+      }, 1000);
+    };
     if (distance > 0) {
       startTimer(distance);
     } else {
       setAbleToCountDown(false);
+      setTextNotify('Time out');
     }
-  }, [distance]);
+  }, [distance, isAttended]);
+  React.useEffect(() => {
+    setTextNotify(`${minute} : ${second}`);
+  }, [minute, second]);
 
-  const startTimer = (timer: number) => {
-    setInterval(() => {
-      setMinute(parseInt((timer / 60000).toString(), 10));
-      setSecond(parseInt((timer % 60000).toString(), 10));
+  const startWaiting = (timer: number, times: any) => {
+    let i = setInterval(() => {
+      setReload(!reload);
       timer = timer - 1000;
-      if (timer < 0) {
-        setAbleToCountDown(false);
+      console.log(timer);
+      if (timer <= 0) {
+        setAfterMinute(times.attendaceAfter);
+        clearInterval(i);
       }
     }, 1000);
   };
-  console.log(minute, second);
+
   const attendance = () => {
     if (defaultProject === '') {
       toast.error('Please choose specific project for attendance');
@@ -219,6 +283,22 @@ const Request = () => {
           toast.success(
             'Successfull, your attendance has been recorded on this project',
           );
+          setAbleToCountDown(false);
+          setReload(!reload);
+          setDistance(0);
+          setTimes(0);
+          setIsAttended(true);
+
+          onGetHistoryAttendance()
+            .then((rs: any) => {
+              if (rs) {
+                console.log('rs', rs);
+                setHistory(rs);
+              }
+            })
+            .catch((err: any) => {
+              toast.error(err);
+            });
         }
       })
       .catch((err: any) => {
@@ -244,15 +324,7 @@ const Request = () => {
                 </h5>
                 <div className="punch-info">
                   <div className="punch-minutes">
-                    <span>
-                      {ableToCountDown ? (
-                        <>
-                          {minute} : {second}
-                        </>
-                      ) : (
-                        'Time out'
-                      )}
-                    </span>
+                    <span>{textNotify}</span>
                   </div>
                 </div>
                 <div
@@ -260,14 +332,20 @@ const Request = () => {
                     ableToCountDown ? 'punch-btn' : 'punch-btn disable'
                   }
                   onClick={() => {
-                    if (ableToCountDown) {
+                    if (ableToCountDown && !isAttended) {
                       attendance();
                     } else {
-                      toast.info('Can not attendance at this moment ');
+                      if (isAttended) {
+                        toast.info('You have attended successfull');
+                      } else {
+                        toast.info('Can not attendance at this moment ');
+                      }
                     }
                   }}
                 >
-                  <button type="button">Punch Out</button>
+                  <button type="button">
+                    {isAttended ? 'Attended' : 'Attend'}
+                  </button>
                 </div>
                 <div className="statistics">
                   <Grid spacing={3} className="grid" container>

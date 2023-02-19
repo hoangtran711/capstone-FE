@@ -6,7 +6,12 @@ import { IEmployee } from 'modules/Employee/Employee';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { toast } from 'react-toastify';
 
-export const AddStudent = ({ setVisibility, projectID }: any) => {
+export const AddStudent = ({
+  setVisibility,
+  projectID,
+  reload,
+  setReload,
+}: any) => {
   console.log('project id', projectID);
   const [students, setStudents] = React.useState<Array<IEmployee>>([]);
   const onAdd = useAddStudentToProject();
@@ -47,11 +52,17 @@ export const AddStudent = ({ setVisibility, projectID }: any) => {
                   <div
                     className="btn-add"
                     onClick={() => {
-                      onAdd(item._id, projectID).then((rs: any) => {
-                        if (rs) {
-                          toast.success('Add student successfull');
-                        }
-                      });
+                      onAdd(item._id, projectID)
+                        .then((rs: any) => {
+                          if (rs) {
+                            toast.success('Add student successfull');
+                            setReload(!reload);
+                            setVisibility(false);
+                          }
+                        })
+                        .catch((err: any) => {
+                          toast.error(err);
+                        });
                     }}
                   >
                     <GroupAddIcon />

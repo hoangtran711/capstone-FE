@@ -8,17 +8,24 @@ import { Link, useHistory } from 'react-router-dom';
 import { singInThunk } from 'reducer';
 // import { IAppDispatch } from 'app/store';
 import { useAppDispatch } from 'app/store';
+import { useSelector } from 'react-redux';
+import { selectToken } from 'reducer/account/account.selector';
 
 const SignInPage = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const history = useHistory();
+  const token = useSelector(selectToken);
 
   const dispatch = useAppDispatch();
   const login = () => {
     dispatch(singInThunk({ username: email, password: password }));
-    history.push('/');
   };
+  React.useEffect(() => {
+    if (token) {
+      history.push('/');
+    }
+  }, [token, history]);
   return (
     <Wrapper>
       <img

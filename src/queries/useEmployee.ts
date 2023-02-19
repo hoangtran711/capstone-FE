@@ -61,3 +61,13 @@ export const useAttendanceMe = () => {
         }
     };
 };
+export const useGetCurrentSchedules = () => {
+    return async function () {
+        try {
+            const rs = http.get(`v1/student/me/current-attendance/today`);
+            return rs;
+        } catch (err: any) {
+            toast.error(err);
+        }
+    };
+};

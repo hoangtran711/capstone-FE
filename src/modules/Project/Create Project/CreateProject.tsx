@@ -12,9 +12,10 @@ import dayjs, { Dayjs } from 'dayjs';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useCreateProject } from 'queries/useProjects';
+
 const MAX_JOIN_DEFAULT = 99;
 const ATTENDANCE_AFTER_DEFAULT = 14;
-export const CreateProject = ({ setVisibility }: any) => {
+export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
   const {
     register,
     handleSubmit,
@@ -29,19 +30,29 @@ export const CreateProject = ({ setVisibility }: any) => {
     payload.maxJoin = Number(payload.maxJoin);
     payload.attendanceAfterMinute = Number(payload.attendanceAfterMinute);
     payload.totalLesson = Number(payload.totalLesson);
-    console.log(payload);
     onCreateProject(payload).then((rs: any) => {
       if (rs) {
         toast.success(`Project ${payload.projectName} created successfull`);
+        setReload(!reload);
+        setVisibility(false);
       }
     });
   };
-  const [startDate, setStart] = React.useState('2022-01-01');
-  const [endDate, setEnd] = React.useState('2022-01-02');
+  const today = new Date();
+  const nexdate = new Date();
+  nexdate.setDate(today.getDate() + 1);
+
+  const [startDate, setStart] = React.useState(
+    dayjs(today).format('YYYY-MM-DD'),
+  );
+  const [endDate, setEnd] = React.useState(dayjs(nexdate).format('YYYY-MM-DD'));
   const [learnDate, setLearnDate] = React.useState<Array<string>>([]);
   const [learnDateShow, setLearnDateShow] = React.useState<Array<string>>([]);
   const [value, setValue] = React.useState<Dayjs | null>(dayjs(new Date()));
-
+  React.useEffect(() => {
+    console.log('today', endDate);
+    console.log('next', startDate);
+  }, []);
   return (
     <Wrapper>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

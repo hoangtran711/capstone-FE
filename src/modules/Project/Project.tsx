@@ -18,6 +18,7 @@ import { AddStudent } from './Add Student/AddStudent';
 const Project = () => {
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
   const [isShowAddStudent, setIsShowAddStudent] = React.useState(false);
+  const [reload, setReload] = React.useState(false);
   const [me, setMe] = React.useState<IEmployee>({
     email: '',
     password: '',
@@ -50,7 +51,14 @@ const Project = () => {
       }
     });
   }, []);
-  console.log(listProject);
+  React.useEffect(() => {
+    onGetAllProject().then((rs: any) => {
+      if (rs) {
+        setListProject(rs);
+        setListProjectTemp(rs);
+      }
+    });
+  }, [reload]);
   const search = () => {
     if (searchvalue === '') {
       setListProject(listProjectTemp);
@@ -62,17 +70,24 @@ const Project = () => {
       ),
     );
   };
+  console.log(listProject);
 
   return (
     <SidebarLayout>
       <Wrapper>
         {isShowCreateProject && (
-          <CreateProject setVisibility={setIsShowCreateProject} />
+          <CreateProject
+            setVisibility={setIsShowCreateProject}
+            reload={reload}
+            setReload={setReload}
+          />
         )}
         {isShowAddStudent && (
           <AddStudent
             setVisibility={setIsShowAddStudent}
             projectID={activeProject}
+            reload={reload}
+            setReload={setReload}
           />
         )}
         <div className="header">

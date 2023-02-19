@@ -1,69 +1,48 @@
 import React from 'react';
 import { Wrapper } from './Authenticate.styled';
 import { TextField } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSignUp } from 'queries/useAuth';
 // import { useSignUp } from 'queries/useAuth';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 const SignInPage = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [repeatpass, setRepeatPass] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [dateOfBirth, setDateOfBirth] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [address, setAddress] = React.useState('');
   const [date, setDate] = React.useState(1);
   const [month, setMonth] = React.useState(1);
   const [year, setYear] = React.useState(1970);
+  const [dateOfBirth, setDateOfBirth] = React.useState('1-1-1970');
   const onSignUp = useSignUp();
   const history = useHistory();
+
   React.useEffect(() => {
     if (date && month && year) {
       setDateOfBirth([date, month, year].join('-'));
     }
   }, [date, month, year]);
-  console.log(dateOfBirth);
-  const register = () => {
-    if (
-      email &&
-      password &&
-      repeatpass &&
-      username &&
-      firstName &&
-      lastName &&
-      dateOfBirth &&
-      phoneNumber &&
-      address
-    ) {
-      if (password !== repeatpass) {
-        toast.info('Password and Repeat Password does not match !');
-        return;
-      }
-      onSignUp({
-        email: email,
-        password: password,
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
-        dateOfBirth: dateOfBirth,
-        phoneNumber: phoneNumber,
-        address: address,
-      }).then((rs: any) => {
-        if (rs) {
-          toast.success('Register successfull');
-          history.push('/sign-in');
-        }
-      });
-    } else {
-      toast.info('Please fill all the fields for registering');
-    }
-  };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const onSubmit = (data: any) => {
+    let payload = { ...data, dateOfBirth };
+    if (data.password !== data.repeatpassword) {
+      toast.error('Pass and Repeat Pass does not match');
+      return;
+    }
+    onSignUp(payload).then((rs: any) => {
+      if (rs) {
+        toast.success('Register successfull');
+        history.push('/sign-in');
+      }
+    });
+  };
   return (
     <Wrapper>
       <img
@@ -71,7 +50,7 @@ const SignInPage = () => {
         src={require('assets/logo/primary-logo.png')}
         alt="Logo"
       />
-      <div className="form">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <span className="title">Register</span>
         <span className="subtitle">Access to our dashboard</span>
         <TextField
@@ -79,56 +58,56 @@ const SignInPage = () => {
           className="text-field"
           label="Email"
           type="email"
-          onChange={(e: any) => setEmail(e.target.value)}
+          {...register('email')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Username"
           type="email"
-          onChange={(e: any) => setUsername(e.target.value)}
+          {...register('username')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="First Name"
           type="email"
-          onChange={(e: any) => setFirstName(e.target.value)}
+          {...register('firstName')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Last Name"
           type="email"
-          onChange={(e: any) => setLastName(e.target.value)}
+          {...register('lastName')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Password"
           type="password"
-          onChange={(e: any) => setPassword(e.target.value)}
+          {...register('password')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Repeat Password"
           type="password"
-          onChange={(e: any) => setRepeatPass(e.target.value)}
+          {...register('repeatpassword')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Phone"
           type="email"
-          onChange={(e: any) => setPhoneNumber(e.target.value)}
+          {...register('phone')}
         />
         <TextField
           fullWidth
           className="text-field"
           label="Address"
           type="email"
-          onChange={(e: any) => setAddress(e.target.value)}
+          {...register('address')}
         />
         <div className="date">
           <div className="label">Date of birth</div>
@@ -178,20 +157,25 @@ const SignInPage = () => {
             })}
           </select>
         </div>
-        <LoadingButton
+        <input
           className="authenticate-button"
-          variant="contained"
-          fullWidth
-          onClick={() => register()}
-        >
-          Register
-        </LoadingButton>
+          type="submit"
+          value={'Register'}
+        />
         <span className="redirect">
           Already have an account? <Link to="/sign-in">Login</Link>
         </span>
-      </div>
+      </form>
     </Wrapper>
   );
 };
+const schema = yup
+  .object({
+    email: yup.string().required('Email is required'),
+    password: yup.string().required('Password is required'),
+    repeatpassword: yup.string().required('Repeat password is required'),
+    // maxJoin: yup.number().positive().integer().required('Max join is required'),
+  })
+  .required();
 
 export default SignInPage;

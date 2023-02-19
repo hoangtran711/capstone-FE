@@ -29,6 +29,7 @@ export const Wrapper = styled.div`
       border-radius: 4px;
     }
   }
+  form,
   .form {
     background-color: white;
     width: 480px;

@@ -17,7 +17,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useAttendanceMe, useGetSchedules } from 'queries/useEmployee';
+import {
+  useAttendanceMe,
+  useGetCurrentSchedules,
+  // useGetSchedules,
+} from 'queries/useEmployee';
 import { useGetAllProjectsAdmin } from 'queries/useProjects';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -116,11 +120,16 @@ const Request = () => {
   const [defaultProject, setDefaultProject] = React.useState('');
   const [dateMatch, setDateMatch] = React.useState<any>();
   const [afterMinute, setAfterMinute] = React.useState<any>();
+  const [distance, setDistance] = React.useState<any>();
   const [ableToCountDown, setAbleToCountDown] = React.useState<boolean>(false);
   const [schedules, setSchedules] = React.useState<Array<any>>([]);
-  const [times, setTimes] = React.useState<Array<any>>([]);
+  const [times, setTimes] = React.useState<any>();
   const [projects, setProjects] = React.useState<Array<any>>([]);
-  const onGetSchedules = useGetSchedules();
+  const [minute, setMinute] = React.useState(0);
+  const [second, setSecond] = React.useState(0);
+
+  // const onGetSchedules = useGetSchedules();
+  const onGetCurrentSchedules = useGetCurrentSchedules();
   const onGetAllProject = useGetAllProjectsAdmin();
   const attendanceMe = useAttendanceMe();
 
@@ -128,63 +137,94 @@ const Request = () => {
     setDefaultProject(event.target.value);
   };
   React.useEffect(() => {
-    onGetSchedules().then((rs: any) => {
-      setSchedules(rs);
-    });
+    onGetCurrentSchedules()
+      .then((rs: any) => {
+        if (rs) {
+          console.log('rs', rs);
+          setSchedules(rs);
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err);
+      });
     onGetAllProject().then((rs: any) => {
       setProjects(rs);
     });
   }, []);
   React.useEffect(() => {
-    setTimes(
-      schedules[0]?.schedules?.find(
-        (item: any) => item.projectId === defaultProject,
-      )?.times,
-    );
+    if (defaultProject !== '') {
+      setTimes(
+        schedules?.find((item: any) => item.projectId === defaultProject)?.time,
+      );
+    }
   }, [defaultProject, schedules]);
+  console.log(schedules);
+
   React.useEffect(() => {
-    times?.map((item) => {
-      console.log(moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate());
+    console.log(times);
+    if (times) {
+      console.log(moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate());
       if (
-        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getDate() ===
-          new Date().getDate() &&
-        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getMonth() ===
-          new Date().getMonth() &&
-        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss')
-          .toDate()
-          .getFullYear() === new Date().getFullYear()
+        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
+          new Date().getTime() <=
+        0
       ) {
-        setDateMatch(
-          moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime(),
+        setAfterMinute(times.attendaceAfter);
+      } else {
+        console.log(
+          'distance',
+          moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
+            new Date().getTime(),
         );
-        setAfterMinute(item.attendaceAfter);
       }
-    });
+    }
   }, [times]);
   React.useEffect(() => {
-    if (Number(dateMatch) === Number(new Date().getTime())) {
+    if (afterMinute) {
       setAbleToCountDown(true);
+      setDistance(
+        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() +
+          afterMinute * 60 * 1000 -
+          new Date().getTime(),
+      );
     }
-  }, [dateMatch, afterMinute]);
+  }, [dateMatch, afterMinute, times]);
+  React.useEffect(() => {
+    if (distance > 0) {
+      startTimer(distance);
+    } else {
+      setAbleToCountDown(false);
+    }
+  }, [distance]);
 
+  const startTimer = (timer: number) => {
+    setInterval(() => {
+      setMinute(parseInt((timer / 60000).toString(), 10));
+      setSecond(parseInt((timer % 60000).toString(), 10));
+      timer = timer - 1000;
+      if (timer < 0) {
+        setAbleToCountDown(false);
+      }
+    }, 1000);
+  };
+  console.log(minute, second);
   const attendance = () => {
     if (defaultProject === '') {
       toast.error('Please choose specific project for attendance');
       return;
     }
-    attendanceMe(defaultProject).then((rs: any) => {
-      if (rs) {
-        toast.success(
-          'Successfull, your attendance has been recorded on this project',
-        );
-      }
-    });
+    attendanceMe(defaultProject)
+      .then((rs: any) => {
+        if (rs) {
+          toast.success(
+            'Successfull, your attendance has been recorded on this project',
+          );
+        }
+      })
+      .catch((err: any) => {
+        toast.error(err.message || err);
+      });
   };
-
-  console.log('schedules', schedules);
-  console.log('projects', projects);
-  console.log('default', defaultProject);
-  console.log('times', times);
 
   return (
     <SidebarLayout>
@@ -196,7 +236,7 @@ const Request = () => {
           </div>
         </div>
         <Grid spacing={3} className="grid" container>
-          <Grid item xs={9}>
+          <Grid item xs={6}>
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">
@@ -204,7 +244,15 @@ const Request = () => {
                 </h5>
                 <div className="punch-info">
                   <div className="punch-minutes">
-                    <span>10 mins</span>
+                    <span>
+                      {ableToCountDown ? (
+                        <>
+                          {minute} : {second}
+                        </>
+                      ) : (
+                        'Time out'
+                      )}
+                    </span>
                   </div>
                 </div>
                 <div
@@ -234,26 +282,24 @@ const Request = () => {
                           label="Select Project"
                           onChange={handleChange}
                         >
-                          {schedules[0]?.schedules?.map(
-                            (sche: any, key: any) => {
-                              return (
-                                <MenuItem
-                                  key={key}
-                                  value={
-                                    projects?.find(
-                                      (pro: any) => pro._id === sche.projectId,
-                                    )?._id
-                                  }
-                                >
-                                  {
-                                    projects?.find(
-                                      (pro: any) => pro._id === sche.projectId,
-                                    )?.projectName
-                                  }
-                                </MenuItem>
-                              );
-                            },
-                          )}
+                          {schedules?.map((sche: any, key: any) => {
+                            return (
+                              <MenuItem
+                                key={key}
+                                value={
+                                  projects?.find(
+                                    (pro: any) => pro._id === sche.projectId,
+                                  )?._id
+                                }
+                              >
+                                {
+                                  projects?.find(
+                                    (pro: any) => pro._id === sche.projectId,
+                                  )?.projectName
+                                }
+                              </MenuItem>
+                            );
+                          })}
                         </Select>
                       </FormControl>
                     </Grid>
@@ -270,50 +316,25 @@ const Request = () => {
               </div>
             </div>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <div className="card">
               <div className="card-body" style={{ paddingBottom: 0 }}>
                 <div className="card-title">Today Activities</div>
                 <ul className="res-subject-list">
-                  <li>
-                    <p className="res-subject-name">Calculus 1</p>
-                    <p className="res-subject-time">
-                      <AccessTimeIcon />
-                      10:00 am
-                    </p>
-                  </li>
-                  <li>
-                    <p className="res-subject-name">Software Engineering</p>
-                    <p className="res-subject-time">
-                      {' '}
-                      <AccessTimeIcon />
-                      7:00 am
-                    </p>
-                  </li>
-                  <li>
-                    <p className="res-subject-name">Machine Learning</p>
-                    <p className="res-subject-time">
-                      {' '}
-                      <AccessTimeIcon />
-                      3:00 pm
-                    </p>
-                  </li>
-                  <li>
-                    <p className="res-subject-name">Academic English 4</p>
-                    <p className="res-subject-time">
-                      {' '}
-                      <AccessTimeIcon />
-                      6:00 am
-                    </p>
-                  </li>
-                  <li>
-                    <p className="res-subject-name">Web Security</p>
-                    <p className="res-subject-time">
-                      {' '}
-                      <AccessTimeIcon />
-                      2:00 pm
-                    </p>
-                  </li>
+                  {schedules?.map((sche, key) => {
+                    let name = projects?.find(
+                      (pro: any) => pro._id === sche.projectId,
+                    )?.projectName;
+                    return (
+                      <li key={key}>
+                        <p className="res-subject-name">{name}</p>
+                        <p className="res-subject-time">
+                          <AccessTimeIcon />
+                          {sche.time.date}
+                        </p>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>

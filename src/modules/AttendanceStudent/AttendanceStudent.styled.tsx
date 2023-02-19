@@ -67,6 +67,8 @@ export const Wrapper = styled.div`
             justify-content: center;
           }
         }
+        li {
+        }
         .res-subject-name {
           margin-bottom: 5px;
         }
@@ -75,7 +77,10 @@ export const Wrapper = styled.div`
           margin-top: 0;
           color: #757575 !important;
           display: flex;
+          align-items: flex-start;
+          display: flex;
           align-items: center;
+          column-gap: 20px;
         }
       }
       .punch-btn {

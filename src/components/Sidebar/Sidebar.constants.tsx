@@ -58,4 +58,9 @@ export const SidebarItemsStudent: ISidebarItem[] = [
     path: '/request',
     Icon: AccountTreeIcon,
   },
+  {
+    title: 'Projects',
+    path: '/projects',
+    Icon: SubjectIcon,
+  },
 ];

@@ -1,8 +1,17 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import { SidebarLayout } from 'components';
 import { Wrapper } from './Request.styled';
 import AddIcon from '@mui/icons-material/Add';
-import { TextField } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  ListItemText,
+  Menu,
+  MenuItem,
+  TextField,
+} from '@mui/material';
 import { Grid } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,9 +20,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { CreateProject } from './components/Create Project/CreateProject';
-import { useGetRequestTeacher } from 'queries/useRequest';
+import {
+  useCreateRequest,
+  useGetRequestCurrentUser,
+  useUpdateStatusRequest,
+} from 'queries/useRequest';
 import moment from 'moment';
+import { useForm } from 'react-hook-form';
+import { IDataInputRequest } from './model/IDataInputRequest';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { useGetProjectUserJoined } from 'queries/useProjects';
+import { LoadingButton } from '@mui/lab';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { selectRole } from 'reducer/account/account.selector';
 
 const requestType = [
   {
@@ -32,104 +53,209 @@ const requestStatus = [
     label: 'Pending',
   },
   {
-    value: 'Approved',
-    label: 'Approved',
+    value: 'Accepted',
+    label: 'Accepted',
   },
   {
-    value: 'Reject',
-    label: 'Reject',
+    value: 'Denied',
+    label: 'Denied',
   },
 ];
 
-function createData(
-  name: string,
-  leaveType: string,
-  from: string,
-  to: string,
-  noofdays: number,
-  reason: string,
-  status: string,
-  actions: string,
-) {
-  return { name, leaveType, from, to, noofdays, reason, status, actions };
-}
-
-const rows = [
-  createData(
-    'Frozen yoghurt',
-    'Casual Leave',
-    '10 Jan 2019',
-    '10 Jan 2019',
-    4.0,
-    'Going to Hospital',
-    'new',
-    'new',
-  ),
-  createData(
-    'Ice cream sandwich',
-    'Casual Leave',
-    '10 Jan 2019',
-    '10 Jan 2019',
-    4.3,
-    'Going to Hospital',
-    'new',
-    'new',
-  ),
-  createData(
-    'Eclair',
-    'Casual Leave',
-    '10 Jan 2019',
-    '10 Jan 2019',
-    6.0,
-    'Going to Hospital',
-    'new',
-    'new',
-  ),
-  createData(
-    'Cupcake',
-    'Casual Leave',
-    '10 Jan 2019',
-    '10 Jan 2019',
-    4.3,
-    'Going to Hospital',
-    'new',
-    'new',
-  ),
-  createData(
-    'Gingerbread',
-    'Casual Leave',
-    '10 Jan 2019',
-    '10 Jan 2019',
-    3.9,
-    'Going to Hospital',
-    'new',
-    'new',
-  ),
-];
 const Request = () => {
-  const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
-  const { data } = useGetRequestTeacher();
-  console.log(data);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const { data } = useGetRequestCurrentUser();
+  const createRequest = useCreateRequest();
+  const updateRequest = useUpdateStatusRequest();
+  const [open, setOpen] = React.useState(false);
+  const {
+    register,
+    setValue,
+    getValues,
+    trigger,
+    reset,
+    formState: { errors },
+  } = useForm<IDataInputRequest>();
+  const { data: projects } = useGetProjectUserJoined();
+  const role = useSelector(selectRole);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    reset();
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleRequest = useCallback(async () => {
+    const isValid = await trigger();
+    if (!isValid) {
+      return;
+    }
+    const data = getValues();
+    setIsLoading(true);
+    try {
+      await createRequest(data);
+      toast.success('Create request success');
+      handleClose();
+    } catch (err: any) {
+      toast.error(err?.message || err);
+    }
+    setIsLoading(false);
+
+    handleClose();
+  }, [createRequest, getValues, handleClose, trigger]);
+
+  const filteredData = useMemo(
+    () =>
+      data?.filter((request: any) =>
+        `${request.userInfo.firstName} ${request.userInfo.lastName}`
+          .toLowerCase()
+          .trim()
+          .includes(searchValue.toLowerCase().trim()),
+      ),
+    [data, searchValue],
+  );
+
+  const dialogComponent = useMemo(
+    () => (
+      <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
+        <DialogTitle>Create Request</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                margin="dense"
+                label="Project ID"
+                fullWidth
+                select
+                variant="standard"
+                {...register('projectId', {
+                  required: 'Project ID cannot empty',
+                })}
+                helperText={errors.projectId?.message}
+                error={!!errors.projectId?.message}
+              >
+                {projects?.map((project: any) => (
+                  <MenuItem key={project._id} value={project._id}>
+                    {project.projectName}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                margin="dense"
+                label="Reason"
+                fullWidth
+                variant="standard"
+                {...register('reason', {
+                  required: 'Reason cannot empty',
+                })}
+                helperText={errors.reason?.message}
+                error={!!errors.reason?.message}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                margin="dense"
+                label="Type"
+                fullWidth
+                variant="standard"
+                select
+                {...register('type', {
+                  required: 'Type cannot empty',
+                })}
+                helperText={errors.type?.message}
+                error={!!errors.type?.message}
+              >
+                <MenuItem value={'Leave'}>Leave</MenuItem>
+                <MenuItem value={'Join Project'}>Join Project</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Select Date"
+                  value={getValues('date')}
+                  onChange={(newValue: any) => {
+                    setValue('date', newValue);
+                  }}
+                  renderInput={(params: any) => (
+                    <TextField fullWidth {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6}>
+              <ListItemText secondary="Proof Image" />
+              <TextField
+                onChange={(e: any) => setValue('proof', e.target.files)}
+                type="file"
+                inputProps={{ multiple: true }}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <LoadingButton
+            variant="contained"
+            color="error"
+            onClick={handleClose}
+            loading={isLoading}
+          >
+            Cancel
+          </LoadingButton>
+          <LoadingButton onClick={handleRequest} variant="contained">
+            Create Requeste
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    ),
+    [
+      errors.projectId?.message,
+      errors.reason?.message,
+      errors.type?.message,
+      getValues,
+      handleClose,
+      handleRequest,
+      isLoading,
+      open,
+      projects,
+      register,
+      setValue,
+    ],
+  );
+  const isAdmin = role === 'Admin';
+
   return (
     <SidebarLayout>
+      {dialogComponent}
       <Wrapper>
-        {isShowCreateProject && (
-          <CreateProject setVisibility={setIsShowCreateProject} />
-        )}
         <div className="header">
           <div className="header-left">
             <span className="welcome">Requests</span>
             <span className="breadcrumb">Dashboard / Requests</span>
           </div>
-          <div className="header-right">
-            <div
-              className="add-icon"
-              onClick={() => setIsShowCreateProject(true)}
-            >
-              <AddIcon className="icon" />
-              Add Request
+          {!isAdmin && (
+            <div className="header-right">
+              <div className="add-icon" onClick={handleClickOpen}>
+                <AddIcon className="icon" />
+                Create Request
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <Grid spacing={3} className="grid" container>
           <Grid item xs={3}>
@@ -171,16 +297,17 @@ const Request = () => {
           <Grid item xs={3}>
             <TextField
               fullWidth
-              className="text-field"
+              className="text-field textField"
               label="Student Name"
               type="text"
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </Grid>
 
           <Grid item xs={3}>
             <TextField
               fullWidth
-              className="select-requestType"
+              className="select-requestType textField"
               id="outlined-select-currency-native"
               select
               label="Request Type"
@@ -190,16 +317,16 @@ const Request = () => {
               }}
             >
               {requestType.map((option) => (
-                <option key={option.value} value={option.value}>
+                <MenuItem key={option.value} value={option.value}>
                   {option.label}
-                </option>
+                </MenuItem>
               ))}
             </TextField>
           </Grid>
           <Grid item xs={3}>
             <TextField
               fullWidth
-              className="select-requestType"
+              className="select-requestType textField"
               id="outlined-select-currency-native"
               select
               label="Request Status"
@@ -209,9 +336,9 @@ const Request = () => {
               }}
             >
               {requestStatus.map((option) => (
-                <option key={option.value} value={option.value}>
+                <MenuItem key={option.value} value={option.value}>
                   {option.label}
-                </option>
+                </MenuItem>
               ))}
             </TextField>
           </Grid>
@@ -227,25 +354,28 @@ const Request = () => {
                 <TableHead>
                   <TableRow className="table-title">
                     <TableCell id="table-head">Requester</TableCell>
-                    <TableCell align="right" id="table-head">
+                    <TableCell align="center" id="table-head">
                       Request Type
                     </TableCell>
-                    <TableCell align="right" id="table-head">
+                    <TableCell align="center" id="table-head">
                       Date
                     </TableCell>
-                    <TableCell align="right" id="table-head">
+                    <TableCell align="center" id="table-head">
                       Reason
                     </TableCell>
-                    <TableCell align="right" id="table-head">
+                    <TableCell align="center" id="table-head">
                       Approver
                     </TableCell>
-                    <TableCell align="right" id="table-head">
+                    <TableCell align="center" id="table-head">
+                      Project Name
+                    </TableCell>
+                    <TableCell align="center" id="table-head">
                       Status
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data?.map((row: any) => (
+                  {filteredData?.map((row: any) => (
                     <TableRow
                       key={row.name}
                       sx={{
@@ -253,16 +383,58 @@ const Request = () => {
                       }}
                     >
                       <TableCell component="th" scope="row">
-                        {row._id}
+                        {`${row.userInfo.firstName} ${row.userInfo.lastName}`}
                       </TableCell>
-                      <TableCell align="right">{row.type}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">{row.type}</TableCell>
+                      <TableCell align="center">
                         {row.date &&
                           moment(row.date).format('dddd, MMMM Do YYYY')}
                       </TableCell>
-                      <TableCell align="right">{row.reason}</TableCell>
-                      <TableCell align="right">{row.approver}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="center">{row.reason}</TableCell>
+                      <TableCell align="center">{`${row.approverInfo.firstName} ${row.approverInfo.lastName}`}</TableCell>
+                      <TableCell align="center">
+                        {row.projectInfo.projectName}
+                      </TableCell>
+                      <TableCell align="center">
+                        <div
+                          onClick={handleOpenMenu}
+                          id="status-button"
+                          className={`status ${row.status}`}
+                        >
+                          {row.status}
+                        </div>
+                        {isAdmin && row.status === 'Pending' && (
+                          <Menu
+                            aria-labelledby="status-button"
+                            anchorEl={anchorEl}
+                            open={openMenu}
+                            onClose={handleCloseMenu}
+                          >
+                            <MenuItem
+                              onClick={async () => {
+                                await updateRequest({
+                                  requestId: row._id,
+                                  status: 'Accepted',
+                                });
+                                handleClose();
+                              }}
+                            >
+                              Accepted
+                            </MenuItem>
+                            <MenuItem
+                              onClick={async () => {
+                                await updateRequest({
+                                  requestId: row._id,
+                                  status: 'Denied',
+                                });
+                                handleClose();
+                              }}
+                            >
+                              Denied
+                            </MenuItem>
+                          </Menu>
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

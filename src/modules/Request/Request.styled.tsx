@@ -2,8 +2,42 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   padding: 30px;
+  padding-bottom: 80px;
   box-sizing: border-box;
   width: 100%;
+  .textField {
+    background-color: white;
+  }
+  .Accepted {
+    color: #699834;
+    border-color: #699834 !important;
+  }
+  .Pending {
+    color: #7460ee;
+    border-color: #7460ee !important;
+  }
+  .Denied {
+    color: #f62d51;
+    border-color: #f62d51 !important;
+  }
+  .status {
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid black;
+    border-radius: 50px;
+    padding: 7px 0px;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      transform: scale(1.02);
+    }
+    &:active {
+      transform: scale(0.99);
+    }
+  }
+  .dialog {
+    display: none;
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -30,6 +64,8 @@ export const Wrapper = styled.div`
       .add-icon {
         display: flex;
         align-items: center;
+        font-size: 16px !important;
+        width: auto !important;
       }
       .container-icon {
         margin-right: 20px;

@@ -71,3 +71,13 @@ export const useGetCurrentSchedules = () => {
         }
     };
 };
+export const useGetHistoryAttendance = () => {
+    return async function () {
+        try {
+            const rs = http.get(`v1/student/me/history`);
+            return rs;
+        } catch (err: any) {
+            toast.error(err);
+        }
+    };
+};

@@ -40,7 +40,7 @@ export const Header = () => {
                 <ul>
                   <li>
                     Need Help? Talk to an Expert
-                    <span> 19001234</span>
+                    <span> 0382520281</span>
                   </li>
                   <li>
                     <SearchIcon />
@@ -74,7 +74,7 @@ export const Header = () => {
                         onClick={() => history.push(`${item.path}`)}
                       >
                         {item.title}
-                        <div className="dropdown-menu">
+                        {/* <div className="dropdown-menu">
                           {item.child?.map((item) => (
                             <a
                               key={item.title}
@@ -84,7 +84,7 @@ export const Header = () => {
                               {item.title}
                             </a>
                           ))}
-                        </div>
+                        </div> */}
                       </li>
                     ))}
                   </ul>

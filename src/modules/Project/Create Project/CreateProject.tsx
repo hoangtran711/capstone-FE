@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import { useCreateProject } from 'queries/useProjects';
 const MAX_JOIN_DEFAULT = 99;
 const ATTENDANCE_AFTER_DEFAULT = 14;
-export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
+export const CreateProject = ({ setVisibility }: any) => {
   const {
     register,
     handleSubmit,
@@ -23,7 +23,6 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
     resolver: yupResolver(schema),
   });
   const onCreateProject = useCreateProject();
-  console.log(reload);
 
   const onSubmit = (data: any) => {
     let payload = { ...data, startDate, endDate, learnDate };
@@ -34,8 +33,6 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
     onCreateProject(payload).then((rs: any) => {
       if (rs) {
         toast.success(`Project ${payload.projectName} created successfull`);
-        setReload(!reload);
-        setVisibility(false);
       }
     });
   };

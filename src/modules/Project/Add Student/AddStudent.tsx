@@ -1,0 +1,67 @@
+import { Wrapper } from './AddStudent.styled';
+import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import { useAddStudentToProject, useGetAllEmployee } from 'queries/useEmployee';
+import { IEmployee } from 'modules/Employee/Employee';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { toast } from 'react-toastify';
+
+export const AddStudent = ({ setVisibility, projectID }: any) => {
+  console.log('project id', projectID);
+  const [students, setStudents] = React.useState<Array<IEmployee>>([]);
+  const onAdd = useAddStudentToProject();
+  const onGetAllUsers = useGetAllEmployee();
+  React.useEffect(() => {
+    onGetAllUsers().then((rs: any) => {
+      let tmp = rs?.filter((item: any) => item.role === 'Student');
+      setStudents(tmp);
+    });
+  }, []);
+
+  return (
+    <Wrapper>
+      <div className="overlay" onClick={() => setVisibility(false)}></div>
+      <div className="content">
+        <div className="close" onClick={() => setVisibility(false)}>
+          <CloseIcon className="ic" />
+        </div>
+        <div className="title">ADD STUDENT</div>
+        <div className="list-user">
+          <div className="user head">
+            <div className="id">ID</div>
+            <div className="username">Username</div>
+            <div className="name">Name</div>
+            <div className="action">
+              <div className="btn-add">Actions</div>
+            </div>
+          </div>
+          {students?.map((item: IEmployee, key) => {
+            return (
+              <div className="user" key={key}>
+                <div className="id">{item._id}</div>
+                <div className="username">{item.username}</div>
+                <div className="name">
+                  {item.lastName} {item.firstName}
+                </div>
+                <div className="action">
+                  <div
+                    className="btn-add"
+                    onClick={() => {
+                      onAdd(item._id, projectID).then((rs: any) => {
+                        if (rs) {
+                          toast.success('Add student successfull');
+                        }
+                      });
+                    }}
+                  >
+                    <GroupAddIcon />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Wrapper>
+  );
+};

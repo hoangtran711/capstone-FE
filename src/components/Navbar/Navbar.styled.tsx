@@ -37,24 +37,33 @@ export const Wrapper = styled.div`
       padding: 0 5px !important;
     }
   }
-  .account-icon {
-    color: white;
-    font-size: 35px;
-    margin-right: 20px;
-    cursor: pointer;
-  }
-  .account-more {
-    position: absolute;
-    right: 23px;
-    top: 52px;
 
+  .account-more {
+    position: relative;
+    &:hover {
+      .account-content {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .account-icon {
+      color: white;
+      font-size: 35px;
+      margin-right: 20px;
+      cursor: pointer;
+    }
     .account-content {
       border-radius: 5px;
       font-weight: 300;
       border: 1px solid #f5f0f0;
       background-color: white;
       padding: 15px 40px;
-
+      position: absolute;
+      min-width: 265px;
+      right: 0;
+      top: 100%;
+      display: none;
+      box-sizing: border-box;
       .signout-btn {
         display: flex;
         justify-content: center;

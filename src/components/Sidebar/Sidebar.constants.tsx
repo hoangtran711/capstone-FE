@@ -41,23 +41,21 @@ export const SidebarItems: ISidebarItem[] = [
     path: '/projects',
     Icon: SubjectIcon,
   },
-  // {
-  //   title: 'Dashboard',
-  //   Icon: DashboardIcon,
-  //   children: [
-  //     {
-  //       title: 'Teacher Dashboard',
-  //       path: '/dashboard',
-  //     },
-  //     {
-  //       title: 'Student Dashboard',
-  //       path: '/dashboard',
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: 'Apps',
-  //   path: '/apps',
-  //   Icon: AppsIcon,
-  // },
+];
+export const SidebarItemsStudent: ISidebarItem[] = [
+  {
+    title: 'Home',
+    path: '/dashboard',
+    Icon: HomeIcon,
+  },
+  {
+    title: ' Attendance',
+    path: '/attendancestudent',
+    Icon: AccountCircleIcon,
+  },
+  {
+    title: 'Requests',
+    path: '/request',
+    Icon: AccountTreeIcon,
+  },
 ];

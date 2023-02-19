@@ -49,7 +49,7 @@ const Employee = () => {
     onnGetAllEmployee().then((rs: any) => {
       setList(rs);
     });
-  }, [onnGetAllEmployee]);
+  }, []);
   React.useEffect(() => {
     setIsShowTable(!isShowGrid);
   }, [isShowGrid]);

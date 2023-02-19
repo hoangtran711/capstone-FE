@@ -10,6 +10,10 @@ export const menu: IMenuItem[] = [
     path: '/',
   },
   {
+    title: 'Dashboard',
+    path: '/dashboard',
+  },
+  {
     title: 'About Us',
     path: '/',
     child: [

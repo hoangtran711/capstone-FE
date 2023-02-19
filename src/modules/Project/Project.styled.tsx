@@ -109,9 +109,47 @@ export const Wrapper = styled.div`
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       height: 100%;
+      position: relative;
+      .more {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+        z-index: 10;
+        &:hover {
+          .options {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+        .options {
+          padding: 12px;
+          border-radius: 12px;
+          background: white;
+          color: rgba(0, 0, 0, 0.6);
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 100%;
+          min-width: 150px;
+          .opt {
+            display: flex;
+            align-items: center;
+            column-gap: 12px;
+            &:hover {
+              color: black;
+            }
+          }
+        }
+      }
       .card-body {
         flex: 1 1 auto;
         padding: 1rem;
+        small {
+          display: flex;
+          column-gap: 8px;
+        }
         .mini-img {
           img {
             border-radius: 50%;

@@ -4,7 +4,7 @@ import { ISingIn, useSignIn } from 'queries/useAuth';
 import { toast } from 'react-toastify';
 import { IAccountState } from './account.entity';
 
-const initialState: IAccountState = { token: '', expiresIn: '' };
+const initialState: IAccountState = { token: '', expiresIn: '', role: '' };
 export const singInThunk = createAsyncThunk('account/signIn', async (payload: ISingIn) => {
   try {
     const signIn = useSignIn();
@@ -23,13 +23,14 @@ const accountSlice = createSlice({
       state.expiresIn = action.payload.expiresIn;
     },
     deleteAccount(state: IAccountState) {
-      (state.token = ''), (state.expiresIn = '');
+      (state.token = ''), (state.expiresIn = ''), (state.role = '');
     },
   },
   extraReducers: (builder) => {
     builder.addCase(singInThunk.fulfilled, (state: IAccountState, action: any) => {
       state.token = action.payload.token;
       state.expiresIn = action.payload.expiresIn;
+      state.role = action.payload.role;
     })
   }
 });

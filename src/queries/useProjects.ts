@@ -10,6 +10,7 @@ export interface IProject {
   maxJoin: number;
   totalLesson: number;
   joined: number;
+  _id: string;
 }
 export const useCreateProject = () => {
   return async function (payload: IProject) {
@@ -25,6 +26,16 @@ export const useGetAllProjects = () => {
   return async function () {
     try {
       const rs = http.get(`v1/projects/me`);
+      return rs;
+    } catch (err: any) {
+      toast.error(err);
+    }
+  };
+};
+export const useGetAllProjectsAdmin = () => {
+  return async function () {
+    try {
+      const rs = http.get(`v1/projects`);
       return rs;
     } catch (err: any) {
       toast.error(err);

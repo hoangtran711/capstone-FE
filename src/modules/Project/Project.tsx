@@ -12,28 +12,12 @@ import { IProject, useGetAllProjects } from 'queries/useProjects';
 import { useGetDetailOfMe } from 'queries/useEmployee';
 import { IEmployee } from 'modules/Employee/Employee';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-const majors = [
-  {
-    value: 'Information Technology',
-    label: 'Information Technology',
-  },
-  {
-    value: 'Food Technology',
-    label: 'Food Technology',
-  },
-  {
-    value: 'Business Administration',
-    label: 'Business Administration',
-  },
-  {
-    value: 'English Studies',
-    label: 'English Studies',
-  },
-];
-
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { AddStudent } from './Add Student/AddStudent';
 const Project = () => {
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
-  const [reload, setReload] = React.useState(false);
+  const [isShowAddStudent, setIsShowAddStudent] = React.useState(false);
   const [me, setMe] = React.useState<IEmployee>({
     email: '',
     password: '',
@@ -46,6 +30,7 @@ const Project = () => {
     _id: '',
   });
   const [searchvalue, setSearchValue] = React.useState<string>('');
+  const [activeProject, setActiveProject] = React.useState<string>('');
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
   const [listProjectTemp, setListProjectTemp] = React.useState<Array<IProject>>(
     [],
@@ -82,10 +67,12 @@ const Project = () => {
     <SidebarLayout>
       <Wrapper>
         {isShowCreateProject && (
-          <CreateProject
-            setVisibility={setIsShowCreateProject}
-            setReload={setReload}
-            reload={reload}
+          <CreateProject setVisibility={setIsShowCreateProject} />
+        )}
+        {isShowAddStudent && (
+          <AddStudent
+            setVisibility={setIsShowAddStudent}
+            projectID={activeProject}
           />
         )}
         <div className="header">
@@ -159,17 +146,34 @@ const Project = () => {
               return (
                 <Grid item xs={3} key={key}>
                   <div className="card">
+                    <div className="more">
+                      <MoreVertIcon />
+                      <div className="options">
+                        <div
+                          className="opt"
+                          onClick={() => {
+                            setIsShowAddStudent(true);
+                            setActiveProject(item._id);
+                          }}
+                        >
+                          <GroupAddIcon />
+                          Add student
+                        </div>
+                      </div>
+                    </div>
                     <div className="card-body">
                       <div className="dropdown"></div>
                       <h4 className="project-title">{item?.projectName}</h4>
                       <small>
                         <span className="text-xs">{item?.totalLesson}</span>
                         <span className="text-muted">
-                          {' '}
-                          {item?.totalLesson > 1 ? 'lessons' : 'lesson'}{' '}
+                          {item?.totalLesson > 1 ? 'lessons' : 'lesson'}
                         </span>
+                        {'-'}
                         <span className="text-xs">{item?.maxJoin}</span>
-                        <span className="text-muted"> students</span>
+                        <span className="text-muted">
+                          {item?.maxJoin > 1 ? 'students' : 'student'}
+                        </span>
                       </small>
                       <p className="text-muted">{item?.projectDescription}</p>
                       <div className="date">

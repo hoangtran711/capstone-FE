@@ -19,7 +19,6 @@ const SignInPage = () => {
     dispatch(singInThunk({ username: email, password: password }));
     history.push('/');
   };
-  console.log(typeof password);
   return (
     <Wrapper>
       <img

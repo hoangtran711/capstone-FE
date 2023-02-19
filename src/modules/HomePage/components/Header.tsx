@@ -68,7 +68,11 @@ export const Header = () => {
                 <div className="headerBottom__mid">
                   <ul>
                     {menu.map((item, key) => (
-                      <li key={key} className="item item-1">
+                      <li
+                        key={key}
+                        className="item item-1"
+                        onClick={() => history.push(`${item.path}`)}
+                      >
                         {item.title}
                         <div className="dropdown-menu">
                           {item.child?.map((item) => (

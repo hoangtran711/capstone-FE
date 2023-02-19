@@ -17,6 +17,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useAttendanceMe, useGetSchedules } from 'queries/useEmployee';
+import { useGetAllProjectsAdmin } from 'queries/useProjects';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 const month = [
   {
@@ -109,11 +113,79 @@ const rows = [
 ];
 
 const Request = () => {
-  const [age, setAge] = React.useState('');
+  const [defaultProject, setDefaultProject] = React.useState('');
+  const [dateMatch, setDateMatch] = React.useState<any>();
+  const [afterMinute, setAfterMinute] = React.useState<any>();
+  const [ableToCountDown, setAbleToCountDown] = React.useState<boolean>(false);
+  const [schedules, setSchedules] = React.useState<Array<any>>([]);
+  const [times, setTimes] = React.useState<Array<any>>([]);
+  const [projects, setProjects] = React.useState<Array<any>>([]);
+  const onGetSchedules = useGetSchedules();
+  const onGetAllProject = useGetAllProjectsAdmin();
+  const attendanceMe = useAttendanceMe();
 
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+    setDefaultProject(event.target.value);
   };
+  React.useEffect(() => {
+    onGetSchedules().then((rs: any) => {
+      setSchedules(rs);
+    });
+    onGetAllProject().then((rs: any) => {
+      setProjects(rs);
+    });
+  }, []);
+  React.useEffect(() => {
+    setTimes(
+      schedules[0]?.schedules?.find(
+        (item: any) => item.projectId === defaultProject,
+      )?.times,
+    );
+  }, [defaultProject, schedules]);
+  React.useEffect(() => {
+    times?.map((item) => {
+      console.log(moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate());
+      if (
+        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getDate() ===
+          new Date().getDate() &&
+        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getMonth() ===
+          new Date().getMonth() &&
+        moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+          .toDate()
+          .getFullYear() === new Date().getFullYear()
+      ) {
+        setDateMatch(
+          moment(item.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime(),
+        );
+        setAfterMinute(item.attendaceAfter);
+      }
+    });
+  }, [times]);
+  React.useEffect(() => {
+    if (Number(dateMatch) === Number(new Date().getTime())) {
+      setAbleToCountDown(true);
+    }
+  }, [dateMatch, afterMinute]);
+
+  const attendance = () => {
+    if (defaultProject === '') {
+      toast.error('Please choose specific project for attendance');
+      return;
+    }
+    attendanceMe(defaultProject).then((rs: any) => {
+      if (rs) {
+        toast.success(
+          'Successfull, your attendance has been recorded on this project',
+        );
+      }
+    });
+  };
+
+  console.log('schedules', schedules);
+  console.log('projects', projects);
+  console.log('default', defaultProject);
+  console.log('times', times);
+
   return (
     <SidebarLayout>
       <Wrapper>
@@ -135,7 +207,18 @@ const Request = () => {
                     <span>10 mins</span>
                   </div>
                 </div>
-                <div className="punch-btn">
+                <div
+                  className={
+                    ableToCountDown ? 'punch-btn' : 'punch-btn disable'
+                  }
+                  onClick={() => {
+                    if (ableToCountDown) {
+                      attendance();
+                    } else {
+                      toast.info('Can not attendance at this moment ');
+                    }
+                  }}
+                >
                   <button type="button">Punch Out</button>
                 </div>
                 <div className="statistics">
@@ -148,15 +231,29 @@ const Request = () => {
                         <Select
                           labelId="demo-simple-select-helper-label"
                           id="demo-simple-select-helper"
-                          value={age}
-                          label="Project"
+                          label="Select Project"
                           onChange={handleChange}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
-                          <MenuItem value={10}>Xác suất thống kê</MenuItem>
-                          <MenuItem value={20}>Software Engineering</MenuItem>
+                          {schedules[0]?.schedules?.map(
+                            (sche: any, key: any) => {
+                              return (
+                                <MenuItem
+                                  key={key}
+                                  value={
+                                    projects?.find(
+                                      (pro: any) => pro._id === sche.projectId,
+                                    )?._id
+                                  }
+                                >
+                                  {
+                                    projects?.find(
+                                      (pro: any) => pro._id === sche.projectId,
+                                    )?.projectName
+                                  }
+                                </MenuItem>
+                              );
+                            },
+                          )}
                         </Select>
                       </FormControl>
                     </Grid>

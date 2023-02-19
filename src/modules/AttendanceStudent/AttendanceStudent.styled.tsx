@@ -81,6 +81,9 @@ export const Wrapper = styled.div`
       .punch-btn {
         text-align: center;
         margin: 0 0 20px;
+        &.disable {
+          opacity: 0.5;
+        }
         button {
           font-size: 18px;
           font-weight: 600;

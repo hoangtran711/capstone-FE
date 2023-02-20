@@ -88,7 +88,7 @@ const Request = () => {
     setOpen(false);
     reset();
   };
-
+  const [selectedItem, setSelectedItem] = useState<any>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -116,6 +116,8 @@ const Request = () => {
 
     handleClose();
   }, [createRequest, getValues, handleClose, trigger]);
+
+  const isAdmin = role === 'Admin';
 
   const filteredData = useMemo(
     () =>
@@ -237,11 +239,55 @@ const Request = () => {
       setValue,
     ],
   );
-  const isAdmin = role === 'Admin';
+  const menu = useMemo(() => {
+    return (
+      isAdmin &&
+      selectedItem?.status === 'Pending' && (
+        <Menu
+          key={selectedItem?._id}
+          aria-labelledby="status-button"
+          anchorEl={anchorEl}
+          open={openMenu}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem
+            onClick={async () => {
+              await updateRequest({
+                requestId: selectedItem?._id,
+                status: 'Accepted',
+              });
+              handleCloseMenu();
+            }}
+          >
+            Accepted
+          </MenuItem>
+          <MenuItem
+            onClick={async () => {
+              await updateRequest({
+                requestId: selectedItem?._id,
+                status: 'Denied',
+              });
+              handleCloseMenu();
+            }}
+          >
+            Denied
+          </MenuItem>
+        </Menu>
+      )
+    );
+  }, [
+    anchorEl,
+    isAdmin,
+    openMenu,
+    selectedItem?._id,
+    selectedItem?.status,
+    updateRequest,
+  ]);
 
   return (
     <SidebarLayout>
       {dialogComponent}
+      {menu}
       <Wrapper>
         <div className="header">
           <div className="header-left">
@@ -276,7 +322,7 @@ const Request = () => {
           </Grid>
           <Grid item xs={3}>
             <div className="stats-info">
-              <h6>Denied Requests</h6>
+              <h6>Completed Requests</h6>
               <h4>
                 {data?.filter((item: any) => item.status === 'Accepted')
                   .length || 0}{' '}
@@ -286,7 +332,7 @@ const Request = () => {
           </Grid>
           <Grid item xs={3}>
             <div className="stats-info">
-              <h6>Completed Requests</h6>
+              <h6>Denied Requests</h6>
               <h4>
                 {data?.filter((item: any) => item.status === 'Denied').length ||
                   0}{' '}
@@ -397,43 +443,15 @@ const Request = () => {
                       </TableCell>
                       <TableCell align="center">
                         <div
-                          onClick={handleOpenMenu}
+                          onClick={(e) => {
+                            setSelectedItem(row);
+                            handleOpenMenu(e);
+                          }}
                           id="status-button"
                           className={`status ${row.status}`}
                         >
                           {row.status}
                         </div>
-                        {isAdmin && row.status === 'Pending' && (
-                          <Menu
-                            aria-labelledby="status-button"
-                            anchorEl={anchorEl}
-                            open={openMenu}
-                            onClose={handleCloseMenu}
-                          >
-                            <MenuItem
-                              onClick={async () => {
-                                await updateRequest({
-                                  requestId: row._id,
-                                  status: 'Accepted',
-                                });
-                                handleClose();
-                              }}
-                            >
-                              Accepted
-                            </MenuItem>
-                            <MenuItem
-                              onClick={async () => {
-                                await updateRequest({
-                                  requestId: row._id,
-                                  status: 'Denied',
-                                });
-                                handleClose();
-                              }}
-                            >
-                              Denied
-                            </MenuItem>
-                          </Menu>
-                        )}
                       </TableCell>
                     </TableRow>
                   ))}

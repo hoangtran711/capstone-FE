@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { SidebarLayout } from 'components';
 import { Wrapper } from './Project.styled';
-import { Grid } from '@mui/material';
+import { Grid, IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
 
 // import AppsIcon from '@mui/icons-material/Apps';
 // import MenuIcon from '@mui/icons-material/Menu';
@@ -15,7 +15,24 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { AddStudent } from './Add Student/AddStudent';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectRole, selectUser } from 'reducer/account/account.selector';
+import { useHistory } from 'react-router-dom';
 const Project = () => {
+  const history = useHistory();
+  const role = useSelector(selectRole);
+  const user = useSelector(selectUser);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedItem, setSelectedItem] = useState<any>();
+  const openMenu = Boolean(anchorEl);
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
   const [isShowAddStudent, setIsShowAddStudent] = React.useState(false);
   const [reload, setReload] = React.useState(false);
@@ -31,7 +48,6 @@ const Project = () => {
     _id: '',
   });
   const [searchvalue, setSearchValue] = React.useState<string>('');
-  const [activeProject, setActiveProject] = React.useState<string>('');
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
   const [listProjectTemp, setListProjectTemp] = React.useState<Array<IProject>>(
     [],
@@ -70,11 +86,43 @@ const Project = () => {
       ),
     );
   };
-  console.log(listProject);
+
+  const isAdmin = role === 'Admin';
+
+  const menu = useMemo(
+    () => (
+      <Menu
+        key={selectedItem?._id}
+        aria-labelledby="status-button"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem
+          onClick={async () => {
+            history.push(`/projects/${selectedItem?._id}`);
+            handleCloseMenu();
+          }}
+        >
+          <GroupAddIcon /> View Detail
+        </MenuItem>
+        <MenuItem
+          onClick={async () => {
+            setIsShowCreateProject(true);
+            handleCloseMenu();
+          }}
+        >
+          <GroupAddIcon /> Add Student
+        </MenuItem>
+      </Menu>
+    ),
+    [anchorEl, history, openMenu, selectedItem?._id],
+  );
 
   return (
     <SidebarLayout>
       <Wrapper>
+        {menu}
         {isShowCreateProject && (
           <CreateProject
             setVisibility={setIsShowCreateProject}
@@ -85,7 +133,7 @@ const Project = () => {
         {isShowAddStudent && (
           <AddStudent
             setVisibility={setIsShowAddStudent}
-            projectID={activeProject}
+            projectID={selectedItem?._id}
             reload={reload}
             setReload={setReload}
           />
@@ -102,13 +150,15 @@ const Project = () => {
             <div className="container-icon">
               <MenuIcon className="icon" />
             </div> */}
-            <div
-              className="add-icon"
-              onClick={() => setIsShowCreateProject(true)}
-            >
-              <AddIcon className="icon" />
-              Add Project
-            </div>
+            {isAdmin && (
+              <div
+                className="add-icon"
+                onClick={() => setIsShowCreateProject(true)}
+              >
+                <AddIcon className="icon" />
+                Add Project
+              </div>
+            )}
           </div>
         </div>
         <Grid spacing={3} className="grid" container>
@@ -162,19 +212,15 @@ const Project = () => {
                 <Grid item xs={3} key={key}>
                   <div className="card">
                     <div className="more">
-                      <MoreVertIcon />
-                      <div className="options">
-                        <div
-                          className="opt"
-                          onClick={() => {
-                            setIsShowAddStudent(true);
-                            setActiveProject(item._id);
-                          }}
-                        >
-                          <GroupAddIcon />
-                          Add student
-                        </div>
-                      </div>
+                      <IconButton
+                        onClick={(e) => {
+                          setSelectedItem(item);
+                          handleOpenMenu(e);
+                        }}
+                        className="menu"
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
                     </div>
                     <div className="card-body">
                       <div className="dropdown"></div>
@@ -194,11 +240,15 @@ const Project = () => {
                       <div className="date">
                         <div className="deadline">
                           <div className="sub-title">Start Date: </div>
-                          <div className="text-muted">{item?.startDate}</div>
+                          <div className="text-muted">
+                            {moment(item?.startDate).format('L')}
+                          </div>
                         </div>
                         <div className="deadline">
                           <div className="sub-title">End Date: </div>
-                          <div className="text-muted">{item?.endDate}</div>
+                          <div className="text-muted">
+                            {moment(item?.endDate).format('L')}
+                          </div>
                         </div>
                       </div>
                       <div className="leader">
@@ -218,17 +268,17 @@ const Project = () => {
                         </div>
                       </div>
                       <div className="leader">
-                        <div className="sub-title">Project Leader: </div>
+                        <div className="sub-title">Project Teacher: </div>
                         <div className="text-muted">
                           <AccountCircleIcon className="ic" />
-                          <strong>
-                            {me?.lastName} {me?.firstName}
-                          </strong>{' '}
-                          - {me?.email}
+                          <ListItemText
+                            primary={`${me?.lastName} ${me?.firstName}`}
+                            secondary={`${me?.email}`}
+                          />
                         </div>
                       </div>
                       <div className="team">
-                        <div className="sub-title">Team: </div>
+                        <div className="sub-title">Students: </div>
                         <ul className="team-member">
                           <li>
                             <div className="team-img mini-img">

@@ -34,6 +34,17 @@ export const useGetAllProjects = () => {
   };
 };
 
+export const useGetDetailProject = (projectId: string) => {
+  return useQuery(
+    ['useGetDetailProject.name'],
+    async () => {
+      const response = await http.get(`v1/projects/detail/${projectId}`);
+      return response;
+    },
+    { enabled: !!projectId, refetchInterval: 1000 },
+  );
+};
+
 export const useGetAllProjectsOfTeacher = () => {
   return async function () {
     try {

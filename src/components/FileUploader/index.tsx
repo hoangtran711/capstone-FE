@@ -1,7 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
-import classnames from 'classnames';
-import styles from './file-uploader.module.scss';
+import { Wrapper } from './image-uploader.styled';
 
 interface IImageUploaderProps {
   label?: string;
@@ -38,14 +37,14 @@ function Uploader({
   });
 
   const initialThumb = initialFilePath ? (
-    <img src={initialFilePath} className={styles.preview} />
+    <img src={initialFilePath} className={'preview'} />
   ) : null;
 
   const thumbs = files.map((file: any) => (
     <img
       key={file.name}
       src={file.preview}
-      className={styles.preview}
+      className={'preview'}
       onLoad={() => {
         URL.revokeObjectURL(file.preview);
       }}
@@ -58,21 +57,19 @@ function Uploader({
   }, [files]);
 
   return (
-    <section
-      className={classnames(styles.container, disabled && styles.disabled)}
-    >
-      {label && <span className={styles.label}>{label}</span>}
-      <div {...getRootProps({ className: styles.dropzone })}>
+    <Wrapper>
+      {label && <span className={'label'}>{label}</span>}
+      <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         {thumbs.length > 0 ? (
-          <aside className={styles.thumbsContainer}>{thumbs}</aside>
+          <aside className={'thumbsContainer'}>{thumbs}</aside>
         ) : initialThumb ? (
-          <aside className={styles.thumbsContainer}>{initialThumb}</aside>
+          <aside className={'thumbsContainer'}>{initialThumb}</aside>
         ) : (
           <p>Drag drop some files here, or click to select files</p>
         )}
       </div>
-    </section>
+    </Wrapper>
   );
 }
 

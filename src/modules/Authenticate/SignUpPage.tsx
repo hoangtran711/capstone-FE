@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Wrapper } from './Authenticate.styled';
 import { TextField } from '@mui/material';
 import { Link, useHistory } from 'react-router-dom';
@@ -10,41 +10,43 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 
 import * as yup from 'yup';
+import { ImageUploader } from 'components/FileUploader';
+import { IDataInputRegister } from './interfaces/IDataInputRegister';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const SignInPage = () => {
-  const [date, setDate] = React.useState(1);
-  const [month, setMonth] = React.useState(1);
-  const [year, setYear] = React.useState(1970);
-  const [dateOfBirth, setDateOfBirth] = React.useState('1-1-1970');
   const onSignUp = useSignUp();
   const history = useHistory();
 
-  React.useEffect(() => {
-    if (date && month && year) {
-      setDateOfBirth([date, month, year].join('-'));
-    }
-  }, [date, month, year]);
-
   const {
     register,
-    handleSubmit,
+
     formState: { isSubmitting, errors },
-  } = useForm({
+    getValues,
+    trigger,
+    setValue,
+  } = useForm<IDataInputRegister>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: any) => {
-    let payload = { ...data, dateOfBirth };
-    if (data.password !== data.repeatpassword) {
-      toast.error('Pass and Repeat Pass does not match');
-      return;
+  const onSubmit = async () => {
+    const payload = getValues();
+    console.log(payload);
+
+    try {
+      await onSignUp(payload);
+      toast.success('Register Successful');
+      history.push('/login');
+    } catch (err: any) {
+      toast.error(err?.message || err);
     }
-    onSignUp(payload).then((rs: any) => {
-      if (rs) {
-        toast.success('Register successfull');
-        history.push('/sign-in');
-      }
-    });
   };
+  const onImageUploaderDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setValue('avatar', acceptedFiles[0]);
+    },
+    [setValue],
+  );
   return (
     <Wrapper>
       <img
@@ -52,49 +54,63 @@ const SignInPage = () => {
         src={require('assets/logo/primary-logo.png')}
         alt="Logo"
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <span className="title">Register</span>
         <span className="subtitle">Access to our dashboard</span>
         <Grid spacing={3} className="grid" container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={8}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Email"
-              type="email"
-              {...register('email')}
-            />
+          <Grid item xs={4}>
+            <ImageUploader onDrop={onImageUploaderDrop} />
           </Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item xs={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  className="text-field"
+                  label="Email"
+                  type="email"
+                  {...register('email', { required: 'Email cannot empty' })}
+                  helperText={errors?.email?.message}
+                  error={!!errors?.email?.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  className="text-field"
+                  label="Username"
+                  {...register('username', {
+                    required: 'Username cannot empty',
+                  })}
+                  helperText={errors?.username?.message}
+                  error={!!errors?.username?.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  className="text-field"
+                  label="Phone"
+                  {...register('phoneNumber', {
+                    required: 'Phone Number cannot empty',
+                  })}
+                  helperText={errors?.phoneNumber?.message}
+                  error={!!errors?.phoneNumber?.message}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
 
-          <Grid item xs={8}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Username"
-              type="email"
-              {...register('username')}
-            />
-          </Grid>
-          <Grid item xs={4}></Grid>
-
-          <Grid item xs={8}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Phone"
-              type="email"
-              {...register('phone')}
-            />
-          </Grid>
           <Grid item xs={6}>
             <TextField
               fullWidth
               className="text-field"
               label="First Name"
-              type="email"
-              {...register('firstName')}
+              {...register('firstName', {
+                required: 'First Name cannot empty',
+              })}
+              helperText={errors?.firstName?.message}
+              error={!!errors?.firstName?.message}
             />
           </Grid>
           <Grid item xs={6}>
@@ -102,8 +118,9 @@ const SignInPage = () => {
               fullWidth
               className="text-field"
               label="Last Name"
-              type="email"
-              {...register('lastName')}
+              {...register('lastName', { required: 'Last Name cannot empty' })}
+              helperText={errors?.lastName?.message}
+              error={!!errors?.lastName?.message}
             />
           </Grid>
           <Grid item xs={12}>
@@ -112,16 +129,34 @@ const SignInPage = () => {
               className="text-field"
               label="Password"
               type="password"
-              {...register('password')}
+              {...register('password', { required: 'Password cannot empty' })}
+              helperText={errors?.password?.message}
+              error={!!errors?.password?.message}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               className="text-field"
-              label="Repeat Password"
-              type="password"
-              {...register('repeatpassword')}
+              label="Student Id"
+              {...register('studentId', {
+                required: 'Student ID cannot empty',
+              })}
+              helperText={errors?.studentId?.message}
+              error={!!errors?.studentId?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Major"
+              {...register('major', {
+                required: 'Major cannot empty',
+              })}
+              helperText={errors?.major?.message}
+              error={!!errors?.major?.message}
             />
           </Grid>
 
@@ -131,66 +166,30 @@ const SignInPage = () => {
               className="text-field"
               label="Address"
               type="email"
-              {...register('address')}
+              {...register('address', {
+                required: 'Address cannot empty',
+              })}
+              helperText={errors?.address?.message}
+              error={!!errors?.address?.message}
             />
           </Grid>
           <Grid item xs={12}>
-            <div className="date">
-              <div className="label">Date of birth</div>
-              Day:{' '}
-              <select
-                name="date"
-                id=""
-                value={date}
-                onChange={(e: any) => setDate(e.target.value)}
-              >
-                {Array.from(Array(31).keys()).map((it, key) => {
-                  return (
-                    <option value={it + 1} key={key}>
-                      {it + 1}
-                    </option>
-                  );
-                })}
-              </select>
-              Month:{' '}
-              <select
-                name="month"
-                id=""
-                value={month}
-                onChange={(e: any) => setMonth(e.target.value)}
-              >
-                {Array.from(Array(12).keys()).map((it, key) => {
-                  return (
-                    <option value={it + 1} key={key}>
-                      {it + 1}
-                    </option>
-                  );
-                })}
-              </select>
-              Year:{' '}
-              <select
-                name="year"
-                id=""
-                value={year}
-                onChange={(e: any) => setYear(Number(e.target.value))}
-              >
-                {Array.from(Array(60).keys()).map((it, key) => {
-                  return (
-                    <option value={Number(year) + Number(it)} key={key}>
-                      {Number(year) + Number(it)}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Date Of Birth"
+                value={getValues('dateOfBirth')}
+                onChange={(newValue: any) => {
+                  setValue('dateOfBirth', newValue);
+                }}
+                renderInput={(params) => <TextField fullWidth {...params} />}
+              />
+            </LocalizationProvider>
           </Grid>
         </Grid>
 
-        <input
-          className="authenticate-button"
-          type="submit"
-          value={'Register'}
-        />
+        <div className="authenticate-button" onClick={onSubmit}>
+          Register
+        </div>
         <span className="redirect">
           Already have an account? <Link to="/sign-in">Login</Link>
         </span>

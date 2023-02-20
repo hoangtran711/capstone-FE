@@ -57,6 +57,7 @@ export const Wrapper = styled.div`
       }
     }
     .authenticate-button {
+      text-align: center;
       background: linear-gradient(
         to right,
         #ff9b44 0%,

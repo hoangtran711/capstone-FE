@@ -15,6 +15,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { AddStudent } from './Add Student/AddStudent';
+import DetailsIcon from '@mui/icons-material/Details';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { selectRole, selectUser } from 'reducer/account/account.selector';
@@ -104,7 +105,7 @@ const Project = () => {
             handleCloseMenu();
           }}
         >
-          <GroupAddIcon /> View Detail
+          <DetailsIcon sx={{ marginRight: '10px' }} /> View Detail
         </MenuItem>
         <MenuItem
           onClick={async () => {
@@ -112,7 +113,8 @@ const Project = () => {
             handleCloseMenu();
           }}
         >
-          <GroupAddIcon /> Add Student
+          <GroupAddIcon sx={{ marginRight: '10px' }} className="icon-menu" />{' '}
+          Add Student
         </MenuItem>
       </Menu>
     ),

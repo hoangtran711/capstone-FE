@@ -4,6 +4,10 @@ export const Wrapper = styled.div`
   padding: 30px;
   box-sizing: border-box;
   width: 100%;
+  .icon-menu {
+    margin-right: 10px;
+    display: none;
+  }
   .header {
     display: flex;
     justify-content: space-between;

@@ -3,9 +3,8 @@ import { memo } from 'react';
 import { Wrapper } from './Navbar.styled';
 import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectToken } from 'reducer/account/account.selector';
+import { selectToken, selectUser } from 'reducer/account/account.selector';
 import { useHistory } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -15,6 +14,8 @@ import { dispatch } from 'app/store';
 
 const NavbarComponent = () => {
   const token = useSelector(selectToken);
+  const user = useSelector(selectUser);
+
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,17 +44,18 @@ const NavbarComponent = () => {
       </Stack>
       {token ? (
         <div className="account-more">
-          <div className="username">
-            Hi, <span> Thanh</span>
-          </div>
           <Button
             id="basic-button"
+            className="button-avatar"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            <AccountCircleIcon className="account-icon" />
+            <img className="avatar" src={user?.avatar} alt="Logo" />
+            <div className="username">
+              Hi, <span>{`${user?.firstName} ${user?.lastName}`}!</span>
+            </div>
           </Button>
           <Menu
             id="basic-menu"

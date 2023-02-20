@@ -9,6 +9,21 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   width: 100vw;
   position: relative;
+
+  .avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid white;
+    margin-right: 10px;
+  }
+  .button-avatar {
+    border-radius: 30px;
+    color: white;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 16px;
+  }
   .logo {
     width: 40px;
   }

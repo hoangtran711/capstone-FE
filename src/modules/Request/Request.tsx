@@ -1,9 +1,11 @@
 import React, { memo } from 'react';
 import { SidebarLayout } from 'components';
 import { Wrapper } from './Request.styled';
+
 import AddIcon from '@mui/icons-material/Add';
 import { TextField } from '@mui/material';
 import { Grid } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,8 +14,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { CreateProject } from './components/Create Project/CreateProject';
-import { useGetRequestTeacher } from 'queries/useRequest';
-import moment from 'moment';
 
 const requestType = [
   {
@@ -108,8 +108,6 @@ const rows = [
 ];
 const Request = () => {
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
-  const { data } = useGetRequestTeacher();
-  console.log(data);
   return (
     <SidebarLayout>
       <Wrapper>
@@ -134,41 +132,33 @@ const Request = () => {
         <Grid spacing={3} className="grid" container>
           <Grid item xs={3}>
             <div className="stats-info">
-              <h6>Total Requests</h6>
-              <h4>{data?.length}</h4>
+              <h6>Today Presents</h6>
+              <h4>12 / 60</h4>
+            </div>
+          </Grid>
+          <Grid item xs={3}>
+            <div className="stats-info">
+              <h6>Planned Leaves</h6>
+              <h4>
+                12 <span>Today</span>
+              </h4>
+            </div>
+          </Grid>
+          <Grid item xs={3}>
+            <div className="stats-info">
+              <h6>Unplanned Leaves</h6>
+              <h4>
+                60 <span>Today</span>
+              </h4>
             </div>
           </Grid>
           <Grid item xs={3}>
             <div className="stats-info">
               <h6>Pending Requests</h6>
-              <h4>
-                {data?.filter((item: any) => item.status === 'Pending')
-                  .length || 0}{' '}
-                <span>Requests</span>
-              </h4>
+              <h4>12 / 60</h4>
             </div>
           </Grid>
-          <Grid item xs={3}>
-            <div className="stats-info">
-              <h6>Denied Requests</h6>
-              <h4>
-                {data?.filter((item: any) => item.status === 'Accepted')
-                  .length || 0}{' '}
-                <span>Requests</span>
-              </h4>
-            </div>
-          </Grid>
-          <Grid item xs={3}>
-            <div className="stats-info">
-              <h6>Completed Requests</h6>
-              <h4>
-                {data?.filter((item: any) => item.status === 'Denied').length ||
-                  0}{' '}
-                <span>Requests</span>
-              </h4>
-            </div>
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <TextField
               fullWidth
               className="text-field"
@@ -177,7 +167,7 @@ const Request = () => {
             />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <TextField
               fullWidth
               className="select-requestType"
@@ -196,7 +186,7 @@ const Request = () => {
               ))}
             </TextField>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <TextField
               fullWidth
               className="select-requestType"
@@ -215,8 +205,35 @@ const Request = () => {
               ))}
             </TextField>
           </Grid>
-
-          <Grid item xs={3}>
+          <Grid item xs={2}>
+            <Stack component="form" noValidate spacing={3}>
+              <TextField
+                id="date"
+                label="From"
+                type="date"
+                defaultValue="2017-05-24"
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />{' '}
+            </Stack>
+          </Grid>
+          <Grid item xs={2}>
+            <Stack component="form" noValidate spacing={3}>
+              <TextField
+                id="date"
+                label="To"
+                type="date"
+                defaultValue="2017-05-24"
+                sx={{ width: 220 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />{' '}
+            </Stack>
+          </Grid>
+          <Grid item xs={2}>
             <div className="button-search">
               <a href="#">Search</a>
             </div>
@@ -226,26 +243,32 @@ const Request = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow className="table-title">
-                    <TableCell id="table-head">Requester</TableCell>
+                    <TableCell id="table-head">Student</TableCell>
                     <TableCell align="right" id="table-head">
                       Request Type
                     </TableCell>
                     <TableCell align="right" id="table-head">
-                      Date
+                      From
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      To
+                    </TableCell>
+                    <TableCell align="right" id="table-head">
+                      No of Days
                     </TableCell>
                     <TableCell align="right" id="table-head">
                       Reason
                     </TableCell>
                     <TableCell align="right" id="table-head">
-                      Approver
+                      Status
                     </TableCell>
                     <TableCell align="right" id="table-head">
-                      Status
+                      Actions
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data?.map((row: any) => (
+                  {rows.map((row) => (
                     <TableRow
                       key={row.name}
                       sx={{
@@ -253,16 +276,15 @@ const Request = () => {
                       }}
                     >
                       <TableCell component="th" scope="row">
-                        {row._id}
+                        {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.type}</TableCell>
-                      <TableCell align="right">
-                        {row.date &&
-                          moment(row.date).format('dddd, MMMM Do YYYY')}
-                      </TableCell>
+                      <TableCell align="right">{row.leaveType}</TableCell>
+                      <TableCell align="right">{row.from}</TableCell>
+                      <TableCell align="right">{row.to}</TableCell>
+                      <TableCell align="right">{row.noofdays}</TableCell>
                       <TableCell align="right">{row.reason}</TableCell>
-                      <TableCell align="right">{row.approver}</TableCell>
                       <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right">{row.actions}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

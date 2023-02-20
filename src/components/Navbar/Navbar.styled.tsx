@@ -39,7 +39,15 @@ export const Wrapper = styled.div`
   }
 
   .account-more {
+    display: flex;
+    justify-content: center;
     position: relative;
+    margin-right: 20px;
+    .username {
+      color: white;
+      display: flex;
+      align-items: center;
+    }
     &:hover {
       .account-content {
         display: flex;
@@ -47,9 +55,12 @@ export const Wrapper = styled.div`
       }
     }
     .account-icon {
+      display: flex;
+      justify-content: center;
       color: white;
       font-size: 35px;
-      margin-right: 20px;
+      margin: 0 auto;
+      /* margin-left: 5px; */
       cursor: pointer;
     }
     .account-content {

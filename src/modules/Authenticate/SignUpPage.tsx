@@ -7,6 +7,8 @@ import { useSignUp } from 'queries/useAuth';
 // import { useSignUp } from 'queries/useAuth';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
+
 import * as yup from 'yup';
 
 const SignInPage = () => {
@@ -53,110 +55,137 @@ const SignInPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <span className="title">Register</span>
         <span className="subtitle">Access to our dashboard</span>
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Email"
-          type="email"
-          {...register('email')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Username"
-          type="email"
-          {...register('username')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="First Name"
-          type="email"
-          {...register('firstName')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Last Name"
-          type="email"
-          {...register('lastName')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Password"
-          type="password"
-          {...register('password')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Repeat Password"
-          type="password"
-          {...register('repeatpassword')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Phone"
-          type="email"
-          {...register('phone')}
-        />
-        <TextField
-          fullWidth
-          className="text-field"
-          label="Address"
-          type="email"
-          {...register('address')}
-        />
-        <div className="date">
-          <div className="label">Date of birth</div>
-          Day:{' '}
-          <select
-            name="date"
-            id=""
-            value={date}
-            onChange={(e: any) => setDate(e.target.value)}
-          >
-            {Array.from(Array(31).keys()).map((it, key) => {
-              return (
-                <option value={it + 1} key={key}>
-                  {it + 1}
-                </option>
-              );
-            })}
-          </select>
-          Month:{' '}
-          <select
-            name="month"
-            id=""
-            value={month}
-            onChange={(e: any) => setMonth(e.target.value)}
-          >
-            {Array.from(Array(12).keys()).map((it, key) => {
-              return (
-                <option value={it + 1} key={key}>
-                  {it + 1}
-                </option>
-              );
-            })}
-          </select>
-          Year:{' '}
-          <select
-            name="year"
-            id=""
-            value={year}
-            onChange={(e: any) => setYear(Number(e.target.value))}
-          >
-            {Array.from(Array(60).keys()).map((it, key) => {
-              return (
-                <option value={Number(year) + Number(it)} key={key}>
-                  {Number(year) + Number(it)}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        <Grid spacing={3} className="grid" container>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Email"
+              type="email"
+              {...register('email')}
+            />
+          </Grid>
+          <Grid item xs={4}></Grid>
+
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Username"
+              type="email"
+              {...register('username')}
+            />
+          </Grid>
+          <Grid item xs={4}></Grid>
+
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Phone"
+              type="email"
+              {...register('phone')}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="First Name"
+              type="email"
+              {...register('firstName')}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Last Name"
+              type="email"
+              {...register('lastName')}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Password"
+              type="password"
+              {...register('password')}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Repeat Password"
+              type="password"
+              {...register('repeatpassword')}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="Address"
+              type="email"
+              {...register('address')}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <div className="date">
+              <div className="label">Date of birth</div>
+              Day:{' '}
+              <select
+                name="date"
+                id=""
+                value={date}
+                onChange={(e: any) => setDate(e.target.value)}
+              >
+                {Array.from(Array(31).keys()).map((it, key) => {
+                  return (
+                    <option value={it + 1} key={key}>
+                      {it + 1}
+                    </option>
+                  );
+                })}
+              </select>
+              Month:{' '}
+              <select
+                name="month"
+                id=""
+                value={month}
+                onChange={(e: any) => setMonth(e.target.value)}
+              >
+                {Array.from(Array(12).keys()).map((it, key) => {
+                  return (
+                    <option value={it + 1} key={key}>
+                      {it + 1}
+                    </option>
+                  );
+                })}
+              </select>
+              Year:{' '}
+              <select
+                name="year"
+                id=""
+                value={year}
+                onChange={(e: any) => setYear(Number(e.target.value))}
+              >
+                {Array.from(Array(60).keys()).map((it, key) => {
+                  return (
+                    <option value={Number(year) + Number(it)} key={key}>
+                      {Number(year) + Number(it)}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </Grid>
+        </Grid>
+
         <input
           className="authenticate-button"
           type="submit"

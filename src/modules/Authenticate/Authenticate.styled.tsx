@@ -17,9 +17,9 @@ export const Wrapper = styled.div`
     font-size: 1rem;
     line-height: 1.4375em;
     letter-spacing: 0.00938em;
-    margin: 18px 0px;
+    margin-bottom: 13px;
     .label {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     select {
       margin-right: 12px;
@@ -32,7 +32,7 @@ export const Wrapper = styled.div`
   form,
   .form {
     background-color: white;
-    width: 480px;
+    width: 550px;
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -67,6 +67,8 @@ export const Wrapper = styled.div`
       padding: 10px 26px;
       text-transform: capitalize;
       margin-top: 20px;
+      border: none;
+      cursor: pointer;
     }
     .forgot {
       color: #888888;

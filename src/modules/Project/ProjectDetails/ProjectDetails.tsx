@@ -3,8 +3,13 @@ import { SidebarLayout } from 'components';
 import { Wrapper } from './ProjectDetails.styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Grid } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { useGetDetailProject } from 'queries/useProjects';
 
 const ProjectDetails = () => {
+  let { projectId } = useParams<any>();
+  const { data } = useGetDetailProject(projectId);
+  console.log(data);
   return (
     <SidebarLayout>
       <Wrapper>

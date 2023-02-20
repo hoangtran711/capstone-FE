@@ -12,7 +12,6 @@ export const AddStudent = ({
   reload,
   setReload,
 }: any) => {
-  console.log('project id', projectID);
   const [students, setStudents] = React.useState<Array<IEmployee>>([]);
   const onAdd = useAddStudentToProject();
   const onGetAllUsers = useGetAllEmployee();

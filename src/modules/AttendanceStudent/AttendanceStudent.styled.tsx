@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  padding: 30px;
+  padding: 30px 30px 90px 30px;
   box-sizing: border-box;
   width: 100%;
   .header {
@@ -28,6 +28,18 @@ export const Wrapper = styled.div`
   .grid {
     #table-head {
       font-weight: 800;
+      background-color: #75cee1;
+      color: white;
+      font-size: 18px;
+    }
+    #table-wrapper {
+      margin: 34px 0px;
+    }
+    .table-title {
+      transition: all 0.3s;
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
     }
     h3 {
       margin-bottom: 0px;

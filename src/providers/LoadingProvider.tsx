@@ -23,7 +23,7 @@ export const LoadingProvider = ({ children }: any) => {
         toast.error(err?.message || err);
       }
     };
-    const timer1 = setTimeout(onHidePreLoading, 3000);
+    const timer1 = setTimeout(onHidePreLoading, 100);
     return () => {
       clearTimeout(timer1);
     };

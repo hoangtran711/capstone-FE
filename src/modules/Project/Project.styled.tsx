@@ -176,6 +176,10 @@ export const Wrapper = styled.div`
             color: green;
             font-weight: 400;
           }
+          &.attendance {
+            color: red;
+            font-weight: 400;
+          }
         }
         .date {
           display: flex;

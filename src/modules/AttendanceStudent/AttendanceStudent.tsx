@@ -105,18 +105,6 @@ const year = [
   },
 ];
 
-function createData(order: number, date: string, status: string) {
-  return { order, date, status };
-}
-
-const rows = [
-  createData(1, '10 January 2023', 'Casual Leave'),
-  createData(2, '10 January 2023', 'Casual Leave'),
-  createData(3, '10 January 2023', 'Casual Leave'),
-  createData(4, '10 January 2023', 'Casual Leave'),
-  createData(5, '10 January 2023', 'Casual Leave'),
-];
-
 const Request = () => {
   const [defaultProject, setDefaultProject] = React.useState('');
   const [dateMatch, setDateMatch] = React.useState<any>();
@@ -189,14 +177,6 @@ const Request = () => {
         setTextNotify('Joined');
         setAbleToCountDown(false);
       } else {
-        if (
-          !history?.find((h: any) => {
-            return h.projectId === defaultProject;
-          })?.times[0]?.leave
-        ) {
-          setTextNotify('Time out');
-          setAbleToCountDown(false);
-        }
         // setTextNotify('Waiting');
         setTimes(
           schedules?.find((item: any) => item.projectId === defaultProject)
@@ -474,17 +454,24 @@ const Request = () => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} id="table-wrapper">
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow className="table-title">
+                <TableHead id="table-head-wrapper">
+                  <TableRow>
                     <TableCell id="table-head" style={{ width: '10%' }}>
                       #
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       id="table-head"
-                      style={{ width: '45%' }}
+                      style={{ width: '30%' }}
+                    >
+                      Project
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      id="table-head"
+                      style={{ width: '35%' }}
                     >
                       Date
                     </TableCell>
@@ -498,18 +485,45 @@ const Request = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
-                    <TableRow
-                      key={row.order}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.order}
-                      </TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
-                    </TableRow>
-                  ))}
+                  {history
+                    ?.sort(
+                      (a, b) =>
+                        moment(b?.times[0]?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                          .toDate()
+                          .getTime() -
+                        moment(a?.times[0]?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                          .toDate()
+                          .getTime(),
+                    )
+                    ?.map((his, key) => (
+                      <TableRow
+                        key={key + 1}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                        className="table-title"
+                      >
+                        <TableCell component="th" scope="row">
+                          {key}
+                        </TableCell>
+                        <TableCell align="left">
+                          {
+                            projects?.find(
+                              (pro: any) => pro._id === his.projectId,
+                            )?.projectName
+                          }
+                        </TableCell>
+                        <TableCell align="left">
+                          {moment(
+                            his?.times[0]?.date,
+                            'dddd, MMMM Do YYYY, h:mm:ss',
+                          ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
+                        </TableCell>
+                        <TableCell align="right">
+                          {his?.times[0]?.leave ? 'Joined' : 'Absent'}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>

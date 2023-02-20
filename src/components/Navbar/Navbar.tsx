@@ -3,18 +3,23 @@ import { memo } from 'react';
 import { Wrapper } from './Navbar.styled';
 import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectToken } from 'reducer/account/account.selector';
+import { selectToken, selectUser } from 'reducer/account/account.selector';
 import { useHistory } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { deleteAccount } from 'reducer';
 import { dispatch } from 'app/store';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const NavbarComponent = () => {
   const token = useSelector(selectToken);
+  const user = useSelector(selectUser);
+
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,17 +48,18 @@ const NavbarComponent = () => {
       </Stack>
       {token ? (
         <div className="account-more">
-          <div className="username">
-            Hi, <span> Thanh</span>
-          </div>
           <Button
             id="basic-button"
+            className="button-avatar"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            <AccountCircleIcon className="account-icon" />
+            <img className="avatar" src={user?.avatar} alt="Logo" />
+            <div className="username">
+              Hi, <span>{`${user?.firstName} ${user?.lastName}`}!</span>
+            </div>
           </Button>
           <Menu
             id="basic-menu"
@@ -64,14 +70,27 @@ const NavbarComponent = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <AccountBoxIcon />
+              Profile
+            </MenuItem>
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <ManageAccountsIcon />
+              My account
+            </MenuItem>
+
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <AssignmentIcon />
+              My task
+            </MenuItem>
             <MenuItem
+              sx={{ marginRight: '10px' }}
               onClick={() => {
                 dispatch(deleteAccount());
                 history.push('/');
               }}
             >
+              <LogoutIcon />
               Logout
             </MenuItem>
           </Menu>

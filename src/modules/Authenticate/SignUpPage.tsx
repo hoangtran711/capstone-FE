@@ -54,7 +54,7 @@ const SignInPage = () => {
         src={require('assets/logo/primary-logo.png')}
         alt="Logo"
       />
-      <form>
+      <form className="form">
         <span className="title">Register</span>
         <span className="subtitle">Access to our dashboard</span>
         <Grid spacing={3} className="grid" container>

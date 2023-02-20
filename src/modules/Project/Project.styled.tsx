@@ -165,12 +165,16 @@ export const Wrapper = styled.div`
         .text-xs {
         }
         .text-muted {
-          color: #8e8e8e !important;
+          color: #8e8e8e;
           display: flex;
           align-items: center;
           column-gap: 12px;
           .ic {
             font-size: 38px;
+          }
+          &.joined {
+            color: green;
+            font-weight: 400;
           }
         }
         .date {
@@ -198,6 +202,10 @@ export const Wrapper = styled.div`
         }
         .sub-title {
           margin-bottom: 5px;
+          &.joined {
+            // color: green;
+            // font-weight: 600;
+          }
         }
         .progress {
           margin-bottom: 8px;

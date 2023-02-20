@@ -108,7 +108,7 @@ const Project = () => {
         </MenuItem>
         <MenuItem
           onClick={async () => {
-            setIsShowCreateProject(true);
+            setIsShowAddStudent(true);
             handleCloseMenu();
           }}
         >
@@ -230,7 +230,7 @@ const Project = () => {
                         <span className="text-muted">
                           {item?.totalLesson > 1 ? 'lessons' : 'lesson'}
                         </span>
-                        {'-'}
+                        {'-'} <span className="text-muted">Maximum</span>
                         <span className="text-xs">{item?.maxJoin}</span>
                         <span className="text-muted">
                           {item?.maxJoin > 1 ? 'students' : 'student'}
@@ -253,7 +253,7 @@ const Project = () => {
                       </div>
                       <div className="leader">
                         <div className="sub-title">Attendance after: </div>
-                        <div className="text-muted">
+                        <div className="text-muted attendance ">
                           {item?.attendanceAfterMinute}{' '}
                           {item?.attendanceAfterMinute > 1
                             ? 'minutes'
@@ -261,8 +261,8 @@ const Project = () => {
                         </div>
                       </div>
                       <div className="leader">
-                        <div className="sub-title">Joined: </div>
-                        <div className="text-muted">
+                        <div className="sub-title joined ">Joined: </div>
+                        <div className="text-muted joined">
                           {item?.joined}{' '}
                           {item?.joined > 1 ? 'students' : 'student'}
                         </div>

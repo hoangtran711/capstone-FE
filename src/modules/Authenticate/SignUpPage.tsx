@@ -36,7 +36,7 @@ const SignInPage = () => {
     try {
       await onSignUp(payload);
       toast.success('Register Successful');
-      history.push('/login');
+      history.push('/sign-in');
     } catch (err: any) {
       toast.error(err?.message || err);
     }

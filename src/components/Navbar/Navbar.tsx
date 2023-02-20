@@ -11,6 +11,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { deleteAccount } from 'reducer';
 import { dispatch } from 'app/store';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const NavbarComponent = () => {
   const token = useSelector(selectToken);
@@ -66,14 +70,27 @@ const NavbarComponent = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <AccountBoxIcon />
+              Profile
+            </MenuItem>
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <ManageAccountsIcon />
+              My account
+            </MenuItem>
+
+            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
+              <AssignmentIcon />
+              My task
+            </MenuItem>
             <MenuItem
+              sx={{ marginRight: '10px' }}
               onClick={() => {
                 dispatch(deleteAccount());
                 history.push('/');
               }}
             >
+              <LogoutIcon />
               Logout
             </MenuItem>
           </Menu>

@@ -17,9 +17,12 @@ import { TextField } from '@mui/material';
 import {
   IProject,
   useGetAllProjects,
-  useGetStudentOfProject2,
+  useGetProjectAttendance,
 } from 'queries/useProjects';
-import { IEmployee } from 'modules/Employee/Employee';
+// import { IEmployee } from 'modules/Employee/Employee';
+import moment from 'moment';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface Column {
   id: string;
@@ -46,55 +49,26 @@ function createData(
   return { name, code, population, size, density };
 }
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
-];
-
-const columns: readonly Column[] = [
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '2', minWidth: 10 },
-  { id: '1', label: '3', minWidth: 10 },
-  { id: '1', label: '4', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-  { id: '1', label: '1', minWidth: 10 },
-];
 const Attendance = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
-  const [listStudent, setListStudent] = React.useState<Array<IEmployee>>([]);
+  const [listStudent, setListStudent] = React.useState<Array<any>>([]);
   const [activeProject, setActiveProject] = React.useState<string>('');
+  const [columns, setColumns] = React.useState<any>([
+    '#',
+    'Name',
+    '-',
+    '-',
+    '-',
+    '-',
+    '-',
+    '-',
+    '-',
+    '-',
+    '-',
+  ]);
+
   const onGetAllProject = useGetAllProjects();
-  const onGetStudentOfProject = useGetStudentOfProject2();
+  const onGetProjectAttendance = useGetProjectAttendance();
   React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
       setListProject(rs);
@@ -107,13 +81,25 @@ const Attendance = () => {
   }, [listProject]);
   React.useEffect(() => {
     if (activeProject) {
-      onGetStudentOfProject(activeProject).then((rs: any) => {
+      onGetProjectAttendance(activeProject).then((rs: any) => {
         if (rs) {
           setListStudent(rs);
         }
       });
     }
   }, [activeProject]);
+  React.useEffect(() => {
+    const listday = listStudent[0]?.schedules?.times?.map((d: any) =>
+      moment(d.date, 'dddd, MMMM Do YYYY,h:mm:ss').format('dddd, DD-MM-YYYY'),
+    );
+    let tmp = [];
+    if (listday?.length > 0) {
+      tmp = ['#', 'Name'].concat(listday);
+    } else {
+      tmp = ['#', 'Name'].concat(['-', '-', '-']);
+    }
+    setColumns(tmp);
+  }, [listStudent]);
 
   console.log(activeProject);
 
@@ -146,13 +132,13 @@ const Attendance = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    {columns.map((column, key) => (
+                    {columns.map((column: any, key: any) => (
                       <TableCell
                         key={key}
-                        align={column.align}
-                        style={{ minWidth: column.minWidth }}
+                        style={{ minWidth: 150 }}
+                        align={key === 2 ? 'center' : 'left'}
                       >
-                        {column.label}
+                        {column}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -161,16 +147,35 @@ const Attendance = () => {
                   {listStudent?.map((st: any, key: any) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={key}>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
-                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{key + 1}</TableCell>
+                        <TableCell id="profile-cell">
+                          <img src={st?.avatar} alt="ava" />
+                          <div className="info">
+                            <div className="name">
+                              {st?.firstName + st?.lastName}
+                            </div>
+                            {st?.email}
+                          </div>
+                        </TableCell>
+                        {st?.schedules?.times?.map((time: any, k: any) => {
+                          return (
+                            <TableCell key={k} align={'center'}>
+                              {moment(time.date, 'dddd, MMMM Do YYYY,h:mm:ss')
+                                .toDate()
+                                .getTime() < new Date().getTime() ? (
+                                time?.leave ? (
+                                  <CheckCircleIcon
+                                    style={{ color: '#55ce63' }}
+                                  />
+                                ) : (
+                                  <CancelIcon style={{ color: 'red' }} />
+                                )
+                              ) : (
+                                <div id="line"></div>
+                              )}
+                            </TableCell>
+                          );
+                        })}
                       </TableRow>
                     );
                   })}

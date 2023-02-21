@@ -96,3 +96,13 @@ export const useGetProjectProgress = () => {
     }
   };
 };
+export const useGetProjectAttendance = () => {
+  return async (id: string) => {
+    try {
+      const rs = await http.get(`/v1/projects/attendance/${id}`);
+      return rs;
+    } catch (err: any) {
+      toast.error(err);
+    }
+  };
+};

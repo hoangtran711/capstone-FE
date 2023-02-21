@@ -3,6 +3,31 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   padding: 30px;
   box-sizing: border-box;
+  #profile-cell {
+    display: flex;
+    column-gap: 12px;
+    align-items: center;
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+    .info {
+      .name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  #line {
+    width: 8px;
+    height: 2px;
+    background: green;
+    margin: 0 auto;
+  }
   .welcome {
     color: #1f1f1f;
     font-size: 26px;

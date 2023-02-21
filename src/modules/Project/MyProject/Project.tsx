@@ -18,6 +18,7 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { selectRole, selectUser } from 'reducer/account/account.selector';
 import { useHistory, useParams } from 'react-router-dom';
+import { Progress } from '../Project.styled';
 const Project = () => {
   const { userId } = useParams<{ userId: string }>();
   const history = useHistory();
@@ -331,12 +332,13 @@ const Project = () => {
                       </div>
                       <div className="progress">
                         <div className="sub-title">Progress</div>
-                        <div className="progress-bar">
-                          <div
-                            style={{ width: `${item.process}%` }}
-                            className="actual-process"
-                          ></div>
-                        </div>
+                        <Progress value={Number((item?.process).toFixed(3))}>
+                          <div className="sub-title">
+                            Progress{' '}
+                            <span>{Number((item?.process).toFixed(3))}%</span>
+                          </div>
+                          <div className="progress-bar"></div>
+                        </Progress>
                       </div>
                     </div>
                   </div>

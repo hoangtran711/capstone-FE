@@ -211,6 +211,12 @@ export const Wrapper = styled.div`
         }
         .sub-title {
           margin-bottom: 5px;
+          display: flex;
+          justify-content: space-between;
+          span {
+            font-size: 13px;
+            color: #55ce63;
+          }
           &.joined {
             // color: green;
             // font-weight: 600;

@@ -358,16 +358,12 @@ const Project = () => {
                       </div>
                       <Progress
                         value={
-                          listProgress
-                            ? Number((listProgress[key] * 100).toFixed(3))
-                            : 0
+                          listProgress ? Number((item?.process).toFixed(3)) : 0
                         }
                       >
                         <div className="sub-title">
                           Progress{' '}
-                          <span>
-                            {Number((listProgress[key] * 100).toFixed(3))}%
-                          </span>
+                          <span>{Number((item?.process).toFixed(3))}%</span>
                         </div>
                         <div className="progress-bar"></div>
                       </Progress>

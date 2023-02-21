@@ -5,7 +5,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import HorizontalSplitIcon from '@mui/icons-material/HorizontalSplit';
 import { Container } from '@mui/system';
 import { menu } from './Header.constants';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { selectToken } from 'reducer/account/account.selector';
 import { deleteAccount } from 'reducer';
@@ -18,9 +17,7 @@ export const Header = () => {
       const element = document.querySelector('#sidebar') as HTMLDivElement;
       console.log(element);
       element.style.transform = 'translateX(0%)';
-    } catch (err: any) {
-      toast.error(err?.message || err);
-    }
+    } catch (err: any) {}
   }, []);
   const token = useSelector(selectToken);
   const dispatch = useAppDispatch();
@@ -59,7 +56,7 @@ export const Header = () => {
             <div className="headerBottom__content">
               <div className="headerBottom__left">
                 <img
-                  src="https://smarthr-ci.dreamguystech.com/template/orange/public/assets/img/logo.png"
+                  src={require('assets/logo/secondary-logo.png')}
                   alt="logo"
                 />
                 <span>Magic Attendance</span>

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Wrapper } from './Authenticate.styled';
-import { TextField } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSignUp } from 'queries/useAuth';
@@ -35,7 +35,9 @@ const SignInPage = () => {
 
     try {
       await onSignUp(payload);
-      toast.success('Register Successful');
+      toast.success(
+        'Register recorded. Please check your email to validation email',
+      );
       history.push('/sign-in');
     } catch (err: any) {
       toast.error(err?.message || err);
@@ -123,6 +125,34 @@ const SignInPage = () => {
               error={!!errors?.lastName?.message}
             />
           </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              className="text-field"
+              select
+              label="Role"
+              {...register('role', {
+                required: 'Role cannot empty',
+              })}
+              helperText={errors?.role?.message}
+              error={!!errors?.role?.message}
+            >
+              <MenuItem value="Admin">Teacher</MenuItem>
+              <MenuItem value="Student">Student</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              fullWidth
+              className="text-field"
+              label="StudentId"
+              {...register('studentId', {
+                required: 'Student ID cannot empty',
+              })}
+              helperText={errors?.studentId?.message}
+              error={!!errors?.studentId?.message}
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -132,18 +162,6 @@ const SignInPage = () => {
               {...register('password', { required: 'Password cannot empty' })}
               helperText={errors?.password?.message}
               error={!!errors?.password?.message}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Student Id"
-              {...register('studentId', {
-                required: 'Student ID cannot empty',
-              })}
-              helperText={errors?.studentId?.message}
-              error={!!errors?.studentId?.message}
             />
           </Grid>
 

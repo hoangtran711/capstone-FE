@@ -70,27 +70,40 @@ const NavbarComponent = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
-              <AccountBoxIcon />
-              Profile
-            </MenuItem>
-            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
-              <ManageAccountsIcon />
+            <MenuItem
+              onClick={() => {
+                history.push(`/profile/${user._id}`);
+                handleClose();
+              }}
+            >
+              <ManageAccountsIcon sx={{ marginRight: '10px' }} />
               My account
             </MenuItem>
-
-            <MenuItem sx={{ marginRight: '10px' }} onClick={handleClose}>
-              <AssignmentIcon />
+            <MenuItem
+              onClick={() => {
+                history.push(`/projects/me`);
+                handleClose();
+              }}
+            >
+              <AccountBoxIcon sx={{ marginRight: '10px' }} />
+              My Projects
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                history.push(`/tasks/${user._id}`);
+                handleClose();
+              }}
+            >
+              <AssignmentIcon sx={{ marginRight: '10px' }} />
               My task
             </MenuItem>
             <MenuItem
-              sx={{ marginRight: '10px' }}
               onClick={() => {
                 dispatch(deleteAccount());
                 history.push('/');
               }}
             >
-              <LogoutIcon />
+              <LogoutIcon sx={{ marginRight: '10px' }} />
               Logout
             </MenuItem>
           </Menu>

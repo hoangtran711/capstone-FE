@@ -11,7 +11,9 @@ export interface IProject {
   maxJoin: number;
   totalLesson: number;
   joined: number;
+  approverInfo?: any;
   _id: string;
+  process: number;
 }
 export const useCreateProject = () => {
   return async function (payload: IProject) {
@@ -42,10 +44,10 @@ export const useGetDetailProject = (projectId: string) => {
       return response;
     },
     { enabled: !!projectId, refetchInterval: 1000 },
-  );
+  ) as any;
 };
 
-export const useGetAllProjectsOfTeacher = () => {
+export const useGetAllProjectsCurrentUser = () => {
   return async function () {
     try {
       const rs = http.get(`v1/projects/me`);

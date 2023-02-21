@@ -1,29 +1,25 @@
 import React, { memo, useMemo, useState } from 'react';
 import { SidebarLayout } from 'components';
-import { Progress, Wrapper } from './Project.styled';
+import { Wrapper } from './Project.styled';
 import { Grid, IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
 
 // import AppsIcon from '@mui/icons-material/Apps';
 // import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import { TextField } from '@mui/material';
-import { CreateProject } from './Create Project/CreateProject';
-import {
-  IProject,
-  useGetAllProjects,
-  useGetProjectProgress,
-} from 'queries/useProjects';
+import { CreateProject } from '../Create Project/CreateProject';
+import { IProject, useGetAllProjectsCurrentUser } from 'queries/useProjects';
 import { useGetDetailOfMe } from 'queries/useEmployee';
-import { IEmployee } from 'modules/Employee/Employee';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { AddStudent } from './Add Student/AddStudent';
+import { AddStudent } from '../Add Student/AddStudent';
 import DetailsIcon from '@mui/icons-material/Details';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { selectRole, selectUser } from 'reducer/account/account.selector';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 const Project = () => {
+  const { userId } = useParams<{ userId: string }>();
   const history = useHistory();
   const role = useSelector(selectRole);
   const user = useSelector(selectUser);
@@ -36,29 +32,17 @@ const Project = () => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-  const onGetProgressProject = useGetProjectProgress();
 
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
   const [isShowAddStudent, setIsShowAddStudent] = React.useState(false);
   const [reload, setReload] = React.useState(false);
-  const [me, setMe] = React.useState<IEmployee>({
-    email: '',
-    password: '',
-    username: '',
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    address: '',
-    dateOfBirth: '',
-    _id: '',
-  });
+
   const [searchvalue, setSearchValue] = React.useState<string>('');
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
-  const [listProgress, setListProgress] = React.useState<Array<number>>([]);
   const [listProjectTemp, setListProjectTemp] = React.useState<Array<IProject>>(
     [],
   );
-  const onGetAllProject = useGetAllProjects();
+  const onGetAllProject = useGetAllProjectsCurrentUser();
   const onGetDetailOfMe = useGetDetailOfMe();
   React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
@@ -67,19 +51,7 @@ const Project = () => {
         setListProjectTemp(rs);
       }
     });
-    onGetDetailOfMe().then((rs: any) => {
-      if (rs) {
-        setMe(rs);
-      }
-    });
   }, []);
-  React.useEffect(() => {
-    onGetProgressProject(listProject?.map((item: any) => item?._id)).then(
-      (rs: any) => {
-        setListProgress(rs);
-      },
-    );
-  }, [listProject]);
   React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
       if (rs) {
@@ -88,7 +60,6 @@ const Project = () => {
       }
     });
   }, [reload]);
-  console.log(listProject);
   const search = () => {
     if (searchvalue === '') {
       setListProject(listProjectTemp);
@@ -100,7 +71,7 @@ const Project = () => {
       ),
     );
   };
-  console.log(listProgress);
+  console.log(listProject);
 
   const isAdmin = role === 'Admin';
 
@@ -121,18 +92,20 @@ const Project = () => {
         >
           <DetailsIcon sx={{ marginRight: '10px' }} /> View Detail
         </MenuItem>
-        <MenuItem
-          onClick={async () => {
-            setIsShowAddStudent(true);
-            handleCloseMenu();
-          }}
-        >
-          <GroupAddIcon sx={{ marginRight: '10px' }} className="icon-menu" />{' '}
-          Add Student
-        </MenuItem>
+        {isAdmin && (
+          <MenuItem
+            onClick={async () => {
+              setIsShowAddStudent(true);
+              handleCloseMenu();
+            }}
+          >
+            <GroupAddIcon sx={{ marginRight: '10px' }} className="icon-menu" />{' '}
+            Add Student
+          </MenuItem>
+        )}
       </Menu>
     ),
-    [anchorEl, history, openMenu, selectedItem?._id],
+    [anchorEl, history, isAdmin, openMenu, selectedItem?._id],
   );
 
   return (
@@ -356,21 +329,15 @@ const Project = () => {
                           </li>
                         </ul>
                       </div>
-                      <Progress
-                        value={
-                          listProgress
-                            ? Number((listProgress[key] * 100).toFixed(3))
-                            : 0
-                        }
-                      >
-                        <div className="sub-title">
-                          Progress{' '}
-                          <span>
-                            {Number((listProgress[key] * 100).toFixed(3))}%
-                          </span>
+                      <div className="progress">
+                        <div className="sub-title">Progress</div>
+                        <div className="progress-bar">
+                          <div
+                            style={{ width: `${item.process}%` }}
+                            className="actual-process"
+                          ></div>
                         </div>
-                        <div className="progress-bar"></div>
-                      </Progress>
+                      </div>
                     </div>
                   </div>
                 </Grid>

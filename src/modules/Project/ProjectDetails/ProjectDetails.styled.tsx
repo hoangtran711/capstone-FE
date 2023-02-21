@@ -4,6 +4,21 @@ export const Wrapper = styled.div`
   padding: 30px;
   box-sizing: border-box;
   width: 100%;
+  padding-bottom: 80px;
+  .label {
+    font-weight: 600;
+  }
+  .avatar-student {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #a7a7a7;
+    margin-right: 10px;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -70,25 +85,33 @@ export const Wrapper = styled.div`
     .card {
       background-color: white;
       border: 1px solid #ededed;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       border-radius: 3px;
+      &-title {
+        color: #1f1f1f;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        margin-top: 2px;
+        margin-bottom: 3px;
+      }
       .card-body {
         flex: 1 1 auto;
         padding: 1rem 2rem;
         font-size: 18px;
         letter-spacing: 0.2px;
         line-height: 20px;
+
+        .avatar {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          border: 1px solid #a7a7a7;
+          margin-right: 10px;
+        }
         .project-title {
           margin: 0 0 5px;
-          .card-title {
-            color: #1f1f1f;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            margin-top: 2px;
-            margin-bottom: 3px;
-          }
           small {
             .text-muted {
               color: #8e8e8e !important;
@@ -151,7 +174,7 @@ export const Wrapper = styled.div`
             margin-top: 10px;
             .list-item {
               display: flex;
-              margin-top: 7px;
+              margin-top: 10px;
               .list-left {
                 margin-right: 10px;
                 a {

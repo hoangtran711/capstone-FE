@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { encryptData } from 'services/utils/crypt';
 import http from 'services/utils/http';
 export const useGetAllEmployee = () => {
   return async function () {
@@ -53,9 +54,13 @@ export const useGetSchedules = () => {
   };
 };
 export const useAttendanceMe = () => {
-  return async function (id: string) {
+  return async function (id: string, geoLocation: any) {
     try {
-      const rs = http.post(`v1/student/me/attendance`, { projectId: id });
+      const geoLocationEncrypted = encryptData(geoLocation);
+      const rs = http.post(`v1/student/me/attendance`, {
+        projectId: id,
+        geoLocation: geoLocationEncrypted,
+      });
       return rs;
     } catch (err: any) {
       toast.error(err);

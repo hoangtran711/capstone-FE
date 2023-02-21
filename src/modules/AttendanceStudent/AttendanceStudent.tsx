@@ -26,6 +26,7 @@ import {
 import { useGetAllProjectsAdmin } from 'queries/useProjects';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { useGetGeoLocation } from 'queries/useGetGeoLocation';
 
 const month = [
   {
@@ -120,6 +121,7 @@ const Request = () => {
   const [textNotify, setTextNotify] = React.useState<string>('');
   const [reload, setReload] = React.useState<boolean>(false);
   const [isAttended, setIsAttended] = React.useState<boolean>(false);
+  const geoLocation = useGetGeoLocation();
 
   // const onGetSchedules = useGetSchedules();
   const onGetCurrentSchedules = useGetCurrentSchedules();
@@ -258,7 +260,10 @@ const Request = () => {
       toast.error('Please choose specific project for attendance');
       return;
     }
-    attendanceMe(defaultProject)
+    if (!geoLocation) {
+      toast.error('Please enable location for our site');
+    }
+    attendanceMe(defaultProject, geoLocation)
       .then((rs: any) => {
         if (rs) {
           toast.success(

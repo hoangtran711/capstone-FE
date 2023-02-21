@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 export const Wrapper = styled.div`
   padding: 30px;
   box-sizing: border-box;
+  padding-bottom: 80px;
   width: 100%;
   .icon-menu {
     margin-right: 10px;

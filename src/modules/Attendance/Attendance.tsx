@@ -131,6 +131,7 @@ const Attendance = () => {
               select
               onChange={(e: any) => setActiveProject(e.target.value)}
               helperText="Please select your specific project"
+              value={activeProject}
             >
               {listProject?.map((option, key) => (
                 <MenuItem key={key} value={option._id}>
@@ -145,9 +146,9 @@ const Attendance = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    {columns.map((column) => (
+                    {columns.map((column, key) => (
                       <TableCell
-                        key={column.id}
+                        key={key}
                         align={column.align}
                         style={{ minWidth: column.minWidth }}
                       >

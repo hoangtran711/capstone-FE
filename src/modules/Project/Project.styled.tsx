@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Wrapper = styled.div`
   padding: 30px;
@@ -112,7 +112,6 @@ export const Wrapper = styled.div`
       margin-bottom: 30px;
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-      height: 100%;
       position: relative;
       .more {
         position: absolute;
@@ -210,32 +209,53 @@ export const Wrapper = styled.div`
         }
         .sub-title {
           margin-bottom: 5px;
+          display: flex;
+          justify-content: space-between;
+          span {
+            font-size: 13px;
+            color: #55ce63;
+          }
           &.joined {
             // color: green;
             // font-weight: 600;
           }
         }
-        .progress {
-          margin-bottom: 8px;
-          .progress-bar {
-            position: relative;
-            height: 4px;
-            display: flex;
-            overflow: hidden;
-            font-size: 0.75rem;
-            background-color: #e9ecef;
-            border-radius: 0.25rem;
-            &::before {
-              z-index: 2;
-              content: '';
-              position: absolute;
-              height: 100%;
-              width: 40%;
-              background-color: #55ce63 !important;
-            }
-          }
-        }
       }
+    }
+  }
+`;
+export interface IProgress {
+  value: number;
+}
+const animProgress = (v: number) => keyframes`
+0%{
+  width: 0;
+}
+100%{
+  width: ${v}% ;
+}
+`;
+
+export const Progress = styled.div<IProgress>`
+  margin-top: 18px;
+  .progress-bar {
+    position: relative;
+    height: 4px;
+    display: flex;
+    overflow: hidden;
+    font-size: 0.75rem;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    width: 100%;
+    &::before {
+      z-index: 2;
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: ${(props) => props.value}%;
+      background-color: #55ce63 !important;
+      animation: ${(props) => animProgress(props.value)} 1.5s
+        cubic-bezier(0.14, 0.28, 0.71, 1.53);
     }
   }
 `;

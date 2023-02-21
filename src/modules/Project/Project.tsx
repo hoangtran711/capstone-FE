@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useState } from 'react';
 import { SidebarLayout } from 'components';
-import { Wrapper } from './Project.styled';
+import { Progress, Wrapper } from './Project.styled';
 import { Grid, IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
 
 // import AppsIcon from '@mui/icons-material/Apps';
@@ -8,7 +8,11 @@ import { Grid, IconButton, ListItemText, Menu, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { TextField } from '@mui/material';
 import { CreateProject } from './Create Project/CreateProject';
-import { IProject, useGetAllProjects } from 'queries/useProjects';
+import {
+  IProject,
+  useGetAllProjects,
+  useGetProjectProgress,
+} from 'queries/useProjects';
 import { useGetDetailOfMe } from 'queries/useEmployee';
 import { IEmployee } from 'modules/Employee/Employee';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -33,6 +37,7 @@ const Project = () => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+  const onGetProgressProject = useGetProjectProgress();
 
   const [isShowCreateProject, setIsShowCreateProject] = React.useState(false);
   const [isShowAddStudent, setIsShowAddStudent] = React.useState(false);
@@ -50,6 +55,7 @@ const Project = () => {
   });
   const [searchvalue, setSearchValue] = React.useState<string>('');
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
+  const [listProgress, setListProgress] = React.useState<Array<number>>([]);
   const [listProjectTemp, setListProjectTemp] = React.useState<Array<IProject>>(
     [],
   );
@@ -69,6 +75,13 @@ const Project = () => {
     });
   }, []);
   React.useEffect(() => {
+    onGetProgressProject(listProject?.map((item: any) => item?._id)).then(
+      (rs: any) => {
+        setListProgress(rs);
+      },
+    );
+  }, [listProject]);
+  React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
       if (rs) {
         setListProject(rs);
@@ -87,6 +100,7 @@ const Project = () => {
       ),
     );
   };
+  console.log(listProgress);
 
   const isAdmin = role === 'Admin';
 
@@ -339,10 +353,21 @@ const Project = () => {
                           </li>
                         </ul>
                       </div>
-                      <div className="progress">
-                        <div className="sub-title">Progress</div>
+                      <Progress
+                        value={
+                          listProgress
+                            ? Number((listProgress[key] * 100).toFixed(3))
+                            : 0
+                        }
+                      >
+                        <div className="sub-title">
+                          Progress{' '}
+                          <span>
+                            {Number((listProgress[key] * 100).toFixed(3))}%
+                          </span>
+                        </div>
                         <div className="progress-bar"></div>
-                      </div>
+                      </Progress>
                     </div>
                   </div>
                 </Grid>

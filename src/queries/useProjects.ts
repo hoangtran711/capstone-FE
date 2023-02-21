@@ -85,3 +85,14 @@ export const useGetStudentOfProject = (id: string) => {
     return response;
   }) as any;
 };
+
+export const useGetProjectProgress = () => {
+  return async (id: Array<string>) => {
+    try {
+      const rs = await http.post(`/v1/projects/progress`, { projectIds: id });
+      return rs;
+    } catch (err: any) {
+      toast.error(err);
+    }
+  };
+};

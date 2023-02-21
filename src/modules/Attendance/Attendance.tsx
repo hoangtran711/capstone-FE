@@ -3,258 +3,179 @@ import { SidebarLayout } from 'components';
 
 import { Wrapper } from './Attendance.styled';
 
-import { Grid } from '@mui/material';
+import {
+  Grid,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { TextField } from '@mui/material';
+import {
+  IProject,
+  useGetAllProjects,
+  useGetStudentOfProject2,
+} from 'queries/useProjects';
+import { IEmployee } from 'modules/Employee/Employee';
 
-const month = [
-  {
-    value: 'Select Month',
-    label: 'Select Month',
-  },
-  {
-    value: 'Jan',
-    label: 'Jan',
-  },
-  {
-    value: 'Feb',
-    label: 'Feb',
-  },
-  {
-    value: 'Mar',
-    label: 'Mar',
-  },
-  {
-    value: 'Apr',
-    label: 'Apr',
-  },
-  {
-    value: 'May',
-    label: 'May',
-  },
-  {
-    value: 'Jun',
-    label: 'Jun',
-  },
-  {
-    value: 'Jul',
-    label: 'Jul',
-  },
-  {
-    value: 'Aug',
-    label: 'Aug',
-  },
-  {
-    value: 'Sep',
-    label: 'Sep',
-  },
-  {
-    value: 'Oct',
-    label: 'Oct',
-  },
-  {
-    value: 'Nov',
-    label: 'Nov',
-  },
-  {
-    value: 'Dec',
-    label: 'Dec',
-  },
+interface Column {
+  id: string;
+  label: string;
+  minWidth?: number;
+  align?: 'right';
+  format?: (value: number) => string;
+}
+interface Data {
+  name: string;
+  code: string;
+  population: number;
+  size: number;
+  density: number;
+}
+
+function createData(
+  name: string,
+  code: string,
+  population: number,
+  size: number,
+): Data {
+  const density = population / size;
+  return { name, code, population, size, density };
+}
+
+const rows = [
+  createData('India', 'IN', 1324171354, 3287263),
+  createData('China', 'CN', 1403500365, 9596961),
+  createData('Italy', 'IT', 60483973, 301340),
+  createData('United States', 'US', 327167434, 9833520),
+  createData('Canada', 'CA', 37602103, 9984670),
+  createData('Australia', 'AU', 25475400, 7692024),
+  createData('Germany', 'DE', 83019200, 357578),
+  createData('Ireland', 'IE', 4857000, 70273),
+  createData('Mexico', 'MX', 126577691, 1972550),
+  createData('Japan', 'JP', 126317000, 377973),
+  createData('France', 'FR', 67022000, 640679),
+  createData('United Kingdom', 'GB', 67545757, 242495),
+  createData('Russia', 'RU', 146793744, 17098246),
+  createData('Nigeria', 'NG', 200962417, 923768),
+  createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-const year = [
-  {
-    value: 'Select Year',
-    label: 'Select Year',
-  },
-  {
-    value: '2023',
-    label: '2023',
-  },
-  {
-    value: '2022',
-    label: '2022',
-  },
-  {
-    value: '2021',
-    label: '2021',
-  },
-  {
-    value: '2020',
-    label: '2020',
-  },
-  {
-    value: '2019',
-    label: '2019',
-  },
-  {
-    value: '2018',
-    label: '2018',
-  },
-  {
-    value: '2017',
-    label: '2017',
-  },
-  {
-    value: '2016',
-    label: '2016',
-  },
-  {
-    value: '2015',
-    label: '2015',
-  },
-  {
-    value: '2014',
-    label: '2014',
-  },
-  {
-    value: '2013',
-    label: '2013',
-  },
-  {
-    value: '2012',
-    label: '2012',
-  },
+const columns: readonly Column[] = [
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '2', minWidth: 10 },
+  { id: '1', label: '3', minWidth: 10 },
+  { id: '1', label: '4', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
+  { id: '1', label: '1', minWidth: 10 },
 ];
-
 const Attendance = () => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  const [listProject, setListProject] = React.useState<Array<IProject>>([]);
+  const [listStudent, setListStudent] = React.useState<Array<IEmployee>>([]);
+  const [activeProject, setActiveProject] = React.useState<string>('');
+  const onGetAllProject = useGetAllProjects();
+  const onGetStudentOfProject = useGetStudentOfProject2();
+  React.useEffect(() => {
+    onGetAllProject().then((rs: any) => {
+      setListProject(rs);
+    });
+  }, []);
+  React.useEffect(() => {
+    if (listProject) {
+      setActiveProject(listProject[0]?._id);
+    }
+  }, [listProject]);
+  React.useEffect(() => {
+    if (activeProject) {
+      onGetStudentOfProject(activeProject).then((rs: any) => {
+        if (rs) {
+          setListStudent(rs);
+        }
+      });
+    }
+  }, [activeProject]);
+
+  console.log(activeProject);
+
   return (
     <SidebarLayout>
       <Wrapper>
         <span className="welcome">Attendance</span>
         <span className="breadcrumb">Dashboard / Attendance</span>
         <Grid spacing={3} className="grid" container>
-          <Grid item xs={3}>
-            <TextField
-              fullWidth
-              className="text-field"
-              label="Student Name"
-              type="text"
-            />
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={9}>
             <TextField
               fullWidth
               className="select-major"
               id="outlined-select-currency-native"
               select
-              defaultValue="Information Technology"
-              SelectProps={{
-                native: true,
-              }}
+              onChange={(e: any) => setActiveProject(e.target.value)}
+              helperText="Please select your specific project"
             >
-              {month.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              fullWidth
-              className="select-major"
-              id="outlined-select-currency-native"
-              select
-              defaultValue="Information Technology"
-              SelectProps={{
-                native: true,
-              }}
-            >
-              {year.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+              {listProject?.map((option, key) => (
+                <MenuItem key={key} value={option._id}>
+                  {option.projectName}
+                </MenuItem>
               ))}
             </TextField>
           </Grid>
 
-          <Grid item xs={3}>
-            <div className="button-search">
-              <a href="#">Search</a>
-            </div>
-          </Grid>
           <Grid item xs={12}>
-            <div className="table">
-              <thead>
-                <tr>
-                  <th>Employee</th>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th>6</th>
-                  <th>7</th>
-                  <th>8</th>
-                  <th>9</th>
-                  <th>10</th>
-                  <th>11</th>
-                  <th>12</th>
-                  <th>13</th>
-                  <th>14</th>
-                  <th>15</th>
-                  <th>16</th>
-                  <th>17</th>
-                  <th>18</th>
-                  <th>19</th>
-                  <th>20</th>
-                  <th>21</th>
-                  <th>22</th>
-                  <th>23</th>
-                  <th>24</th>
-                  <th>25</th>
-                  <th>26</th>
-                  <th>27</th>
-                  <th>28</th>
-                  <th>29</th>
-                  <th>30</th>
-                  <th>31</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>
-                    <h2 className="table-avatar">
-                      <a href="#" className="avatar"></a>
-                      <a href="#" className="name">
-                        Nguyen Hung Dung
-                      </a>
-                    </h2>
-                  </th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tbody>
-            </div>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {listStudent?.map((st: any, key: any) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={key}>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                        <TableCell>{st?.firstName}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
       </Wrapper>

@@ -226,6 +226,7 @@ const Request = () => {
           setAbleToCountDown(false);
           setDistance(0);
           clearInterval(j);
+          setReload(!reload);
         }
       }, 1000);
     };
@@ -235,7 +236,7 @@ const Request = () => {
       setAbleToCountDown(false);
       setTextNotify('Time out');
     }
-  }, [distance, isAttended]);
+  }, [distance, isAttended, reload]);
   React.useEffect(() => {
     setTextNotify(`${minute} : ${second}`);
   }, [minute, second]);
@@ -309,7 +310,9 @@ const Request = () => {
                 </div>
                 <div
                   className={
-                    ableToCountDown ? 'punch-btn' : 'punch-btn disable'
+                    ableToCountDown && !isAttended
+                      ? 'punch-btn'
+                      : 'punch-btn disable'
                   }
                   onClick={() => {
                     if (ableToCountDown && !isAttended) {

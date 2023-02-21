@@ -43,6 +43,8 @@ export const Wrapper = styled.div`
     align-items: center;
     font-family: 'CircularStd', sans-serif;
     color: #1f1f1f;
+    max-height: 80%;
+    overflow: scroll;
 
     .close {
       border-radius: 50%;
@@ -76,14 +78,15 @@ export const Wrapper = styled.div`
         align-items: center;
         width: 100%;
         padding: 12px;
-        border-top: 1px solid rgba(0, 0, 0, 0.2);
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         &.head {
           margin-botom: 12px;
           border: none;
           font-weight: 600;
-          background: #de9385;
+          background: #75cee1;
           color: white;
+          border-radius: 8px;
+
           .action {
             .btn-add {
               color: white;
@@ -91,22 +94,26 @@ export const Wrapper = styled.div`
           }
         }
         .id {
-          width: 30%;
+          width: 45%;
         }
         .username {
           display: flex;
-          width: 20%;
+          width: 15%;
           justify-content: flex-end;
         }
         .name {
           display: flex;
-          width: 20%;
+          width: 15%;
           justify-content: flex-end;
         }
         .action {
           display: flex;
           flex: 1;
           justify-content: flex-end;
+          .ic-joined {
+            color: #55ce63;
+            cursor: pointer;
+          }
           .btn-add {
             color: #8c97f5;
             cursor: pointer;

@@ -73,3 +73,15 @@ export const useGetProjectUserJoined = () => {
     return response;
   }) as any;
 };
+export const useGetStudentOfProject2 = () => {
+  return async (id: string) => {
+    const response = await http.get(`/v1/project-joined/${id}`);
+    return response;
+  };
+};
+export const useGetStudentOfProject = (id: string) => {
+  return useQuery(['useGetProjectUserJoined.name'], async () => {
+    const response = await http.get(`/v1/project-joined/${id}`);
+    return response;
+  }) as any;
+};

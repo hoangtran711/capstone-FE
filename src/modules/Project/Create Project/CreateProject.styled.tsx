@@ -46,6 +46,8 @@ export const Wrapper = styled.div`
   .content {
     animation: ${animContent} 0.1s forwards;
     width: 40%;
+    max-height: 80%;
+    overflow: scroll;
     background: white;
     z-index: 2;
     position: relative;

@@ -106,3 +106,10 @@ export const useGetProjectAttendance = () => {
     }
   };
 };
+
+export const useGetAllProjectsRequest = () => {
+  return useQuery(['useGetAllProjectsRequest.name'], async () => {
+    const response = await http.get('/v1/projects');
+    return response;
+  }) as any;
+};

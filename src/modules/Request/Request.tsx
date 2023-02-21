@@ -30,7 +30,7 @@ import { useForm } from 'react-hook-form';
 import { IDataInputRequest } from './model/IDataInputRequest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { useGetProjectUserJoined } from 'queries/useProjects';
+import { useGetAllProjectsRequest } from 'queries/useProjects';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -77,7 +77,7 @@ const Request = () => {
     reset,
     formState: { errors },
   } = useForm<IDataInputRequest>();
-  const { data: projects } = useGetProjectUserJoined();
+  const { data: projects } = useGetAllProjectsRequest();
   const role = useSelector(selectRole);
 
   const handleClickOpen = () => {

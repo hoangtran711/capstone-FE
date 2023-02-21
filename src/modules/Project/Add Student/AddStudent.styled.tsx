@@ -98,13 +98,13 @@ export const Wrapper = styled.div`
         }
         .username {
           display: flex;
-          width: 15%;
-          justify-content: flex-end;
+          width: 20%;
+          justify-content: flex-start;
         }
         .name {
           display: flex;
-          width: 15%;
-          justify-content: flex-end;
+          width: 20%;
+          justify-content: flex-start;
         }
         .action {
           display: flex;

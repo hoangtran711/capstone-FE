@@ -1,3 +1,4 @@
+import { animProgress } from 'modules/Project/Project.styled';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -72,7 +73,7 @@ export const Wrapper = styled.div`
       .card-title {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 1rem;
+        margin: 1rem 0px;
         .percentage {
           color: #699834;
         }
@@ -97,6 +98,143 @@ export const Wrapper = styled.div`
           height: 100%;
           width: 70%;
           background-color: #ff9b44;
+        }
+      }
+      .pendings {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+        margin-top: 12px;
+        .req {
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          border-radius: 8px;
+          row-gap: 8px;
+          padding: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+
+          .top {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .user {
+              display: flex;
+              align-items: center;
+              column-gap: 12px;
+              img {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+              }
+            }
+            .status {
+              color: green;
+              padding: 6px;
+              background: rgba(242, 17, 54, 0.12);
+              color: #e63c3c;
+              border-radius: 4px;
+              font-size: 13px;
+              width: 42px;
+            }
+          }
+          .bottom {
+            font-size: 14px;
+          }
+        }
+      }
+      .pro {
+        display: flex;
+        align-items: center;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        align-items: center;
+        display: flex;
+        position: relative;
+        margin: 2px 0px;
+        border-radius: 4px;
+        padding: 4px 12px;
+
+        &.head {
+          font-weight: 600;
+          background: rgba(242, 17, 54, 0.12);
+          padding: 12px;
+        }
+        .proj-name {
+          width: 50%;
+        }
+        .joined {
+          width: 25%;
+          text-align: center;
+          color: #26af48 !important;
+        }
+        .absent {
+          width: 25%;
+          text-align: center;
+          color: #e63c3c;
+        }
+      }
+    }
+  }
+`;
+export interface IPropsTask {
+  value: number;
+}
+export const Task = styled.div<IPropsTask>`
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  box-sizing: border-box;
+  margin: 24px 0px;
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 14px;
+    .name {
+      background: rgba(242, 17, 54, 0.12);
+      padding: 6px;
+      border-radius: 4px;
+
+      &.pending {
+        color: #009efb;
+      }
+      &.inprogress {
+        color: #f62d51;
+      }
+      &.completed {
+        color: #55ce63;
+      }
+    }
+  }
+  .bottom {
+    .line {
+      height: 8px;
+      border-radius: 4px;
+      background: #e9ecef;
+      position: relative;
+      .value {
+        border-radius: 4px;
+        animation: ${(props) => animProgress(props.value)} 2s;
+        width: ${(props) => props.value}%;
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        height: 100%;
+        &.pending {
+          background: #009efb;
+        }
+        &.inprogress {
+          background: #f62d51;
+        }
+        &.completed {
+          background: #55ce63;
         }
       }
     }

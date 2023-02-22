@@ -29,14 +29,14 @@ export const Sidebar = () => {
         <div className="hiddenSidebar__phone">
           <p className="hiddenSidebar__phoneContent">
             <PhoneEnabled />
-            2800 666 999
+            <a href="tel:0382520281">0382520280</a>{' '}
           </p>
         </div>
         <a className="hiddenSidebar__buttonRed" href="">
           <PictureAsPdf /> Looking for your W-2?
         </a>
         <a className="hiddenSidebar__buttonBlue" href="">
-          <Paid /> Pay Online Sale Offices
+          <Paid /> Attendance Online Sale Offices
         </a>
       </div>
     </Wrapper>

@@ -48,10 +48,12 @@ export const Banner = () => {
               <div className="banner__contentText">
                 <h2>
                   {' '}
-                  Payroll &
-                  <br /> HR Solutions
+                  Attendance
+                  <br />
+                  for Class
+                  {/* <br /> for attendance */}
                 </h2>
-                <p>to take your business further</p>
+                <p>Automation solution</p>
                 <a className="button-red">Request a meeting</a>
               </div>
             </div>
@@ -66,10 +68,12 @@ export const Banner = () => {
               <div className="banner__contentText">
                 <h2>
                   {' '}
-                  Payroll &
-                  <br /> HR Solutions
+                  Attendance
+                  <br />
+                  for Class
+                  {/* <br /> for attendance */}
                 </h2>
-                <p>to take your business further</p>
+                <p>Automation solution</p>
                 <a className="button-red">Request a meeting</a>
               </div>
             </div>
@@ -84,10 +88,12 @@ export const Banner = () => {
               <div className="banner__contentText">
                 <h2>
                   {' '}
-                  Payroll &
-                  <br /> HR Solutions
+                  Attendance
+                  <br />
+                  for Class
+                  {/* <br /> for attendance */}
                 </h2>
-                <p>to take your business further</p>
+                <p>Automation solution</p>
                 <a className="button-red">Request a meeting</a>
               </div>
             </div>

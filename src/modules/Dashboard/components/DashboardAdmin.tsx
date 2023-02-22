@@ -8,7 +8,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 const DashboardAdmin = () => {
   return (
     <Wrapper>
-      <span className="welcome">Welcome Teacher!</span>
+      <span className="welcome">Welcome !</span>
       <span className="breadcrumb">Dashboard</span>
       <Grid spacing={3} className="grid" container>
         <Grid item xs={4}>

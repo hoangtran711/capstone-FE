@@ -69,6 +69,10 @@ export const Wrapper = styled.div`
           box-shadow: 0 10px 30px 0 rgb(15 111 213 / 30%);
           margin-right: 20px;
         }
+        a {
+          text-decoration: none;
+          color: #0f6fd5;
+        }
       }
     }
     .hiddenSidebar__buttonRed {

@@ -47,6 +47,10 @@ export const Wrapper = styled.div`
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+    a {
+      text-decoration: none;
+      color: white;
+    }
     svg {
       color: white;
       transition: all 0.5s;
@@ -111,6 +115,10 @@ export const Wrapper = styled.div`
     padding: 15px 20px;
     cursor: pointer;
     position: relative;
+    &:hover {
+      color: black;
+      transition: all 0.7s ease-in-out;
+    }
     .dropdown-menu {
       position: absolute;
       top: 100%;

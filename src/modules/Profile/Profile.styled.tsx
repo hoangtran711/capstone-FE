@@ -34,6 +34,9 @@ export const Wrapper = styled.div`
             justify-content: center;
             .image {
               border-radius: 50%;
+              width: 120px;
+              height: 120px;
+              filter: drop-shadow(0 0 0.35rem #ff9b44);
             }
           }
         }
@@ -85,14 +88,30 @@ export const Wrapper = styled.div`
             margin-bottom: 24px;
             display: flex;
             position: relative;
+            align-items: center;
+            column-gap: 12px;
             .title {
             }
             .text {
-              left: 82px;
-              position: absolute;
+              display: flex;
+              align-items: center;
+              column-gap: 12px;
+
               color: #888888;
               a {
-                color: rgb(85, 26, 139);
+                color: #55ce63;
+                &.isNotVerified {
+                  color: red;
+                }
+                &.isVerified {
+                  color: #55ce63;
+                }
+              }
+              .info-ic {
+                color: red;
+              }
+              .check-ic {
+                color: #55ce63;
               }
             }
           }

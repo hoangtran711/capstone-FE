@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { IEditUser } from 'modules/Profile/IEditUser';
 import { toast } from 'react-toastify';
 import { encryptData } from 'services/utils/crypt';
 import http from 'services/utils/http';
@@ -16,6 +17,16 @@ export const useGetDetailEmployee = () => {
     return async function (id: string) {
         try {
             const rs = await http.get(`v1/users/${id}`);
+            return rs;
+        } catch (error: any) {
+            toast.error(error);
+        }
+    };
+};
+export const useEditUserInfo = () => {
+    return async function (payload: IEditUser) {
+        try {
+            const rs = await http.put(`v1/users/me`, payload);
             return rs;
         } catch (error: any) {
             toast.error(error);

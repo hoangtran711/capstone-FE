@@ -5,19 +5,55 @@ import { Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useParams } from 'react-router-dom';
 import { useGetDetailEmployee } from 'queries/useEmployee';
+import moment from 'moment';
+import InfoIcon from '@mui/icons-material/Info';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { EditUser } from './components/Edit PopUp/EditUser';
 
+export interface IUser {
+  address: string;
+  avatar: string;
+  dateOfBirth: string;
+  email: string;
+  emailVerified: string;
+  firstName: string;
+  lastName: string;
+  major: string;
+  phoneNumber: string;
+  username: string;
+  _id: string;
+}
 const Profile = () => {
   let param: { id: string } = useParams();
+  const [userInfo, setUserInfo] = React.useState<IUser>();
+  const [isShowEdit, setIsShowEdit] = React.useState(false);
+  const [reload, setReload] = React.useState(false);
   const onGetDetailEmployee = useGetDetailEmployee();
   React.useEffect(() => {
     onGetDetailEmployee(param.id).then((rs: any) => {
-      console.log(rs);
+      setUserInfo(rs);
     });
     console.log(param.id);
   }, [param]);
+  React.useEffect(() => {
+    onGetDetailEmployee(param.id).then((rs: any) => {
+      setUserInfo(rs);
+    });
+    console.log(param.id);
+  }, [reload]);
+  console.log(userInfo);
+
   return (
     <SidebarLayout>
       <Wrapper>
+        {isShowEdit && (
+          <EditUser
+            reload={reload}
+            setReload={setReload}
+            setVisibility={setIsShowEdit}
+            userInfo={userInfo}
+          />
+        )}
         <span className="welcome">Profile</span>
         <span className="breadcrumb">Dashboard / Profile</span>
         <div className="main-card">
@@ -27,21 +63,24 @@ const Profile = () => {
                 <a href="#">
                   <img
                     className="image"
-                    src={require('assets/images/student/student-01.jpg')}
+                    src={userInfo?.avatar}
                     alt="personal-img"
                   />
                 </a>
               </Grid>
               <Grid item xs={3.5}>
                 <div className="info-left">
-                  <h3>Harley Helmets</h3>
-                  <div className="major text-mute ">Infomation Technology</div>
-                  <div className="class text-mute">Class: 18110CLA</div>
-                  <div className="student-id">Student ID: 18110046</div>
-                  <div className="date-join text-mute">
-                    {' '}
-                    Date of join: 1st Jan 2018
+                  <h3>{userInfo?.username}</h3>
+                  <div className="major text-mute ">
+                    Major: {userInfo?.major}
                   </div>
+                  <div className="class text-mute">
+                    First Name : {userInfo?.firstName}
+                  </div>
+                  <div className="class text-mute">
+                    Last Name : {userInfo?.lastName}
+                  </div>
+                  <div className="student-id"></div>
                   <div className="send-message">
                     <a href="#">Send Mail</a>
                   </div>
@@ -53,33 +92,46 @@ const Profile = () => {
                     <div className="title">
                       <span>Phone: </span>
                     </div>
-                    <div className="text">
-                      <a href="#">0382520281</a>
-                    </div>
+                    <div className="text">{userInfo?.phoneNumber}</div>
                   </li>
                   <li>
                     <div className="title">Email: </div>
                     <div className="text">
-                      <a href="#">johndoe@example.com</a>
+                      <a
+                        href="#"
+                        className={
+                          userInfo?.emailVerified === 'false'
+                            ? 'isNotVerified'
+                            : 'isVerified'
+                        }
+                      >
+                        {userInfo?.email}
+                      </a>
+                      {userInfo?.emailVerified === 'false' ? (
+                        <InfoIcon className="info-ic" />
+                      ) : (
+                        <CheckCircleIcon className="check-ic" />
+                      )}
                     </div>
                   </li>
                   <li>
                     <div className="title">Birthday: </div>
-                    <div className="text">24th July</div>
-                  </li>
-                  <li>
-                    <div className="title">Address:</div>
                     <div className="text">
-                      1861 Xa Lo Ha Noi, Linh Chieu, Thu Duc, TP. Ho Chi Minh
+                      {moment(userInfo?.dateOfBirth).format('dddd, DD-MM-YYYY')}
                     </div>
                   </li>
                   <li>
-                    <div className="title">Gender:</div>
-                    <div className="text">Male</div>
+                    <div className="title">Address:</div>
+                    <div className="text">{userInfo?.address}</div>
                   </li>
                 </ul>
               </Grid>
-              <Grid item xs={0.5} className="edit-profile">
+              <Grid
+                item
+                xs={0.5}
+                className="edit-profile"
+                onClick={() => setIsShowEdit(true)}
+              >
                 <a href="#">
                   <EditIcon />
                 </a>
@@ -87,91 +139,7 @@ const Profile = () => {
             </Grid>
           </div>
         </div>
-        <div className="child-card">
-          <Grid spacing={3} className="grid-2" container>
-            <Grid item xs={6} className="child-card-left">
-              <div className="card">
-                <h3>Personal Informations</h3>
-                <ul className="personal-info">
-                  <li>
-                    <div className="title">Date of birth:</div>
-                    <div className="text">21- 05- 2000</div>
-                  </li>
-                  <li>
-                    <div className="title">Place of birth:</div>
-                    <div className="text">Binh Phuoc</div>
-                  </li>
-                  <li>
-                    <div className="title">Nationality:</div>
-                    <div className="text">Viet Nam</div>
-                  </li>
-                  <li>
-                    <div className="title">Religion:</div>
-                    <div className="text">Buddhism</div>
-                  </li>
-                  <li>
-                    <div className="title">Study Status:</div>
-                    <div className="text learning-status">Still learning</div>
-                  </li>
-                  <li>
-                    <div className="title">Course:</div>
-                    <div className="text">Course 2018</div>
-                  </li>
-                </ul>
-                <Grid item xs={0.5} className="edit-profile">
-                  <a href="#">
-                    <EditIcon />
-                  </a>
-                </Grid>
-              </div>
-            </Grid>
-            <Grid item xs={6} className="child-card-right">
-              <div className="card">
-                <h3>Emergency Contact</h3>
-                <div className="section-title">Primary</div>
-                <ul className="personal-info">
-                  <li>
-                    <div className="title">Name:</div>
-                    <div className="text">Nguyen Van Binh</div>
-                  </li>
-                  <li>
-                    <div className="title">Relationship:</div>
-                    <div className="text">Father</div>
-                  </li>
-                  <li>
-                    <div className="title">Phone:</div>
-                    <div className="text">
-                      <a href="#">9876543210, 9876543210</a>
-                    </div>
-                  </li>
-                </ul>
-                <hr />
-                <div className="section-title">Secondary</div>
-                <ul className="personal-info">
-                  <li>
-                    <div className="title">Name:</div>
-                    <div className="text">Tran Thi Thu</div>
-                  </li>
-                  <li>
-                    <div className="title">Relationship:</div>
-                    <div className="text">Mother</div>
-                  </li>
-                  <li>
-                    <div className="title">Phone:</div>
-                    <div className="text">
-                      <a href="#">9876543210</a>
-                    </div>
-                  </li>
-                </ul>
-                <Grid item xs={0.5} className="edit-profile">
-                  <a href="#">
-                    <EditIcon />
-                  </a>
-                </Grid>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
+        <div className="edit"></div>
       </Wrapper>
     </SidebarLayout>
   );

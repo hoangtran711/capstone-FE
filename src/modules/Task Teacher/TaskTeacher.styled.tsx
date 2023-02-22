@@ -38,19 +38,18 @@ export const Wrapper = styled.div`
       justify-content: space-between;
       position: relative;
       &:hover {
-        transform: translateY(-8px);
+        transform: translateY(-4px);
         box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
           rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
           rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
         .add {
           display: flex;
-          border-radius: 24px;
         }
       }
       .add {
         border-radius: 24px;
         flex-direction: column;
-        display: none;
+        // display: none;
         align-items: center;
         justify-content: center;
         position: absolute;
@@ -59,7 +58,7 @@ export const Wrapper = styled.div`
         width: 100%;
         height: 100%;
         z-index: 2;
-        color: #55ce63;
+        color: #34b042;
         font-weight: 600;
         font-size: 18px;
         &::after {

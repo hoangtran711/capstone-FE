@@ -49,7 +49,7 @@ export const Wrapper = styled.div`
       .add {
         border-radius: 24px;
         flex-direction: column;
-        // display: none;
+        display: none;
         align-items: center;
         justify-content: center;
         position: absolute;

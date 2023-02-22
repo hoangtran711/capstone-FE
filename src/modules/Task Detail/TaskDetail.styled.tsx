@@ -146,7 +146,7 @@ export const Wrapper = styled.div`
           }
           .title {
             color: black;
-            font-size: 18px;
+            font-size: 22px;
           }
           .date {
             width: 100%;
@@ -154,7 +154,7 @@ export const Wrapper = styled.div`
             margin-bottom: 12px;
             align-items: center;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 11px;
             .start,
             .end {
               color: rbga(0, 0, 0, 0.1);
@@ -164,10 +164,17 @@ export const Wrapper = styled.div`
             width: 100%;
             display: flex;
             justify-content: flex-start;
-            font-size: 12px;
+            font-size: 14px;
             color: rgba(0, 0, 0, 0.5);
+            column-gap: 4px;
+            &.subs {
+              &:hover {
+                color: green;
+              }
+            }
+
             .ic {
-              font-size: 16px;
+              font-size: 20px;
             }
             .file {
               &:hover {
@@ -175,11 +182,7 @@ export const Wrapper = styled.div`
               }
             }
             .more {
-              font-size: 16px;
-
-              &:hover {
-                color: green;
-              }
+              font-size: 18px;
             }
           }
           .submmited {

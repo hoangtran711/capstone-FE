@@ -29,6 +29,7 @@ export const Submit = ({ setVisibility, taskId, reload, setReload }: any) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  console.log(file);
   const onSubmit = (data: any) => {
     if (file && data && taskId) {
       const form = new FormData();

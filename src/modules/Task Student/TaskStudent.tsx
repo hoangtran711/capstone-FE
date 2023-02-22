@@ -12,7 +12,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Submit } from './components/Submit/Submit';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-
+import PublishIcon from '@mui/icons-material/Publish';
 const TaskStudent = () => {
   const [reload, setReload] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -138,7 +138,7 @@ const TaskStudent = () => {
                           }
                         }}
                       >
-                        Submit
+                        <PublishIcon />
                       </div>
                     ) : (
                       'Time out'

@@ -109,7 +109,50 @@ const TaskDetail = () => {
               <div className="tasks">
                 {task?.taskPending?.length > 0 ? (
                   task?.taskPending?.map((item: any, key: any) => {
-                    <div className="task" key={key}></div>;
+                    return (
+                      <div className="task" key={key}>
+                        <div className="title">{item?.title}</div>
+                        <div className="date">
+                          <div className="start">Start : {item?.startTime}</div>
+                          <div className="end">End : {item?.endTime}</div>
+                        </div>
+                        <div className="files">
+                          Task files :
+                          {item?.files?.map((f: any, key: any) => {
+                            return (
+                              <div
+                                className="file"
+                                onClick={() => window.open(f)}
+                                key={key}
+                              >
+                                file {key + 1}
+                              </div>
+                            );
+                          })}
+                          <FileDownloadIcon className="ic" />
+                        </div>
+                        <div
+                          className="files subs"
+                          onClick={() => {
+                            if (item?.submmited?.length > 0) {
+                              setIsShowSubmissions(true);
+                              setSubmmitedList(item?.submmited);
+                            } else {
+                              toast.info('No one submmited yet');
+                            }
+                          }}
+                        >
+                          Submission files :
+                          <InfoIcon className="more" />
+                          <div className="submmited">
+                            {item?.submmited?.length > 0
+                              ? item?.submmited?.length
+                              : 0}{' '}
+                            submmited
+                          </div>
+                        </div>
+                      </div>
+                    );
                   })
                 ) : (
                   <div className="empty">Don{"'"}t have any task here</div>
@@ -150,19 +193,19 @@ const TaskDetail = () => {
                           })}
                           <FileDownloadIcon className="ic" />
                         </div>
-                        <div className="files">
+                        <div
+                          className="files subs"
+                          onClick={() => {
+                            if (item?.submmited?.length > 0) {
+                              setIsShowSubmissions(true);
+                              setSubmmitedList(item?.submmited);
+                            } else {
+                              toast.info('No one submmited yet');
+                            }
+                          }}
+                        >
                           Submission files :
-                          <InfoIcon
-                            className="more"
-                            onClick={() => {
-                              if (item?.submmited?.length > 0) {
-                                setIsShowSubmissions(true);
-                                setSubmmitedList(item?.submmited);
-                              } else {
-                                toast.info('No one submmited yet');
-                              }
-                            }}
-                          />
+                          <InfoIcon className="more" />
                           <div className="submmited">
                             {item?.submmited?.length > 0
                               ? item?.submmited?.length
@@ -190,7 +233,50 @@ const TaskDetail = () => {
               <div className="tasks">
                 {task?.taskCompleted?.length > 0 ? (
                   task?.taskCompleted?.map((item: any, key: any) => {
-                    <div className="task" key={key}></div>;
+                    return (
+                      <div className="task" key={key}>
+                        <div className="title">{item?.title}</div>
+                        <div className="date">
+                          <div className="start">Start : {item?.startTime}</div>
+                          <div className="end">End : {item?.endTime}</div>
+                        </div>
+                        <div className="files">
+                          Task files :
+                          {item?.files?.map((f: any, key: any) => {
+                            return (
+                              <div
+                                className="file"
+                                onClick={() => window.open(f)}
+                                key={key}
+                              >
+                                file {key + 1}
+                              </div>
+                            );
+                          })}
+                          <FileDownloadIcon className="ic" />
+                        </div>
+                        <div
+                          className="files subs"
+                          onClick={() => {
+                            if (item?.submmited?.length > 0) {
+                              setIsShowSubmissions(true);
+                              setSubmmitedList(item?.submmited);
+                            } else {
+                              toast.info('No one submmited yet');
+                            }
+                          }}
+                        >
+                          Submission files :
+                          <InfoIcon className="more" />
+                          <div className="submmited">
+                            {item?.submmited?.length > 0
+                              ? item?.submmited?.length
+                              : 0}{' '}
+                            submmited
+                          </div>
+                        </div>
+                      </div>
+                    );
                   })
                 ) : (
                   <div className="empty">Don{"'"}t have any task here</div>

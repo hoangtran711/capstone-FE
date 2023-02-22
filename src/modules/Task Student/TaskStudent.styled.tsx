@@ -35,12 +35,15 @@ export const Wrapper = styled.div`
       display: flex;
       position: relative;
       margin: 2px 0px;
-      border-radius: 12px;
+      border-radius: 16px;
 
       &.head {
         font-weight: 600;
         &:hover {
           box-shadow: none;
+        }
+        .files {
+          color: black;
         }
       }
       &:hover {
@@ -56,13 +59,13 @@ export const Wrapper = styled.div`
 
       .name {
         width: 20%;
-        font-size: 12px;
+        font-size: 16px;
         color: black;
       }
       .start,
       .end {
         width: 10%;
-        font-size: 12px;
+        font-size: 16px;
 
         color: rbga(0, 0, 0, 0.1);
       }
@@ -81,14 +84,14 @@ export const Wrapper = styled.div`
         .completed {
           color: #55ce63;
         }
-        margin-bottom: 12px;
+        margin-bottom: 16px;
       }
       .submission {
         display: flex;
-        column-gap: 12px;
+        column-gap: 16px;
         width: 15%;
         overflow: scroll;
-        font-size: 12px;
+        font-size: 16px;
         justify-content: center;
 
         img {
@@ -102,10 +105,10 @@ export const Wrapper = styled.div`
         width: 30%;
         display: flex;
         justify-content: flex-end;
-        font-size: 12px;
+        font-size: 16px;
         color: rgba(0, 0, 0, 0.5);
         .ic {
-          font-size: 16px;
+          font-size: 22px;
         }
         .file {
           &:hover {
@@ -124,7 +127,7 @@ export const Wrapper = styled.div`
         width: 10%;
         display: flex;
         justify-content: flex-end;
-        font-size: 12px;
+        font-size: 16px;
         .submit {
           &:hover {
             color: blue;
@@ -138,7 +141,7 @@ export const Wrapper = styled.div`
     }
   }
   .status {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     border: 1px solid black;
     border-radius: 50px;
@@ -239,7 +242,7 @@ export const Wrapper = styled.div`
         font-size: 24px;
         margin-bottom: 0;
         span {
-          font-size: 12px;
+          font-size: 16px;
           color: #8e8e8e;
         }
       }
@@ -250,7 +253,7 @@ export const Wrapper = styled.div`
     .button-search {
       min-height: 50px;
       text-transform: uppercase;
-      padding: 12px;
+      padding: 16px;
       height: 100%;
       width: 100%;
       box-sizing: border-box;

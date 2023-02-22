@@ -191,14 +191,21 @@ const Request = () => {
 
   React.useEffect(() => {
     if (times) {
-      console.log(moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate());
+      console.log(
+        'future - now',
+        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
+          new Date().getTime(),
+      );
       if (
         moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
           new Date().getTime() <=
         0
       ) {
         setAfterMinute(times.attendaceAfter);
+        console.log('not waiting');
       } else {
+        console.log(' waiting');
+
         setTextNotify('Waiting');
         startWaiting(
           moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
@@ -219,30 +226,29 @@ const Request = () => {
     }
   }, [dateMatch, afterMinute, times]);
   React.useEffect(() => {
-    const startTimer = (timer: number) => {
-      let j = setInterval(() => {
-        setMinute(parseInt((timer / 60000).toString(), 10));
-        setSecond(parseInt(((timer % 60000) / 1000).toString(), 10));
-        timer = timer - 1000;
-        if (timer < 0) {
-          setAbleToCountDown(false);
-          setDistance(0);
-          clearInterval(j);
-          setReload(!reload);
-        }
-      }, 1000);
-    };
     if (distance > 0) {
       startTimer(distance);
     } else {
       setAbleToCountDown(false);
       setTextNotify('Time out');
     }
-  }, [distance, isAttended, reload]);
+  }, [distance, isAttended]);
   React.useEffect(() => {
     setTextNotify(`${minute} : ${second}`);
   }, [minute, second]);
-
+  const startTimer = (timer: number) => {
+    let j = setInterval(() => {
+      setMinute(parseInt((timer / 60000).toString(), 10));
+      setSecond(parseInt(((timer % 60000) / 1000).toString(), 10));
+      timer = timer - 1000;
+      if (timer < 0) {
+        setAbleToCountDown(false);
+        setDistance(0);
+        clearInterval(j);
+        setReload(!reload);
+      }
+    }, 1000);
+  };
   const startWaiting = (timer: number, times: any) => {
     let i = setInterval(() => {
       setReload(!reload);

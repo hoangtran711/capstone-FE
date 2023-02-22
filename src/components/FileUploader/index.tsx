@@ -6,6 +6,9 @@ interface IImageUploaderProps {
   label?: string;
   initialFilePath?: string;
   disabled?: boolean;
+  accepts: { [key: string]: string[] };
+  max: number;
+  disablePreview: boolean;
   onDrop: (
     acceptedFiles: File[],
     fileRejections: FileRejection[],
@@ -17,13 +20,15 @@ function Uploader({
   label,
   onDrop,
   initialFilePath,
+  accepts,
   disabled,
+  disablePreview,
+  max,
 }: IImageUploaderProps) {
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      'image/*': [],
-    },
+    maxFiles: max,
+    accept: accepts,
     onDrop: (acceptedFiles: any, fileRejections: any, event: any) => {
       setFiles(
         acceptedFiles.map((file: any) =>
@@ -61,7 +66,7 @@ function Uploader({
       {label && <span className={'label'}>{label}</span>}
       <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
-        {thumbs.length > 0 ? (
+        {!disablePreview && thumbs.length > 0 ? (
           <aside className={'thumbsContainer'}>{thumbs}</aside>
         ) : initialThumb ? (
           <aside className={'thumbsContainer'}>{initialThumb}</aside>

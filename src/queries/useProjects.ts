@@ -35,6 +35,16 @@ export const useGetAllProjects = () => {
     }
   };
 };
+export const useGetAllProjectsMe = () => {
+  return async function () {
+    try {
+      const rs = http.get(`v1/projects/me`);
+      return rs;
+    } catch (err: any) {
+      toast.error(err);
+    }
+  };
+};
 
 export const useGetDetailProject = (projectId: string) => {
   return useQuery(

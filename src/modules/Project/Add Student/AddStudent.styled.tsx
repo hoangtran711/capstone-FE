@@ -110,8 +110,8 @@ export const Wrapper = styled.div`
           display: flex;
           flex: 1;
           justify-content: flex-end;
-          .ic-joined {
-            color: #55ce63;
+          .ic-removed {
+            color: red;
             cursor: pointer;
           }
           .btn-add {

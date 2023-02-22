@@ -363,7 +363,7 @@ const Project = () => {
                       >
                         <div className="sub-title">
                           Progress{' '}
-                          <span>{Number((item?.process).toFixed(3))}%</span>
+                          <span>{Number((item?.process).toFixed(1))}%</span>
                         </div>
                         <div className="progress-bar"></div>
                       </Progress>

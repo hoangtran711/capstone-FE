@@ -2,10 +2,13 @@ import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 // import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SubjectIcon from '@mui/icons-material/Subject';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-
+// import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import TaskIcon from '@mui/icons-material/Task';
 export interface ISidebarItem {
   children?: ISidebarItem[];
   title: string;
@@ -24,22 +27,27 @@ export const SidebarItems: ISidebarItem[] = [
   {
     title: ' Attendance',
     path: '/attendance',
-    Icon: AccountCircleIcon,
+    Icon: CalendarMonthIcon,
   },
   {
     title: 'Requests',
     path: '/request',
-    Icon: AccountTreeIcon,
+    Icon: ForwardToInboxIcon,
   },
   {
     title: 'Students',
     path: '/students',
-    Icon: SubjectIcon,
+    Icon: PeopleAltIcon,
   },
   {
     title: 'Projects',
     path: '/projects',
     Icon: SubjectIcon,
+  },
+  {
+    title: 'Tasks',
+    path: '/task/teacher',
+    Icon: TaskIcon,
   },
 ];
 export const SidebarItemsStudent: ISidebarItem[] = [
@@ -51,16 +59,21 @@ export const SidebarItemsStudent: ISidebarItem[] = [
   {
     title: ' Attendance',
     path: '/attendancestudent',
-    Icon: AccountCircleIcon,
+    Icon: CalendarMonthIcon,
   },
   {
     title: 'Requests',
     path: '/request',
-    Icon: AccountTreeIcon,
+    Icon: ForwardToInboxIcon,
   },
   {
     title: 'Projects',
     path: '/projects',
     Icon: SubjectIcon,
+  },
+  {
+    title: 'Tasks',
+    path: '/task/student',
+    Icon: TaskIcon,
   },
 ];

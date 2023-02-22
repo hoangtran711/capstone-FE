@@ -47,6 +47,9 @@ const SignInPage = () => {
     },
     [setValue],
   );
+  const acpt = {
+    'image/*': [],
+  };
   return (
     <Wrapper>
       <img
@@ -59,7 +62,12 @@ const SignInPage = () => {
         <span className="subtitle">Access to our dashboard</span>
         <Grid spacing={3} className="grid" container>
           <Grid item xs={4}>
-            <ImageUploader onDrop={onImageUploaderDrop} />
+            <ImageUploader
+              disablePreview={false}
+              max={1}
+              accepts={acpt}
+              onDrop={onImageUploaderDrop}
+            />
           </Grid>
           <Grid item xs={8}>
             <Grid container spacing={2}>

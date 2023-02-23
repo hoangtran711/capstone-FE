@@ -27,6 +27,7 @@ import { useGetAllProjectsAdmin } from 'queries/useProjects';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useGetGeoLocation } from 'queries/useGetGeoLocation';
+import InfoIcon from '@mui/icons-material/Info';
 
 const month = [
   {
@@ -141,7 +142,7 @@ const Request = () => {
         }
       })
       .catch((err: any) => {
-        toast.error(err);
+        console.log(err);
       });
     onGetHistoryAttendance()
       .then((rs: any) => {
@@ -151,7 +152,7 @@ const Request = () => {
         }
       })
       .catch((err: any) => {
-        toast.error(err);
+        console.log(err);
       });
     onGetAllProject().then((rs: any) => {
       setProjects(rs);
@@ -166,7 +167,7 @@ const Request = () => {
         }
       })
       .catch((err: any) => {
-        toast.error(err);
+        console.log(err);
       });
   }, [reload]);
   React.useEffect(() => {
@@ -353,6 +354,9 @@ const Request = () => {
                           id="demo-simple-select-helper"
                           label="Select Project"
                           onChange={handleChange}
+                          defaultValue={schedules[0]?.projectId}
+                          value={defaultProject}
+                          disabled={schedules?.length <= 0 ? true : false}
                         >
                           {schedules?.map((sche: any, key: any) => {
                             return (
@@ -393,20 +397,27 @@ const Request = () => {
               <div className="card-body" style={{ paddingBottom: 0 }}>
                 <div className="card-title">Today Activities</div>
                 <ul className="res-subject-list">
-                  {schedules?.map((sche, key) => {
-                    let name = projects?.find(
-                      (pro: any) => pro._id === sche.projectId,
-                    )?.projectName;
-                    return (
-                      <li key={key}>
-                        <p className="res-subject-name">{name}</p>
-                        <p className="res-subject-time">
-                          <AccessTimeIcon />
-                          {sche.time.date}
-                        </p>
-                      </li>
-                    );
-                  })}
+                  {schedules.length > 0 ? (
+                    schedules?.map((sche, key) => {
+                      let name = projects?.find(
+                        (pro: any) => pro._id === sche.projectId,
+                      )?.projectName;
+                      return (
+                        <li key={key}>
+                          <p className="res-subject-name">{name}</p>
+                          <p className="res-subject-time">
+                            <AccessTimeIcon />
+                            {sche.time.date}
+                          </p>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <p className="res-subject-time">
+                      <InfoIcon />
+                      You don{"'"}t have any class schedule today
+                    </p>
+                  )}
                 </ul>
               </div>
             </div>
@@ -499,45 +510,64 @@ const Request = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {history
-                    ?.sort(
-                      (a, b) =>
-                        moment(b?.times[0]?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
-                          .toDate()
-                          .getTime() -
-                        moment(a?.times[0]?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
-                          .toDate()
-                          .getTime(),
-                    )
-                    ?.map((his, key) => (
-                      <TableRow
-                        key={key + 1}
-                        sx={{
-                          '&:last-child td, &:last-child th': { border: 0 },
-                        }}
-                        className="table-title"
-                      >
-                        <TableCell component="th" scope="row">
-                          {key}
-                        </TableCell>
-                        <TableCell align="left">
-                          {
-                            projects?.find(
-                              (pro: any) => pro._id === his.projectId,
-                            )?.projectName
-                          }
-                        </TableCell>
-                        <TableCell align="left">
-                          {moment(
-                            his?.times[0]?.date,
+                  {history?.length > 0 ? (
+                    history
+                      ?.sort(
+                        (a, b) =>
+                          moment(
+                            b?.times[0]?.date,
                             'dddd, MMMM Do YYYY, h:mm:ss',
-                          ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
-                        </TableCell>
-                        <TableCell align="right">
-                          {his?.times[0]?.leave ? 'Joined' : 'Absent'}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          )
+                            .toDate()
+                            .getTime() -
+                          moment(
+                            a?.times[0]?.date,
+                            'dddd, MMMM Do YYYY, h:mm:ss',
+                          )
+                            .toDate()
+                            .getTime(),
+                      )
+                      ?.map((his, key) => (
+                        <TableRow
+                          key={key + 1}
+                          sx={{
+                            '&:last-child td, &:last-child th': { border: 0 },
+                          }}
+                          className="table-title"
+                        >
+                          <TableCell component="th" scope="row">
+                            {key}
+                          </TableCell>
+                          <TableCell align="left">
+                            {
+                              projects?.find(
+                                (pro: any) => pro._id === his.projectId,
+                              )?.projectName
+                            }
+                          </TableCell>
+                          <TableCell align="left">
+                            {moment(
+                              his?.times[0]?.date,
+                              'dddd, MMMM Do YYYY, h:mm:ss',
+                            ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
+                          </TableCell>
+                          <TableCell align="right">
+                            {his?.times[0]?.leave ? 'Joined' : 'Absent'}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                  ) : (
+                    <TableRow className="table-title">
+                      <TableCell align="right"></TableCell>
+                      <TableCell align="right"></TableCell>
+                      <TableCell>
+                        <p className="res-subject-time">
+                          <InfoIcon />
+                          You don{"'"}t have any history schedule today
+                        </p>
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

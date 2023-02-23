@@ -236,7 +236,7 @@ export const Wrapper = styled.div`
 export interface IProgress {
   value: number;
 }
-const animProgress = (v: number) => keyframes`
+export const animProgress = (v: number) => keyframes`
 0%{
   width: 0;
 }

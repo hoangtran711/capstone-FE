@@ -4,7 +4,7 @@ import http from 'services/utils/http';
 export const useGetALlTaskOfStudent = () => {
     return async () => {
         try {
-            const rs = await http.get('/v1/task/student/today');
+            const rs = await http.get('/v1/tasks/student/today');
             return rs;
         } catch (error: any) {
             if (error) {

@@ -193,19 +193,19 @@ export const Wrapper = styled.div`
           font-weight: 600;
           background: rgba(242, 17, 54, 0.12);
           padding: 12px;
+          .time {
+            font-size: 14px;
+            text-align: left;
+          }
         }
         .proj-name {
           width: 50%;
         }
-        .joined {
-          width: 25%;
-          text-align: center;
+        .time {
+          width: 50%;
+          text-align: left;
           color: #26af48 !important;
-        }
-        .absent {
-          width: 25%;
-          text-align: center;
-          color: #e63c3c;
+          font-size: 11px;
         }
       }
     }

@@ -26,6 +26,17 @@ export const Wrapper = styled.div`
     }
   }
   .grid {
+    .res-subject-time {
+      margin-bottom: 10px;
+      margin-top: 0;
+      color: #757575 !important;
+      display: flex;
+      align-items: flex-start;
+      display: flex;
+      align-items: center;
+      column-gap: 12px;
+      width: 100%;
+    }
     #table-head {
       font-weight: 800;
       background-color: #75cee1;

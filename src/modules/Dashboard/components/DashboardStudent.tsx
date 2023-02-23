@@ -1,121 +1,45 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import { Task, Wrapper } from './DashboardAdmin.styled';
+import { Task, Wrapper } from './DashboardStudent.styled';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SubjectIcon from '@mui/icons-material/Subject';
-import {
-  IProject,
-  useGetAllProjects,
-  useGetProjectAttendance,
-} from 'queries/useProjects';
-import { IEmployee } from 'modules/Employee/Employee';
-import { useGetAllEmployee } from 'queries/useEmployee';
-import { useGetALlTaskOfTeacher } from 'queries/useTask';
+import { IProject, useGetAllProjectsMe } from 'queries/useProjects';
+import { useGetALlTaskOfStudent } from 'queries/useTask';
 import { useGetRequestCurrentUser } from 'queries/useRequest';
 import moment from 'moment';
+import { useGetCurrentSchedules } from 'queries/useEmployee';
 
-const DashboardAdmin = () => {
+const DashboardStudent = () => {
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
-  const [listStudent, setListStudent] = React.useState<Array<IEmployee>>();
   const [listTasks, setListTask] = React.useState<any>();
-  const onnGetAllEmployee = useGetAllEmployee();
-  const onGetAllProject = useGetAllProjects();
-  const onGetAllTaskOfTeacher = useGetALlTaskOfTeacher();
-  const onGetProjectAttendance = useGetProjectAttendance();
+  const [schedules, setSchedules] = React.useState<any>([]);
+
+  const onGetAllProject = useGetAllProjectsMe();
+  const onGetAllTaskOfTeacher = useGetALlTaskOfStudent();
+  const onGetSchedules = useGetCurrentSchedules();
   const { data: listRequests } = useGetRequestCurrentUser();
-  const [listAllAttendance, setListAllAttendance] = React.useState<any>([]);
   React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
       if (rs) {
         setListProject(rs);
       }
     });
-    onnGetAllEmployee().then((rs: any) => {
-      setListStudent(rs);
-    });
+
     onGetAllTaskOfTeacher().then((rs: any) => {
       setListTask(rs);
     });
+
+    onGetSchedules().then((rs: any) => {
+      setSchedules(rs);
+    });
   }, []);
-  React.useEffect(() => {
-    if (listAllAttendance.length === 0) {
-      let tmp = listAllAttendance;
-
-      listProject?.map(async (pro: any) => {
-        const rs = await onGetProjectAttendance(pro._id);
-
-        if (rs) {
-          const obj = { id: pro._id, projectName: pro.projectName, arr: rs };
-          tmp.push(obj);
-        }
-      });
-      setListAllAttendance(tmp);
-    }
-  }, [listProject]);
-  console.log(listTasks);
-  const getAmountAbsent = (item: any) => {
-    let lst = item?.arr?.filter((it: any) => {
-      let tmp = it?.timesUntilNow?.filter(
-        (t: any) =>
-          new Date(
-            moment(t?.date, 'dddd, MMMM Do YYYY, h:mm:ss').format('L'),
-          ).getTime() === new Date(moment().format('L')).getTime() && !t?.leave,
-      );
-      console.log(tmp.length);
-      if (tmp.length > 0) {
-        return it;
-      }
-    });
-    if (lst.length > 0) {
-      return lst.length;
-    } else {
-      return '-';
-    }
-  };
-  const getAmountJoined = (item: any) => {
-    let lst = item?.arr?.filter((it: any) => {
-      let tmp = it?.timesUntilNow?.filter(
-        (t: any) =>
-          new Date(
-            moment(t?.date, 'dddd, MMMM Do YYYY, h:mm:ss').format('L'),
-          ).getTime() === new Date(moment().format('L')).getTime() &&
-          t?.leave === 'Joined',
-      );
-      console.log(tmp.length);
-      if (tmp.length > 0) {
-        return it;
-      }
-    });
-    if (lst.length > 0) {
-      return lst.length;
-    } else {
-      return '-';
-    }
-  };
 
   return (
     <Wrapper>
       <span className="welcome">Welcome !</span>
       <span className="breadcrumb">Dashboard</span>
       <Grid spacing={3} className="grid" container>
-        <Grid item xs={4}>
-          <div className="card overview student">
-            <div className="container-icon">
-              <AccountCircleIcon className="icon student" />
-              <div className="txt">Students</div>
-            </div>
-            <div className="card-info">
-              <span className="card-info-number">
-                {listStudent && listStudent?.length > 0
-                  ? listStudent?.length
-                  : 0}
-              </span>
-              <span className="card-info-title">Total Students</span>
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <div className="card overview project">
             <div className="container-icon">
               <AccountTreeIcon className="icon project" />
@@ -131,7 +55,7 @@ const DashboardAdmin = () => {
             </div>
           </div>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <div className="card overview task">
             <div className="container-icon">
               <SubjectIcon className="icon" />
@@ -203,15 +127,22 @@ const DashboardAdmin = () => {
             </div>
             <div className="pro head">
               <div className="proj-name">Project</div>
-              <div className="joined">Joined</div>
-              <div className="absent">Absent</div>
+              <div className="time">Time</div>
             </div>
-            {listAllAttendance?.map((item: any, key: any) => {
+            {schedules?.map((item: any, key: any) => {
+              let name = listProject?.find(
+                (i: any) => i?._id === item?.projectId,
+              )?.projectName;
+
               return (
                 <div className="pro" key={key}>
-                  <div className="proj-name">{item.projectName}</div>
-                  <div className="joined">{getAmountJoined(item)}</div>
-                  <div className="absent">{getAmountAbsent(item)}</div>
+                  <div className="proj-name">{name}</div>
+                  <div className="time">
+                    {moment(
+                      item?.time?.date,
+                      'dddd, MMMM Do YYYY, h:mm:ss',
+                    ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
+                  </div>
                 </div>
               );
             })}
@@ -225,29 +156,32 @@ const DashboardAdmin = () => {
             <div className="card-title">
               <span style={{ color: '#1f1f1f' }}>Total</span>
               <span className="percentage">
-                {listTasks?.taskCompleted?.length +
+                {(listTasks?.taskCompleted?.length +
                   listTasks?.taskInprogress?.length +
-                  listTasks?.taskPending?.length}{' '}
+                  listTasks?.taskPending?.length) |
+                  0}{' '}
                 task
               </span>
             </div>
 
             <Task
               value={
-                (listTasks?.taskCompleted?.length /
+                ((listTasks?.taskCompleted?.length /
                   (listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
                     listTasks?.taskPending?.length)) *
-                100
+                  100) |
+                0
               }
             >
               <div className="top">
                 <div className="name pending">Pending Tasks</div>
                 <div className="vals">
-                  {listTasks?.taskPending?.length} /{' '}
-                  {listTasks?.taskCompleted?.length +
+                  {listTasks?.taskPending?.length | 0} /{' '}
+                  {(listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
-                    listTasks?.taskPending?.length}
+                    listTasks?.taskPending?.length) |
+                    0}
                 </div>
               </div>
               <div className="bottom">
@@ -258,20 +192,22 @@ const DashboardAdmin = () => {
             </Task>
             <Task
               value={
-                (listTasks?.taskInprogress?.length /
+                ((listTasks?.taskInprogress?.length /
                   (listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
                     listTasks?.taskPending?.length)) *
-                100
+                  100) |
+                0
               }
             >
               <div className="top">
                 <div className="name inprogress">Inprogress Tasks</div>
                 <div className="vals">
-                  {listTasks?.taskInprogress?.length} /{' '}
-                  {listTasks?.taskCompleted?.length +
+                  {listTasks?.taskInprogress?.length | 0} /{' '}
+                  {(listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
-                    listTasks?.taskPending?.length}
+                    listTasks?.taskPending?.length) |
+                    0}
                 </div>
               </div>
               <div className="bottom">
@@ -282,20 +218,22 @@ const DashboardAdmin = () => {
             </Task>
             <Task
               value={
-                (listTasks?.taskCompleted?.length /
+                ((listTasks?.taskCompleted?.length /
                   (listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
                     listTasks?.taskPending?.length)) *
-                100
+                  100) |
+                0
               }
             >
               <div className="top">
                 <div className="name completed">Completed Tasks</div>
                 <div className="vals">
-                  {listTasks?.taskCompleted?.length} /{' '}
-                  {listTasks?.taskCompleted?.length +
+                  {listTasks?.taskCompleted?.length | 0} /{' '}
+                  {(listTasks?.taskCompleted?.length +
                     listTasks?.taskInprogress?.length +
-                    listTasks?.taskPending?.length}
+                    listTasks?.taskPending?.length) |
+                    0}
                 </div>
               </div>
               <div className="bottom">
@@ -311,4 +249,4 @@ const DashboardAdmin = () => {
   );
 };
 
-export default DashboardAdmin;
+export default DashboardStudent;

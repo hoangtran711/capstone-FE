@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Wrapper } from './Header.styled';
-import FlagIcon from '@mui/icons-material/Flag';
 import SearchIcon from '@mui/icons-material/Search';
 import HorizontalSplitIcon from '@mui/icons-material/HorizontalSplit';
 import { Container } from '@mui/system';
@@ -28,16 +27,16 @@ export const Header = () => {
         <div className="header__top">
           <Container maxWidth="xl">
             <div className="headerTop__content">
-              <div className="header__topLeft float-left">
+              {/* <div className="header__topLeft float-left">
                 <FlagIcon />
                 <span>Looking for your W2, 1095-C or 1099? </span>
                 <a href="#"> Click here</a>
-              </div>
+              </div> */}
               <div className="header__topRight float-right">
                 <ul>
                   <li>
                     Need Help? Talk to an Expert
-                    <span> 0382520281</span>
+                    <a href="tel:0382520281"> 0382520281</a>
                   </li>
                   <li>
                     <SearchIcon />

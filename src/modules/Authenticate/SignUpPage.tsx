@@ -27,6 +27,7 @@ const SignInPage = () => {
     trigger,
     setValue,
   } = useForm<IDataInputRegister>({
+    defaultValues: { dateOfBirth: new Date('1/1/2000') },
     resolver: yupResolver(schema),
   });
   const onSubmit = async () => {
@@ -153,9 +154,9 @@ const SignInPage = () => {
             <TextField
               fullWidth
               className="text-field"
-              label="StudentId"
+              label="ID"
               {...register('studentId', {
-                required: 'Student ID cannot empty',
+                required: ' ID cannot empty',
               })}
               helperText={errors?.studentId?.message}
               error={!!errors?.studentId?.message}

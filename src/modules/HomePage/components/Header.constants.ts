@@ -40,7 +40,7 @@ export const menu: IMenuItem[] = [
     path: '/',
     child: [
       {
-        title: 'Pauroll Solution',
+        title: 'Payroll Solution',
         path: '/',
       },
       {

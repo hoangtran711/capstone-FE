@@ -82,6 +82,13 @@ export const Wrapper = styled.div`
     .card-9 {
       min-height: 502px;
     }
+    .enable {
+      color: green;
+      cursor: pointer;
+      &:hover {
+        color: #55ce63;
+      }
+    }
     .card {
       background-color: white;
       border: 1px solid #ededed;

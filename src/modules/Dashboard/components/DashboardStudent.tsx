@@ -116,7 +116,7 @@ const DashboardStudent = () => {
         <Grid item xs={4}>
           <div className="card-statistic">
             <span className="card-info-number" style={{ fontSize: '24px' }}>
-              Attendance Today
+              Schedules Today
             </span>
             <div className="card-title">
               <span style={{ color: '#1f1f1f' }}>Total</span>

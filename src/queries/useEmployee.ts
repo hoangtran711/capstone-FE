@@ -109,3 +109,23 @@ export const useDeleteStudent = () => {
         }
     };
 };
+export const usetGetDisabledStudent = () => {
+    return async function (projectId: string) {
+        try {
+            const rs = http.get(`v1/disabled-user/${projectId}`);
+            return rs;
+        } catch (err: any) {
+            toast.error(err);
+        }
+    };
+};
+export const useEnableStudent = () => {
+    return async function (projectId: string, studentId: string) {
+        try {
+            const rs = http.post(`v1/disabled-user/${projectId}/remove/${studentId}`);
+            return rs;
+        } catch (err: any) {
+            toast.error(err);
+        }
+    };
+};

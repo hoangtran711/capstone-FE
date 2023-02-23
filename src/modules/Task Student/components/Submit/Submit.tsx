@@ -18,7 +18,7 @@ export const Submit = ({ setVisibility, taskId, reload, setReload }: any) => {
   const [file, setFiles] = React.useState<any>();
   const onFileUploaderDrop = useCallback(
     (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
+      setFiles(acceptedFiles[0]);
     },
     [setFiles],
   );

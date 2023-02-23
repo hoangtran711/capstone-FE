@@ -485,7 +485,7 @@ const Request = () => {
                   <TableRow>
                     <TableCell
                       id="table-head"
-                      style={{ width: '10%' }}
+                      style={{ width: '1%' }}
                     ></TableCell>
                     <TableCell
                       align="left"

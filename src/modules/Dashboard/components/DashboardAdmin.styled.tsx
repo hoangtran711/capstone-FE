@@ -27,21 +27,44 @@ export const Wrapper = styled.div`
       padding: 16px;
       box-sizing: border-box;
       background-color: white;
-      border: 1px solid #ededed;
+
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       width: 100%;
       border-radius: 4px;
+      &.overview {
+        padding: 48px 24px;
+        box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
+        width: 100%;
+        border-radius: 8px;
+        color: white;
+        &.student {
+          background-color: #eebd5a;
+          box-shadow: #eebd5a 0px 3px 12px 0px;
+        }
+        &.project {
+          background-color: #55ce63;
+          box-shadow: #55ce63 0px 3px 12px 0px;
+        }
+        &.task {
+          background-color: #88acea;
+          box-shadow: #88acea 0px 3px 12px 0px;
+        }
+      }
       .container-icon {
-        width: 60px;
-        height: 60px;
-        background-color: rgba(255, 155, 68, 0.2);
-        color: #ff9b44;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
+        column-gap: 12px;
+        .txt {
+          font-size: 24px;
+          font-weight: 600;
+        }
         .icon {
-          font-size: 35px;
+          font-size: 65px;
+
+          color: white;
         }
       }
       .chart {
@@ -52,7 +75,7 @@ export const Wrapper = styled.div`
         flex-direction: column;
         align-items: flex-end;
         &-number {
-          font-size: 30px;
+          font-size: 38px;
           font-weight: 600;
           margin-bottom: 8px;
         }
@@ -70,6 +93,7 @@ export const Wrapper = styled.div`
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       width: 100%;
       border-radius: 4px;
+      margin: 60px 0px;
       .card-title {
         display: flex;
         justify-content: space-between;

@@ -100,9 +100,10 @@ const DashboardAdmin = () => {
       <span className="breadcrumb">Dashboard</span>
       <Grid spacing={3} className="grid" container>
         <Grid item xs={4}>
-          <div className="card">
+          <div className="card overview student">
             <div className="container-icon">
-              <AccountCircleIcon className="icon" />
+              <AccountCircleIcon className="icon student" />
+              <div className="txt">Students</div>
             </div>
             <div className="card-info">
               <span className="card-info-number">
@@ -115,9 +116,10 @@ const DashboardAdmin = () => {
           </div>
         </Grid>
         <Grid item xs={4}>
-          <div className="card">
+          <div className="card overview project">
             <div className="container-icon">
-              <AccountTreeIcon className="icon" />
+              <AccountTreeIcon className="icon project" />
+              <div className="txt">Projects</div>
             </div>
             <div className="card-info">
               <span className="card-info-number">
@@ -130,9 +132,10 @@ const DashboardAdmin = () => {
           </div>
         </Grid>
         <Grid item xs={4}>
-          <div className="card">
+          <div className="card overview task">
             <div className="container-icon">
               <SubjectIcon className="icon" />
+              <div className="txt">Tasks</div>
             </div>
             <div className="card-info">
               <span className="card-info-number">

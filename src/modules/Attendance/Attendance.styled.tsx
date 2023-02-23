@@ -75,5 +75,8 @@ export const Wrapper = styled.div`
         border-radius: 0.25rem;
       }
     }
+    .select-major {
+      background-color: white;
+    }
   }
 `;

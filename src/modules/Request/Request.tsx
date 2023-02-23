@@ -439,7 +439,7 @@ const Request = () => {
                       <TableCell align="center">{row.reason}</TableCell>
                       <TableCell align="center">{`${row.approverInfo.firstName} ${row.approverInfo.lastName}`}</TableCell>
                       <TableCell align="center">
-                        {row.projectInfo.projectName}
+                        {row?.projectInfo?.projectName}
                       </TableCell>
                       <TableCell align="center">
                         <div

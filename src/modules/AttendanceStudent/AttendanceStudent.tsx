@@ -483,9 +483,10 @@ const Request = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead id="table-head-wrapper">
                   <TableRow>
-                    <TableCell id="table-head" style={{ width: '10%' }}>
-                      #
-                    </TableCell>
+                    <TableCell
+                      id="table-head"
+                      style={{ width: '10%' }}
+                    ></TableCell>
                     <TableCell
                       align="left"
                       id="table-head"
@@ -511,51 +512,45 @@ const Request = () => {
                 </TableHead>
                 <TableBody>
                   {history?.length > 0 ? (
-                    history
-                      ?.sort(
-                        (a, b) =>
-                          moment(
-                            b?.times[0]?.date,
-                            'dddd, MMMM Do YYYY, h:mm:ss',
-                          )
-                            .toDate()
-                            .getTime() -
-                          moment(
-                            a?.times[0]?.date,
-                            'dddd, MMMM Do YYYY, h:mm:ss',
-                          )
-                            .toDate()
-                            .getTime(),
-                      )
-                      ?.map((his, key) => (
-                        <TableRow
-                          key={key + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                          className="table-title"
-                        >
-                          <TableCell component="th" scope="row">
-                            {key}
-                          </TableCell>
-                          <TableCell align="left">
-                            {
-                              projects?.find(
-                                (pro: any) => pro._id === his.projectId,
-                              )?.projectName
-                            }
-                          </TableCell>
-                          <TableCell align="left">
-                            {moment(
-                              his?.times[0]?.date,
-                              'dddd, MMMM Do YYYY, h:mm:ss',
-                            ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
-                          </TableCell>
-                          <TableCell align="right">
-                            {his?.times[0]?.leave ? 'Joined' : 'Absent'}
-                          </TableCell>
-                        </TableRow>
-                      ))
+                    history?.map((his: any, k: any) =>
+                      his?.times
+                        ?.sort(
+                          (a: any, b: any) =>
+                            moment(b?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                              .toDate()
+                              .getTime() -
+                            moment(a?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                              .toDate()
+                              .getTime(),
+                        )
+                        ?.map((item: any, key: any) => (
+                          <TableRow
+                            key={key}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
+                            className="table-title"
+                          >
+                            <TableCell component="th" scope="row"></TableCell>
+                            <TableCell align="left">
+                              {
+                                projects?.find(
+                                  (pro: any) => pro._id === his.projectId,
+                                )?.projectName
+                              }
+                            </TableCell>
+                            <TableCell align="left">
+                              {moment(
+                                item?.date,
+                                'dddd, MMMM Do YYYY, h:mm:ss',
+                              ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
+                            </TableCell>
+                            <TableCell align="right">
+                              {item?.leave ? 'Joined' : 'Absent'}
+                            </TableCell>
+                          </TableRow>
+                        )),
+                    )
                   ) : (
                     <TableRow className="table-title">
                       <TableCell align="right"></TableCell>

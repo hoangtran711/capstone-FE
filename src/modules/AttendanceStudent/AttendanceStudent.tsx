@@ -27,6 +27,7 @@ import { useGetAllProjectsAdmin } from 'queries/useProjects';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useGetGeoLocation } from 'queries/useGetGeoLocation';
+import InfoIcon from '@mui/icons-material/Info';
 
 const month = [
   {
@@ -353,6 +354,7 @@ const Request = () => {
                           id="demo-simple-select-helper"
                           label="Select Project"
                           onChange={handleChange}
+                          defaultValue={schedules[0]?.projectId}
                         >
                           {schedules?.map((sche: any, key: any) => {
                             return (
@@ -393,20 +395,27 @@ const Request = () => {
               <div className="card-body" style={{ paddingBottom: 0 }}>
                 <div className="card-title">Today Activities</div>
                 <ul className="res-subject-list">
-                  {schedules?.map((sche, key) => {
-                    let name = projects?.find(
-                      (pro: any) => pro._id === sche.projectId,
-                    )?.projectName;
-                    return (
-                      <li key={key}>
-                        <p className="res-subject-name">{name}</p>
-                        <p className="res-subject-time">
-                          <AccessTimeIcon />
-                          {sche.time.date}
-                        </p>
-                      </li>
-                    );
-                  })}
+                  {schedules.length > 0 ? (
+                    schedules?.map((sche, key) => {
+                      let name = projects?.find(
+                        (pro: any) => pro._id === sche.projectId,
+                      )?.projectName;
+                      return (
+                        <li key={key}>
+                          <p className="res-subject-name">{name}</p>
+                          <p className="res-subject-time">
+                            <AccessTimeIcon />
+                            {sche.time.date}
+                          </p>
+                        </li>
+                      );
+                    })
+                  ) : (
+                    <p className="res-subject-time">
+                      <InfoIcon />
+                      You don{"'"}t have any class schedule today
+                    </p>
+                  )}
                 </ul>
               </div>
             </div>

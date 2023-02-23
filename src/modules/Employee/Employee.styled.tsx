@@ -185,5 +185,8 @@ export const Wrapper = styled.div`
         }
       }
     }
+    .text-field {
+      background-color: white;
+    }
   }
 `;

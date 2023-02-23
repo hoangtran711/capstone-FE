@@ -155,5 +155,10 @@ export const Wrapper = styled.div`
         border-radius: 0.25rem;
       }
     }
+    .text-field,
+    .select-requestType,
+    .select-requestType {
+      background-color: white;
+    }
   }
 `;

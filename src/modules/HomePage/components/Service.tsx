@@ -1,9 +1,8 @@
 import React from 'react';
 import { Container } from '@mui/system';
-
+import TaskIcon from '@mui/icons-material/Task';
 import { Wrapper } from './Service.styled';
 import {
-  Paid,
   AccessTime,
   CheckCircleOutline,
   SettingsSuggest,
@@ -19,18 +18,18 @@ export const Service = () => {
             <div className="service__title">
               <span>We do more for your world</span>
               <h2>
-                All-in-one payroll and HR
+                All-in-one
                 <br />
-                your business
+                in your Website
               </h2>
             </div>
             <div className="row service__itemRow">
               <div className="col service__itemRowContent">
                 <div className=" service__item">
-                  <Paid />
+                  <TaskIcon />
                 </div>
                 <div className="service__itemText">
-                  <h3>Payroll</h3>
+                  <h3>Task</h3>
                 </div>
               </div>
 
@@ -57,7 +56,7 @@ export const Service = () => {
                   <SettingsSuggest />
                 </div>
                 <div className="service__itemText">
-                  <h3>HR Management</h3>
+                  <h3>Student Management</h3>
                 </div>
               </div>
 
@@ -66,7 +65,7 @@ export const Service = () => {
                   <AccountCircle />
                 </div>
                 <div className="service__itemText">
-                  <h3>Hiring</h3>
+                  <h3>Profile</h3>
                 </div>
               </div>
             </div>

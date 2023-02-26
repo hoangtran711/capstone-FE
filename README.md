@@ -4,8 +4,8 @@
 | ID            | Name          | Role  |
 | ------------- |:-------------:| -----:|
 | 18110057      | Hoang Ngoc Bao Tran | Junior Sofware Developer |
-| 18110      | Nguyen Hoang Vu      |   Fuckboiz Engineering |
-| 181100 | Nguyen Tan Thanh      |    Fuckboiz Engineering |
+| 18110      | Nguyen Hoang Vu      |   Junior Software Engineering |
+| 181100 | Nguyen Tan Thanh      |    Junior Software Engineering |
 
 ## Project UI Template
 [Dashboard](https://smarthr-ci.dreamguystech.com/template/orange/public/dashboard?)

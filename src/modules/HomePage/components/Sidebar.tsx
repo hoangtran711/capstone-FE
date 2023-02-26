@@ -1,16 +1,13 @@
 import React, { useCallback } from 'react';
 import { Wrapper } from './Sidebar.styled';
 import { Close, PhoneEnabled, PictureAsPdf, Paid } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 
 export const Sidebar = () => {
   const onHandleCloseSidebar = useCallback(() => {
     try {
       const element = document.querySelector('#sidebar') as HTMLDivElement;
       element.style.transform = 'translateX(100%)';
-    } catch (err: any) {
-      toast.error(err?.message || err);
-    }
+    } catch (err: any) {}
   }, []);
   return (
     <Wrapper id="sidebar" className="hidden__sidebar">

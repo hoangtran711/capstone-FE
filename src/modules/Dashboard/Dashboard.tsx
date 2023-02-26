@@ -7,7 +7,9 @@ import DashboardStudent from './components/DashboardStudent';
 
 const Dashboard = () => {
   const role = useSelector(selectRole);
-  console.log(role);
+  if (!role) {
+    return null;
+  }
   return (
     <SidebarLayout>
       {role === 'Admin' ? (

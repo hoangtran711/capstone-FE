@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 // import { useEffect } from "react";
 import { Loading } from 'components/Loading';
 import { useLocation } from 'react-router-dom';
@@ -19,9 +18,7 @@ export const LoadingProvider = ({ children }: any) => {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
-      } catch (err: any) {
-        toast.error(err?.message || err);
-      }
+      } catch (err: any) {}
     };
     const timer1 = setTimeout(onHidePreLoading, 100);
     return () => {

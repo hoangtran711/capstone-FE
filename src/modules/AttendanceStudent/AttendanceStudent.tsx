@@ -605,11 +605,7 @@ const Request = () => {
                           >
                             <TableCell component="th" scope="row"></TableCell>
                             <TableCell align="left">
-                              {
-                                projects?.find(
-                                  (pro: any) => pro._id === his.projectId,
-                                )?.projectName
-                              }
+                              {his?.projectName}
                             </TableCell>
                             <TableCell align="left">
                               {moment(

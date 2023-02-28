@@ -89,6 +89,28 @@ export const Wrapper = styled.div`
         color: #55ce63;
       }
     }
+    #btn-view-location {
+      padding: 4px 8px;
+      background: #88acea;
+      color: white;
+      width: 30% !important;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      column-gap: 8px;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+      &:hover {
+        box-shadow: #88acea 0px 3px 12px 0px;
+      }
+      .ic {
+        font-size: 14px;
+      }
+    }
     .card {
       background-color: white;
       border: 1px solid #ededed;

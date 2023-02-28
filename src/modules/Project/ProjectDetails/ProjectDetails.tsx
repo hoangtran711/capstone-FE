@@ -19,7 +19,7 @@ import { useGetDetailProject } from 'queries/useProjects';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'reducer/account/account.selector';
 import { Stack } from '@mui/system';
-import moment from 'moment';
+// import moment from 'moment';
 import { AddStudent } from '../Add Student/AddStudent';
 import { toast } from 'react-toastify';
 import { useCreateRequest } from 'queries/useRequest';
@@ -32,6 +32,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useEnableStudent, usetGetDisabledStudent } from 'queries/useEmployee';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import moment from 'moment';
+import RoomIcon from '@mui/icons-material/Room';
 const ProjectDetails = () => {
   let { projectId } = useParams<any>();
   const { data, refetch } = useGetDetailProject(projectId);
@@ -216,21 +218,46 @@ const ProjectDetails = () => {
                         Learn Date
                       </Typography>
                     }
-                    secondary={
-                      data?.learnDate[0].dayOfWeek &&
-                      moment().day(data?.learnDate[0].dayOfWeek).format('ddd')
-                    }
                   />
                   <ListItemText
                     sx={{ textAlign: 'end' }}
                     primary={
-                      <Typography className="label" variant="subtitle2">
-                        At Time
-                      </Typography>
+                      <Typography
+                        className="label"
+                        variant="subtitle2"
+                      ></Typography>
                     }
-                    secondary={`${data?.learnDate[0].atHour}:${data?.learnDate[0].atMinute}:${data?.learnDate[0].atSecond}`}
                   />
                 </Stack>
+                {data?.schedules?.map((sch: any, key: any) => {
+                  return (
+                    <Stack
+                      sx={{ marginBottom: '10px' }}
+                      direction="row"
+                      justifyContent={'space-between'}
+                      key={key}
+                    >
+                      <ListItemText
+                        secondary={moment(
+                          sch?.startTime,
+                          'dddd MMMM Do YYYY, h:mm:ss',
+                        ).format('dddd, kk:mm:ss a')}
+                      />
+                      <div
+                        className="btn"
+                        id="btn-view-location"
+                        onClick={() =>
+                          window.open(
+                            `https://www.google.com/maps?q=${sch?.location?.lat},${sch?.location?.lng}`,
+                          )
+                        }
+                      >
+                        {' '}
+                        View location <RoomIcon className="ic" />
+                      </div>
+                    </Stack>
+                  );
+                })}
                 <Stack direction="row" justifyContent={'space-between'}>
                   <ListItemText
                     primary={

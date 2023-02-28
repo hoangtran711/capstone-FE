@@ -109,6 +109,7 @@ const year = [
 
 const Request = () => {
   const [defaultProject, setDefaultProject] = React.useState('');
+  const [attendanceId, setAttendanceId] = React.useState('');
   const [dateMatch, setDateMatch] = React.useState<any>();
   const [afterMinute, setAfterMinute] = React.useState<any>();
   const [distance, setDistance] = React.useState<any>();
@@ -116,7 +117,9 @@ const Request = () => {
   const [schedules, setSchedules] = React.useState<Array<any>>([]);
   const [history, setHistory] = React.useState<Array<any>>([]);
   const [times, setTimes] = React.useState<any>();
+  const [defaultTime, setDefaultTime] = React.useState<any>();
   const [projects, setProjects] = React.useState<Array<any>>([]);
+  const [attendanceAt, setAttendanceAt] = React.useState<Array<any>>([]);
   const [minute, setMinute] = React.useState(0);
   const [second, setSecond] = React.useState(0);
   const [textNotify, setTextNotify] = React.useState<string>('');
@@ -133,11 +136,16 @@ const Request = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setDefaultProject(event.target.value);
   };
+  const handleChangeAttendanceAt = (event: SelectChangeEvent) => {
+    setAttendanceId(event.target.value);
+    setDefaultTime(
+      attendanceAt?.find((att: any) => att._id === event.target.value),
+    );
+  };
   React.useEffect(() => {
     onGetCurrentSchedules()
       .then((rs: any) => {
         if (rs) {
-          console.log('rs', rs);
           setSchedules(rs);
         }
       })
@@ -147,7 +155,6 @@ const Request = () => {
     onGetHistoryAttendance()
       .then((rs: any) => {
         if (rs) {
-          console.log('rs', rs);
           setHistory(rs);
         }
       })
@@ -162,7 +169,6 @@ const Request = () => {
     onGetHistoryAttendance()
       .then((rs: any) => {
         if (rs) {
-          console.log('rs', rs);
           setHistory(rs);
         }
       })
@@ -171,61 +177,92 @@ const Request = () => {
       });
   }, [reload]);
   React.useEffect(() => {
+    if (schedules) setDefaultProject(schedules[0]?._id);
+  }, [schedules]);
+  React.useEffect(() => {
     if (defaultProject !== '') {
       if (
         history?.find((h: any) => {
           return h.projectId === defaultProject;
-        })?.times[0]?.leave
+        })?.schedules[0]?.isJoined
       ) {
         setTextNotify('Joined');
         setAbleToCountDown(false);
       } else {
         // setTextNotify('Waiting');
-        setTimes(
-          schedules?.find((item: any) => item.projectId === defaultProject)
-            ?.time,
+        setAttendanceAt(
+          schedules?.find((s: any) => s._id === defaultProject)?.schedules[0]
+            ?.attendanceAt,
         );
       }
     }
   }, [defaultProject, schedules, history, distance]);
-  console.log(schedules);
+  console.log('schedules', schedules);
+
+  console.log('attendanceAt', attendanceAt);
+  console.log('defaultTime', defaultTime);
+  console.log('attendanceId', attendanceAt);
 
   React.useEffect(() => {
-    if (times) {
+    if (attendanceAt) {
+      setDefaultTime(attendanceAt[0]);
+      setAttendanceId(attendanceAt[0]?._id);
+    }
+  }, [attendanceAt]);
+
+  React.useEffect(() => {
+    if (defaultTime) {
       console.log(
         'future - now',
-        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
-          new Date().getTime(),
+        moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+          .toDate()
+          .getTime() - new Date().getTime(),
       );
       if (
-        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
+        moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+          .toDate()
+          .getTime() -
           new Date().getTime() <=
         0
       ) {
-        setAfterMinute(times.attendaceAfter);
-        console.log('not waiting');
+        setAfterMinute(
+          (moment(defaultTime?.end, 'dddd, MMMM Do YYYY, h:mm:ss')
+            .toDate()
+            .getTime() -
+            moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+              .toDate()
+              .getTime()) /
+            60000,
+        );
       } else {
-        console.log(' waiting');
-
         setTextNotify('Waiting');
         startWaiting(
-          moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() -
-            new Date().getTime(),
-          times,
+          moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+            .toDate()
+            .getTime() - new Date().getTime(),
+          (moment(defaultTime?.end, 'dddd, MMMM Do YYYY, h:mm:ss')
+            .toDate()
+            .getTime() -
+            moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+              .toDate()
+              .getTime()) /
+            60000,
         );
       }
     }
-  }, [times]);
+  }, [defaultTime]);
   React.useEffect(() => {
     if (afterMinute) {
       setAbleToCountDown(true);
       setDistance(
-        moment(times.date, 'dddd, MMMM Do YYYY, h:mm:ss').toDate().getTime() +
+        moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+          .toDate()
+          .getTime() +
           afterMinute * 60 * 1000 -
           new Date().getTime(),
       );
     }
-  }, [dateMatch, afterMinute, times]);
+  }, [dateMatch, afterMinute, defaultTime]);
   React.useEffect(() => {
     if (distance > 0) {
       startTimer(distance);
@@ -270,7 +307,7 @@ const Request = () => {
     if (!geoLocation) {
       toast.error('Please enable location for our site');
     }
-    attendanceMe(defaultProject, geoLocation)
+    attendanceMe(defaultProject, geoLocation, defaultTime._id)
       .then((rs: any) => {
         if (rs) {
           toast.success(
@@ -347,14 +384,14 @@ const Request = () => {
                     <Grid item xs={12}>
                       <FormControl sx={{ minWidth: 600 }} fullWidth>
                         <InputLabel id="demo-simple-select-helper-label">
-                          Project
+                          Select Project
                         </InputLabel>
                         <Select
                           labelId="demo-simple-select-helper-label"
                           id="demo-simple-select-helper"
                           label="Select Project"
                           onChange={handleChange}
-                          defaultValue={schedules[0]?.projectId}
+                          defaultValue={schedules[0]?._id}
                           value={defaultProject}
                           disabled={schedules?.length <= 0 ? true : false}
                         >
@@ -364,13 +401,13 @@ const Request = () => {
                                 key={key}
                                 value={
                                   projects?.find(
-                                    (pro: any) => pro._id === sche.projectId,
+                                    (pro: any) => pro._id === sche._id,
                                   )?._id
                                 }
                               >
                                 {
                                   projects?.find(
-                                    (pro: any) => pro._id === sche.projectId,
+                                    (pro: any) => pro._id === sche._id,
                                   )?.projectName
                                 }
                               </MenuItem>
@@ -379,14 +416,37 @@ const Request = () => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    {/* <Grid item xs={6} className="stats-box">
-                      <p>Break</p>
-                      <h6>1.21 hrs</h6>
+                  </Grid>
+                </div>
+                <div className="statistics">
+                  <Grid spacing={3} className="grid" container>
+                    <Grid item xs={12}>
+                      <FormControl sx={{ minWidth: 600 }} fullWidth>
+                        <InputLabel id="demo-simple-select-helper-label">
+                          Milestone
+                        </InputLabel>
+                        <Select
+                          // labelId="demo-simple-select-helper-label"
+                          // id="demo-simple-select-helper"
+                          label="Select Project"
+                          onChange={handleChangeAttendanceAt}
+                          defaultValue={attendanceAt && attendanceAt[0]?._id}
+                          value={attendanceId}
+                          disabled={attendanceAt?.length <= 0 ? true : false}
+                        >
+                          {attendanceAt?.map((att: any, key: any) => {
+                            return (
+                              <MenuItem key={key} value={att?._id}>
+                                {moment(
+                                  att?.start,
+                                  'dddd, MMMM Do YYYY,h:mm:ss',
+                                ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                     </Grid>
-                    <Grid item xs={6} className="stats-box">
-                      <p>Overtime</p>
-                      <h6>3 hrs</h6>
-                    </Grid> */}
                   </Grid>
                 </div>
               </div>
@@ -400,14 +460,16 @@ const Request = () => {
                   {schedules.length > 0 ? (
                     schedules?.map((sche, key) => {
                       let name = projects?.find(
-                        (pro: any) => pro._id === sche.projectId,
+                        (pro: any) => pro._id === sche._id,
                       )?.projectName;
                       return (
                         <li key={key}>
                           <p className="res-subject-name">{name}</p>
                           <p className="res-subject-time">
                             <AccessTimeIcon />
-                            {sche.time.date}
+                            {moment(sche.schedules[0]?.startTime)
+                              .format('dddd, DD-MM-YYYY, kk:mm:ss a')
+                              .toString()}
                           </p>
                         </li>
                       );
@@ -513,13 +575,13 @@ const Request = () => {
                 <TableBody>
                   {history?.length > 0 ? (
                     history?.map((his: any, k: any) =>
-                      his?.times
+                      his?.schedules
                         ?.sort(
                           (a: any, b: any) =>
-                            moment(b?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                            moment(b?.startTime, 'dddd, MMMM Do YYYY, h:mm:ss')
                               .toDate()
                               .getTime() -
-                            moment(a?.date, 'dddd, MMMM Do YYYY, h:mm:ss')
+                            moment(a?.startTime, 'dddd, MMMM Do YYYY, h:mm:ss')
                               .toDate()
                               .getTime(),
                         )
@@ -541,12 +603,12 @@ const Request = () => {
                             </TableCell>
                             <TableCell align="left">
                               {moment(
-                                item?.date,
+                                item?.startTime,
                                 'dddd, MMMM Do YYYY, h:mm:ss',
                               ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
                             </TableCell>
                             <TableCell align="right">
-                              {item?.leave ? 'Joined' : 'Absent'}
+                              {item?.isJoined ? 'Joined' : 'Absent'}
                             </TableCell>
                           </TableRow>
                         )),

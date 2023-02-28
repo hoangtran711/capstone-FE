@@ -66,12 +66,13 @@ export const useGetSchedules = () => {
     };
 };
 export const useAttendanceMe = () => {
-    return async function (id: string, geoLocation: any) {
+    return async function (id: string, geoLocation: any, attendanceId: any) {
         try {
             const geoLocationEncrypted = encryptData(geoLocation);
             const rs = http.post(`v1/student/me/attendance`, {
                 projectId: id,
                 geoLocation: geoLocationEncrypted,
+                attendanceId: attendanceId
             });
             return rs;
         } catch (err: any) {

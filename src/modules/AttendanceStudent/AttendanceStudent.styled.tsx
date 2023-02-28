@@ -127,6 +127,7 @@ export const Wrapper = styled.div`
       .statistics {
         display: flex;
         justify-content: space-between;
+        margin: 12px 0px;
         .stats-box {
           background-color: #f9f9f9;
           border: 1px solid #e3e3e3;

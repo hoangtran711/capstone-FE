@@ -89,9 +89,15 @@ const Attendance = () => {
     }
   }, [activeProject]);
   React.useEffect(() => {
-    const listday = listStudent[0]?.schedules?.times?.map((d: any) =>
-      moment(d.date, 'dddd, MMMM Do YYYY,h:mm:ss').format('dddd, DD-MM-YYYY'),
-    );
+    const listday = listStudent[0]?.schedules?.times
+      ?.sort(
+        (a: any, b: any) =>
+          moment(b.date, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime() -
+          moment(a.date, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime(),
+      )
+      .map((d: any) =>
+        moment(d.date, 'dddd, MMMM Do YYYY,h:mm:ss').format('dddd, DD-MM-YYYY'),
+      );
     let tmp = [];
     if (listday?.length > 0) {
       tmp = ['#', 'Name'].concat(listday);

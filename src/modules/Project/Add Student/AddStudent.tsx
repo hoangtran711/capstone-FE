@@ -87,10 +87,13 @@ export const AddStudent = ({
                       onClick={() => {
                         onAdd(item._id, projectID)
                           .then((rs: any) => {
+                            toast.success('Add student successfull');
+                            setReload(!reload);
+                            setVisibility(false);
                             if (rs) {
-                              toast.success('Add student successfull');
-                              setReload(!reload);
-                              setVisibility(false);
+                              // toast.success('Add student successfull');
+                              // setReload(!reload);
+                              // setVisibility(false);
                             }
                           })
                           .catch((err: any) => {

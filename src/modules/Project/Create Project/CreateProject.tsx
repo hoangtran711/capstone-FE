@@ -51,7 +51,7 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
   const [learnDate, setLearnDate] = React.useState<Array<any>>([]);
   const [learnDateShow, setLearnDateShow] = React.useState<Array<string>>([]);
   const [value, setValue] = React.useState<Dayjs | null>(dayjs(new Date()));
-
+  console.log(learnDate);
   return (
     <Wrapper>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -186,11 +186,14 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
                       }
 
                       let tmp = learnDate;
-                      tmp.push(value?.toISOString() || '');
+                      tmp.push({
+                        time: value?.toISOString(),
+                        location: { lat: '', lng: '' },
+                      });
                       setLearnDate([...tmp]);
 
                       let tmp2 = learnDateShow;
-                      tmp2.push(value?.format('H:mm - dddd MM/YYYY') || '');
+                      tmp2.push(value?.format('H:mm - dddd') || '');
                       setLearnDateShow([...tmp2]);
                     }}
                   >
@@ -203,15 +206,37 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
               <div className="desc">
                 <div className="item lst">
                   <div className="label">List Learn Date : </div>
-                  {learnDateShow?.map((item, key) => {
+                  {learnDateShow?.map((item, key: number) => {
                     return (
                       <Stack
                         key={key}
                         direction="row"
                         justifyContent="space-between"
+                        className="learn-date-item"
                       >
                         <span>{item}</span>
-                        <MapPickerAlert submit={(data) => console.log(data)} />
+                        <div className="btn">
+                          <MapPickerAlert
+                            submit={(data) => {
+                              console.log(data);
+                              learnDate[key].location.lat = data?.lat;
+                              learnDate[key].location.lng = data?.lng;
+                            }}
+                          />
+                          <div
+                            className="delete"
+                            onClick={() => {
+                              const temp = [...learnDateShow];
+                              const temp2 = [...learnDate];
+                              temp2.splice(key, 1);
+                              temp.splice(key, 1);
+                              setLearnDate(temp2);
+                              setLearnDateShow(temp);
+                            }}
+                          >
+                            Delete
+                          </div>
+                        </div>
                       </Stack>
                     );
                   })}

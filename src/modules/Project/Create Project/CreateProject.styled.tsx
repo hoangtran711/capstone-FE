@@ -192,6 +192,26 @@ export const Wrapper = styled.div`
             cursor: pointer;
           }
         }
+        .learn-date-item {
+          display: flex;
+          align-items: center;
+
+          .btn {
+            display: flex;
+            column-gap: 12px;
+            .delete {
+              min-width: 64px;
+              padding: 5px 15px;
+              border-radius: 4px;
+              border: 1px solid red;
+              color: red;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              cursor: pointer;
+            }
+          }
+        }
       }
     }
     .btn-create-wrapper {

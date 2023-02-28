@@ -119,6 +119,7 @@ export const Wrapper = styled.div`
       box-shadow: 0 1px 1px rgb(0 0 0 / 20%);
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       position: relative;
+      height: 100%;
       .more {
         position: absolute;
         right: 12px;

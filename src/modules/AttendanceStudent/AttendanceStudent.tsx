@@ -111,7 +111,7 @@ const Request = () => {
   const [defaultProject, setDefaultProject] = React.useState('');
   const [attendanceId, setAttendanceId] = React.useState('');
   const [dateMatch, setDateMatch] = React.useState<any>();
-  const [afterMinute, setAfterMinute] = React.useState<any>();
+  const [afterMinute, setAfterMinute] = React.useState<any>(0);
   const [distance, setDistance] = React.useState<any>();
   const [ableToCountDown, setAbleToCountDown] = React.useState<boolean>(false);
   const [schedules, setSchedules] = React.useState<Array<any>>([]);
@@ -213,11 +213,17 @@ const Request = () => {
   React.useEffect(() => {
     if (defaultTime) {
       console.log(
+        'future ',
+        moment(defaultTime?.start, 'dddd MMMM Do YYYY, h:mm:ss').toDate(),
+        // .getTime(),
+        'now ',
+        new Date(),
         'future - now',
-        moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
+        moment(defaultTime?.start, 'dddd MMMM Do YYYY, h:mm:ss')
           .toDate()
           .getTime() - new Date().getTime(),
       );
+
       if (
         moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
           .toDate()
@@ -235,6 +241,7 @@ const Request = () => {
             60000,
         );
       } else {
+        setAfterMinute(0);
         setTextNotify('Waiting');
         startWaiting(
           moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
@@ -253,6 +260,7 @@ const Request = () => {
   }, [defaultTime]);
   React.useEffect(() => {
     if (afterMinute) {
+      // alert(afterMinute);
       setAbleToCountDown(true);
       setDistance(
         moment(defaultTime?.start, 'dddd, MMMM Do YYYY, h:mm:ss')
@@ -262,7 +270,8 @@ const Request = () => {
           new Date().getTime(),
       );
     }
-  }, [dateMatch, afterMinute, defaultTime]);
+  }, [afterMinute]);
+  console.log('i', afterMinute);
   React.useEffect(() => {
     if (distance > 0) {
       startTimer(distance);
@@ -292,6 +301,7 @@ const Request = () => {
       setReload(!reload);
       timer = timer - 1000;
       console.log(timer);
+      console.log(times);
       if (timer <= 0) {
         setAfterMinute(times);
         clearInterval(i);

@@ -293,7 +293,7 @@ const Request = () => {
       timer = timer - 1000;
       console.log(timer);
       if (timer <= 0) {
-        setAfterMinute(times.attendaceAfter);
+        setAfterMinute(times);
         clearInterval(i);
       }
     }, 1000);

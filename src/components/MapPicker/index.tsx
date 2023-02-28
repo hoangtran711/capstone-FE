@@ -18,8 +18,8 @@ const MapPickerAlertComponent = ({ submit }: IMapPickerAlertProps) => {
   const [open, setOpen] = useState(false);
 
   const [location, setLocation] = useState({
-    lat: 10.846825775345522,
-    lng: 106.83831735650426,
+    lat: 10.84734,
+    lng: 106.837037,
   });
   const [zoom, setZoom] = useState(15);
 

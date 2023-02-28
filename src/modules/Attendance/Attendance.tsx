@@ -89,14 +89,16 @@ const Attendance = () => {
     }
   }, [activeProject]);
   React.useEffect(() => {
-    const listday = listStudent[0]?.schedules?.times
+    const listday = listStudent[0]?.schedules
       ?.sort(
         (a: any, b: any) =>
-          moment(b.date, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime() -
-          moment(a.date, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime(),
+          moment(a.startTime, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime() -
+          moment(b.startTime, 'dddd, MMMM Do YYYY,h:mm:ss').toDate().getTime(),
       )
       .map((d: any) =>
-        moment(d.date, 'dddd, MMMM Do YYYY,h:mm:ss').format('dddd, DD-MM-YYYY'),
+        moment(d.startTime, 'dddd, MMMM Do YYYY,h:mm:ss').format(
+          'dddd, DD-MM-YYYY',
+        ),
       );
     let tmp = [];
     if (listday?.length > 0) {
@@ -163,13 +165,16 @@ const Attendance = () => {
                             {st?.email}
                           </div>
                         </TableCell>
-                        {st?.schedules?.times?.map((time: any, k: any) => {
+                        {st?.timesUntilNow?.map((time: any, k: any) => {
                           return (
                             <TableCell key={k} align={'center'}>
-                              {moment(time.date, 'dddd, MMMM Do YYYY,h:mm:ss')
+                              {moment(
+                                time.startTime,
+                                'dddd, MMMM Do YYYY,h:mm:ss',
+                              )
                                 .toDate()
                                 .getTime() < new Date().getTime() ? (
-                                time?.leave ? (
+                                time?.isJoined ? (
                                   <CheckCircleIcon
                                     style={{ color: '#55ce63' }}
                                   />

@@ -29,6 +29,16 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
 
   const onSubmit = (data: any) => {
     let payload = { ...data, startDate, endDate, learnDate };
+    let flag = false;
+    learnDate?.map((d: any) => {
+      if (!d.location.lng || !d.location.lat) {
+        flag = true;
+      }
+    });
+    if (flag) {
+      toast.error('Please choose location for each of learn date');
+      return;
+    }
     payload.maxJoin = Number(payload.maxJoin);
     payload.attendanceAfterMinute = Number(payload.attendanceAfterMinute);
     payload.totalLesson = Number(payload.totalLesson);
@@ -173,15 +183,24 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
                     onClick={() => {
                       let flag = false;
                       for (let i = 0; i < learnDate.length; i++) {
+                        console.log(new Date(learnDate[i]?.time).getTime());
+                        console.log(
+                          new Date(value?.toISOString() || '').getTime(),
+                        );
                         if (
-                          new Date(learnDate[i]).getTime() ===
-                          new Date(value?.toISOString() || '').getTime()
+                          new Date(learnDate[i]?.time).getTime() ===
+                            new Date(value?.toISOString() || '').getTime() ||
+                          Math.abs(
+                            new Date(learnDate[i]?.time).getTime() -
+                              new Date(value?.toISOString() || '').getTime(),
+                          ) <
+                            4 * 60 * 60 * 1000
                         ) {
                           flag = true;
                         }
                       }
                       if (flag) {
-                        toast.info('Time overlap');
+                        toast.info('Time invalid');
                         return;
                       }
 

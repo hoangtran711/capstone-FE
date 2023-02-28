@@ -12,6 +12,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useCreateProject } from 'queries/useProjects';
+import { MapPickerAlert } from 'components/MapPicker';
+import { Stack } from '@mui/system';
 
 const MAX_JOIN_DEFAULT = 99;
 const ATTENDANCE_AFTER_DEFAULT = 14;
@@ -46,13 +48,10 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
     dayjs(today).format('YYYY-MM-DD'),
   );
   const [endDate, setEnd] = React.useState(dayjs(nexdate).format('YYYY-MM-DD'));
-  const [learnDate, setLearnDate] = React.useState<Array<string>>([]);
+  const [learnDate, setLearnDate] = React.useState<Array<any>>([]);
   const [learnDateShow, setLearnDateShow] = React.useState<Array<string>>([]);
   const [value, setValue] = React.useState<Dayjs | null>(dayjs(new Date()));
-  React.useEffect(() => {
-    console.log('today', endDate);
-    console.log('next', startDate);
-  }, []);
+
   return (
     <Wrapper>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -205,7 +204,16 @@ export const CreateProject = ({ setVisibility, reload, setReload }: any) => {
                 <div className="item lst">
                   <div className="label">List Learn Date : </div>
                   {learnDateShow?.map((item, key) => {
-                    return <span key={key}>{item}</span>;
+                    return (
+                      <Stack
+                        key={key}
+                        direction="row"
+                        justifyContent="space-between"
+                      >
+                        <span>{item}</span>
+                        <MapPickerAlert submit={(data) => console.log(data)} />
+                      </Stack>
+                    );
                   })}
                 </div>
               </div>

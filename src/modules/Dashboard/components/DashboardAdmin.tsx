@@ -7,6 +7,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import {
   IProject,
   useGetAllProjects,
+  useGetCurrentActiveProjects,
   useGetProjectAttendance,
 } from 'queries/useProjects';
 import { IEmployee } from 'modules/Employee/Employee';
@@ -16,6 +17,8 @@ import { useGetRequestCurrentUser } from 'queries/useRequest';
 import moment from 'moment';
 
 const DashboardAdmin = () => {
+  const { data: currenctActiveProject } = useGetCurrentActiveProjects();
+  console.log(currenctActiveProject);
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
   const [listStudent, setListStudent] = React.useState<Array<IEmployee>>();
   const [listTasks, setListTask] = React.useState<any>();

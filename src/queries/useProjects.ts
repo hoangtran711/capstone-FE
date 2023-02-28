@@ -79,6 +79,17 @@ export const useGetAllProjectsAdmin = () => {
   };
 };
 
+export const useGetCurrentActiveProjects = () => {
+  return useQuery(
+    ['useGetCurrentActiveProjects.name'],
+    async () => {
+      const rs = http.get(`v1/projects/active`);
+      return rs;
+    },
+    { refetchInterval: 1000 },
+  );
+};
+
 export const useGetProjectUserJoined = () => {
   return useQuery(['useGetProjectUserJoined.name'], async () => {
     const response = await http.get('/v1/projects/student/me');

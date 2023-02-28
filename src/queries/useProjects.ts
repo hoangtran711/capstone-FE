@@ -87,7 +87,14 @@ export const useGetCurrentActiveProjects = () => {
       return rs;
     },
     { refetchInterval: 1000 },
-  );
+  ) as any;
+};
+
+export const useRequestGenerateAttendance = () => {
+  return async (projectId: string) => {
+    const rs = http.post(`v1/projects/re-generate-attendance/${projectId}`);
+    return rs;
+  };
 };
 
 export const useGetProjectUserJoined = () => {

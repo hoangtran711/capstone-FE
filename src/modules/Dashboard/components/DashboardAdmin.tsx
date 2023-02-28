@@ -1,5 +1,13 @@
-import { Grid } from '@mui/material';
-import React from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+} from '@mui/material';
+import React, { useMemo, useState } from 'react';
 import { Task, Wrapper } from './DashboardAdmin.styled';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -9,16 +17,27 @@ import {
   useGetAllProjects,
   useGetCurrentActiveProjects,
   useGetProjectAttendance,
+  useRequestGenerateAttendance,
 } from 'queries/useProjects';
 import { IEmployee } from 'modules/Employee/Employee';
 import { useGetAllEmployee } from 'queries/useEmployee';
 import { useGetALlTaskOfTeacher } from 'queries/useTask';
-import { useGetRequestCurrentUser } from 'queries/useRequest';
 import moment from 'moment';
+import { Stack } from '@mui/system';
 
 const DashboardAdmin = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const { data: currenctActiveProject } = useGetCurrentActiveProjects();
-  console.log(currenctActiveProject);
+  const [selectedProject, setSelectedProjects] = useState<any>();
+  const generateAttendance = useRequestGenerateAttendance();
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);
   const [listStudent, setListStudent] = React.useState<Array<IEmployee>>();
   const [listTasks, setListTask] = React.useState<any>();
@@ -26,7 +45,7 @@ const DashboardAdmin = () => {
   const onGetAllProject = useGetAllProjects();
   const onGetAllTaskOfTeacher = useGetALlTaskOfTeacher();
   const onGetProjectAttendance = useGetProjectAttendance();
-  const { data: listRequests } = useGetRequestCurrentUser();
+
   const [listAllAttendance, setListAllAttendance] = React.useState<any>([]);
   React.useEffect(() => {
     onGetAllProject().then((rs: any) => {
@@ -56,7 +75,6 @@ const DashboardAdmin = () => {
       setListAllAttendance(tmp);
     }
   }, [listProject]);
-  console.log(listTasks);
   const getAmountAbsent = (item: any) => {
     let lst = item?.arr?.filter((it: any) => {
       let tmp = it?.timesUntilNow?.filter(
@@ -65,7 +83,6 @@ const DashboardAdmin = () => {
             moment(t?.date, 'dddd, MMMM Do YYYY, h:mm:ss').format('L'),
           ).getTime() === new Date(moment().format('L')).getTime() && !t?.leave,
       );
-      console.log(tmp.length);
       if (tmp.length > 0) {
         return it;
       }
@@ -85,7 +102,6 @@ const DashboardAdmin = () => {
           ).getTime() === new Date(moment().format('L')).getTime() &&
           t?.leave === 'Joined',
       );
-      console.log(tmp.length);
       if (tmp.length > 0) {
         return it;
       }
@@ -97,8 +113,46 @@ const DashboardAdmin = () => {
     }
   };
 
+  const dialogComponent = useMemo(
+    () => (
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Re Attendance this project?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you certain you want to attendance in this project again?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              await generateAttendance(selectedProject?._id || '');
+              handleClose();
+            }}
+            autoFocus
+            variant="contained"
+            color="success"
+          >
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    ),
+    [generateAttendance, open, selectedProject?._id],
+  );
+
   return (
     <Wrapper>
+      {dialogComponent}
       <span className="welcome">Welcome !</span>
       <span className="breadcrumb">Dashboard</span>
       <Grid spacing={3} className="grid" container>
@@ -152,43 +206,65 @@ const DashboardAdmin = () => {
         <Grid item xs={4}>
           <div className="card-statistic">
             <span className="card-info-number" style={{ fontSize: '24px' }}>
-              Pending Requests
+              Current Projects
             </span>
             <div className="card-title">
               <span style={{ color: '#1f1f1f' }}>Requests</span>
               <span className="percentage">
                 {' '}
-                {listRequests && listRequests?.length > 0
-                  ? listRequests?.length
+                {currenctActiveProject && currenctActiveProject?.length > 0
+                  ? `${currenctActiveProject?.length} projects`
                   : 0}
               </span>
             </div>
 
             <div className="pendings">
-              {listRequests
-                ?.filter((item: any) => item.status === 'Pending')
-                ?.map((req: any, key: any) => {
-                  return (
-                    <div className="req" key={key}>
-                      <div className="top">
-                        <div className="user">
-                          <img
-                            src={req?.userInfo?.avatar}
-                            alt="aa"
-                            className="ava"
-                          />
-                          <div className="name">{req?.userInfo?.username}</div>
-                        </div>
-                        <div className="status">
-                          <div className="txt">{req?.status}</div>
-                        </div>
+              {currenctActiveProject?.map((project: any, key: any) => {
+                return (
+                  <div className="req" key={key}>
+                    <div className="top">
+                      <div className="user">
+                        <div className="name">{project.projectName}</div>
                       </div>
-                      <div className="bottom">
-                        Join : {req?.projectInfo?.projectName}
+                      <div className="status">
+                        <div className="txt">Active</div>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="bottom">
+                      Time:{' '}
+                      {moment(project?.activeSchedule?.startTime).format(
+                        'HH:mm:ss',
+                      )}{' '}
+                      -{' '}
+                      {moment(project?.activeSchedule?.endTime).format(
+                        'HH:mm:ss',
+                      )}
+                    </div>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Button
+                        onClick={() =>
+                          window.open(
+                            `https://map.google.com/?q=${project?.activeSchedule?.location?.lat},${project?.activeSchedule?.location?.lng}`,
+                          )
+                        }
+                        size="small"
+                      >
+                        View location
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSelectedProjects(project);
+                          handleClickOpen();
+                        }}
+                        color="error"
+                        size="small"
+                      >
+                        Re-Attendance
+                      </Button>
+                    </Stack>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </Grid>

@@ -35,6 +35,7 @@ export interface IEmployee {
   address: string;
   dateOfBirth: string;
   _id: string;
+  avatar: string;
 }
 const Employee = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -90,11 +91,7 @@ const Employee = () => {
                 >
                   <div className="profile-img">
                     <a href="">
-                      <img
-                        className="logo"
-                        src={require('assets/images/student/student-01.jpg')}
-                        alt="Logo"
-                      />
+                      <img className="logo" src={item?.avatar} alt="Logo" />
                     </a>
                   </div>
 

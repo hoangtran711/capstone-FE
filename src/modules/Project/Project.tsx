@@ -51,6 +51,7 @@ const Project = () => {
     address: '',
     dateOfBirth: '',
     _id: '',
+    avatar: '',
   });
   const [searchvalue, setSearchValue] = React.useState<string>('');
   const [listProject, setListProject] = React.useState<Array<IProject>>([]);

@@ -6,7 +6,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import { IProject, useGetAllProjectsMe } from 'queries/useProjects';
 import { useGetALlTaskOfStudent } from 'queries/useTask';
 import { useGetRequestCurrentUser } from 'queries/useRequest';
-import moment from 'moment';
+
 import { useGetCurrentSchedules } from 'queries/useEmployee';
 
 const DashboardStudent = () => {
@@ -33,6 +33,7 @@ const DashboardStudent = () => {
       setSchedules(rs);
     });
   }, []);
+  console.log(listProject);
 
   return (
     <Wrapper>
@@ -136,13 +137,8 @@ const DashboardStudent = () => {
 
               return (
                 <div className="pro" key={key}>
-                  <div className="proj-name">{name}</div>
-                  <div className="time">
-                    {moment(
-                      item?.time?.date,
-                      'dddd, MMMM Do YYYY, h:mm:ss',
-                    ).format('dddd, DD-MM-YYYY, kk:mm:ss a')}
-                  </div>
+                  <div className="proj-name">{item?.projectName}</div>
+                  <div className="time">{item?.startDate}</div>
                 </div>
               );
             })}
